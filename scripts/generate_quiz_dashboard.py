@@ -26,7 +26,7 @@ def cell_style(result):
     return s.get(result, ("#1e293b","#64748b"))
 
 def badge(result):
-    labels = {"ok":"OK","risky":"Risky","ng":"NG"}
+    labels = {"ok":"OL","risky":"Risky","ng":"NG"}
     bg, fg = cell_style(result)
     return f'<span style="background:{bg};color:{fg};padding:2px 7px;border-radius:4px;font-size:.68rem;font-weight:700">{labels.get(result,result.upper())}</span>'
 
@@ -110,6 +110,8 @@ def generate():
 <th style="text-align:left;padding:8px 12px;border-bottom:1px solid #1f2d42;color:#64748b;font-size:.7rem">\u30e1\u30e2</th>
 </tr></thead><tbody>{rec_rows}</tbody></table></div>'''
 
+    _no_data_msg = '<p style="color:#64748b">\u30c7\u30fc\u30bf\u304c\u3042\u308a\u307e\u305b\u3093</p>'
+
     html = f"""<!DOCTYPE html>
 <html lang="ja">
 <head>
@@ -123,7 +125,7 @@ body{{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgro
 .hdr h1{{font-size:1.4rem;font-weight:700;color:#60a5fa}}
 .hdr .sub{{font-size:.78rem;color:#64748b;margin-top:2px}}
 .hdr-r{{font-size:.72rem;color:#475569;text-align:right}}
-.wrap{{max-width:1440px;margin:0 auto;padding:24px 32py}}
+.wrap{{max-width:1440px;margin:0 auto;padding:24px 32px}}
 .kpi-row{{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:22px}}
 .kpi{{background:#111827;border:1px solid #1f2d42;border-radius:12px;padding:18px 20px}}
 .kpi .lbl{{font-size:.7rem;text-transform:uppercase;letter-spacing:.06em;color:#64748b}}
@@ -154,8 +156,8 @@ canvas{{max-height:200px!important}}
   <div class="card"><h2>\U0001f4c5 \u76f4\u8fd130\u65e5\u306e\u5b66\u7fd2\u6d3b\u52d5</h2><canvas id="ac"></canvas></div>
 
   <div class="g3">
-    <div class="card"><h2>\U0001f534 \u30d0\u30b4\u30de\u30c3\u30d7\uff08\u79d1\u76ee \xd7 \u30c6\u30fc\u30da\uff09</h2>{bugmap_html}</div>
-    <div class="card"><h2>\U0001f4ca \u30d5\u30a7\u30fc\u30ba\u5225\u9032\u6357</h2>{phase_html if phase_html else '<p style="color:#64748b">\u30c7\u30fc\u30bf\u304c\u3042\u308a\u307e\u305b\u3093</p>'}</div>
+    <div class="card"><h2>\U0001f534 \u30d0\u30b0\u30de\u30c3\u30d7\uff08\u79d1\u76ee \xd7 \u30c6\u30fc\u30de\uff09</h2>{bugmap_html}</div>
+    <div class="card"><h2>\U0001f4ca \u30d5\u30a7\u30fc\u30ba\u5225\u9032\u6357</h2>{phase_html if phase_html else _no_data_msg}</div>
   </div>
 
   <div class="g2">
