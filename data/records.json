@@ -1,1 +1,14 @@
-[]
+[
+  {
+    "L1": "VEC",
+    "L2": "CALC",
+    "date": "2026-03-26",
+    "memo": "",
+    "next_review": "SR3",
+    "patch": "",
+    "phase": "A",
+    "result": "ok",
+    "subject": "理論",
+    "theme": "三相交流"
+  }
+]
