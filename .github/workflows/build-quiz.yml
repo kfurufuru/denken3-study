@@ -28,12 +28,23 @@ jobs:
         run: python scripts/append_record.py
 
       - name: 🔨 ダッシュボード HTML を生成
-        run: python scripts/generate_quiz_dashboard.py
+        run: |
+          echo "=== records.json 内容確認 ==="
+          cat data/records.json | python3 -c "import json,sys; d=json.load(sys.stdin); print(f'レコード数: {len(d)}')"
+          echo "=== ダッシュボード生成 ==="
+          python -u scripts/generate_quiz_dashboard.py
+          echo "=== 生成ファイル確認 ==="
+          ls -la quiz.html || echo "⚠️ quiz.html が見つかりません"
 
       - name: 💾 コミット & プッシュ
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
-          git add data/records.json quiz.html
+          git add data/records.json
+          if [ -f quiz.html ]; then
+            git add quiz.html
+          else
+            echo "⚠️ quiz.html が存在しないためスキップ"
+          fi
           git diff --staged --quiet || git commit -m "📝 テスト記録追加 & ダッシュボード更新 [$(date +'%Y-%m-%d %H:%M JST')]"
           git push
