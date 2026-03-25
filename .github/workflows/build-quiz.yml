@@ -28,6 +28,8 @@ jobs:
         run: python scripts/append_record.py
 
       - name: 🔨 ダッシュボード HTML を生成
+        env:
+          TZ: Asia/Tokyo
         run: |
           echo "=== records.json 内容確認 ==="
           cat data/records.json | python3 -c "import json,sys; d=json.load(sys.stdin); print(f'レコード数: {len(d)}')"
