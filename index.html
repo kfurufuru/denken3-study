@@ -356,7 +356,7 @@ body{
         <div class="ring-wrap">
           <canvas id="ring" width="130" height="130"></canvas>
           <div class="ring-center">
-            <div class="ring-pct">17.7%</div>
+            <div class="ring-pct">17.9%</div>
             <div class="ring-lbl">達成率</div>
           </div>
         </div>
@@ -385,7 +385,7 @@ body{
     <!-- Stats 2x2 -->
     <div class="g2" style="align-content:start">
       <div class="card" style="text-align:center">
-        <div class="stat-val" style="color:var(--green)">81</div>
+        <div class="stat-val" style="color:var(--green)">87</div>
         <div class="stat-lbl">1回目 ○ 正解</div>
         <div class="stat-sub">取組中 16.7%</div>
       </div>
@@ -611,33 +611,14 @@ body{
 
 <script>
 // ===== DATA =====
-const ACHIEVED = 86, TOTAL = 486;
-const FIRST_MARU = 81, FIRST_BATU = 57;
+const ACHIEVED = 87, TOTAL = 486;
+const FIRST_MARU = 81, FIRST_BATU = 58;
 const STREAK = 3;
 const EXAM_DATE = new Date('2026-08-23');
 const STUDY_START = new Date('2025-09-01');
 const TODAY = new Date('2026-03-25');
 
-const WEAK_DATA = [
-  {q:'R04下-問8',topic:'交流の波形率・波高率',cat:'電気回路',p:'S',date:'1/11'},
-  {q:'H18-問2',topic:'平行板コンデンサの等電位線',cat:'電磁気',p:'S',date:'未実施'},
-  {q:'H24-問15',topic:'コンデンサの直並列回路',cat:'電磁気',p:'S',date:'3/1'},
-  {q:'H25-問10',topic:'RLC直列回路の特性',cat:'電気回路',p:'S',date:'3/8'},
-  {q:'H26-問5',topic:'コンデンサの回路計算',cat:'電磁気',p:'S',date:'3/1'},
-  {q:'R01-問8',topic:'直流と交流の組合せ回路',cat:'電気回路',p:'S',date:'未実施'},
-  {q:'R02-問10',topic:'テブナン定理と過渡現象',cat:'電気回路',p:'A',date:'未実施'},
-  {q:'R02-問8',topic:'交流回路の電流→抵抗値導出',cat:'電気回路',p:'A',date:'3/8'},
-  {q:'R04下-問7',topic:'抵抗温度係数と変化率',cat:'電気回路',p:'A',date:'未実施'},
-  {q:'R04下-問15',topic:'三相交流の抵抗と消費電力',cat:'電気回路',p:'A',date:'未実施'},
-  {q:'R01-問9',topic:'RLC並列回路・角周波数変化',cat:'電気回路',p:'A',date:'未実施'},
-  {q:'H26-問14',topic:'平衡三相交流回路',cat:'電気回路',p:'A',date:'3/8'},
-  {q:'H25-問15',topic:'三相交流の消費電力',cat:'電気回路',p:'A',date:'3/14'},
-  {q:'H23-問8',topic:'交流回路の並列負荷と電流変化',cat:'電気回路',p:'A',date:'3/20'},
-  {q:'R04上-問1',topic:'平行板コンデンサのパラメータ',cat:'電磁気',p:'S',date:'未実施'},
-  {q:'H24-問9',topic:'RL回路の過渡現象',cat:'電気回路',p:'C',date:'2/14'},
-  {q:'R04下-問10',topic:'RLC直列回路のバイパス過渡',cat:'電気回路',p:'C',date:'2/15'},
-  {q:'H28-問10',topic:'過渡現象(論説)',cat:'電気回路',p:'C',date:'2/15'},
-];
+const WEAK_DATA = [{"q": "R04下-問8", "topic": "", "cat": "電気回路", "p": "S", "date": "2026-01-11"}, {"q": "R04下-問6", "topic": "", "cat": "電磁気", "p": "S", "date": "2026-01-11"}, {"q": "H19-問7", "topic": "", "cat": "電気回路", "p": "S", "date": "2026-02-07"}, {"q": "R04-問8", "topic": "", "cat": "電気回路", "p": "S", "date": "2026-02-28"}, {"q": "R03-問7", "topic": "", "cat": "電気回路", "p": "S", "date": "2026-02-28"}, {"q": "H24-問15", "topic": "", "cat": "電磁気", "p": "S", "date": "2026-03-01"}, {"q": "H26-問5", "topic": "", "cat": "電磁気", "p": "S", "date": "2026-03-01"}, {"q": "H25-問10", "topic": "", "cat": "電気回路", "p": "S", "date": "2026-03-08"}, {"q": "R01-問15", "topic": "", "cat": "電磁気", "p": "S", "date": "2026-03-25"}, {"q": "R01-問8", "topic": "", "cat": "電気回路", "p": "S", "date": "未実施"}, {"q": "R04上-問1", "topic": "", "cat": "電磁気", "p": "S", "date": "未実施"}, {"q": "H18-問2", "topic": "", "cat": "電磁気", "p": "S", "date": "未実施"}, {"q": "R05上-問5", "topic": "", "cat": "電磁気", "p": "A", "date": "2026-01-12"}, {"q": "R05上-問9", "topic": "", "cat": "電気回路", "p": "A", "date": "2026-01-12"}, {"q": "R04-問15", "topic": "", "cat": "電気回路", "p": "A", "date": "2026-02-23"}, {"q": "R02-問8", "topic": "", "cat": "電気回路", "p": "A", "date": "2026-03-08"}, {"q": "H26-問14", "topic": "", "cat": "電気回路", "p": "A", "date": "2026-03-08"}, {"q": "H25-問15", "topic": "", "cat": "電気回路", "p": "A", "date": "2026-03-14"}, {"q": "H24-問16", "topic": "", "cat": "電気回路", "p": "A", "date": "2026-03-15"}, {"q": "H23-問8", "topic": "", "cat": "電気回路", "p": "A", "date": "2026-03-20"}];
 
 // ===== CANVAS BACKGROUND (stars) =====
 (function() {
