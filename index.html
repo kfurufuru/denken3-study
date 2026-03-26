@@ -286,53 +286,11 @@ body{
   </div>
 </div>
 
-<!-- ===== ROW 1: LEVEL + STREAK + COUNTDOWN ===== -->
-<div class="section">
-  <div class="sec-title">🏆 ステータス</div>
-  <div class="g3">
-
-    <!-- Level Card -->
-    <div class="card level-card glow-purple" style="grid-column:span 1">
-      <div class="level-top">
-        <div class="level-badge">
-          <div class="level-num">3</div>
-          <div class="level-txt">LEVEL</div>
-        </div>
-        <div class="level-info">
-          <div class="level-name">⚡ 学習者</div>
-          <div class="level-sub">860 XP 獲得済み</div>
-          <div class="xp-bar-bg">
-            <div class="xp-bar" id="xp-bar" style="width:0%"></div>
-          </div>
-          <div class="xp-labels">
-            <span>860 XP</span>
-            <span>Lv4 まで +140</span>
-            <span>1000 XP</span>
-          </div>
-        </div>
-      </div>
-      <div class="badges">
-        <div class="badge-item badge-gold">🎯 初達成</div>
-        <div class="badge-item badge-gold">🔥 3日連続</div>
-        <div class="badge-item badge-silver">📊 50問突破</div>
-        <div class="badge-item badge-locked">🏅 100問達成</div>
-        <div class="badge-item badge-locked">⚡ 電磁気制覇</div>
-      </div>
-    </div>
-
-    <!-- Streak -->
-    <div class="card streak-card">
-      <div style="font-size:.72rem;color:#fb923c;margin-bottom:6px;font-weight:600;text-transform:uppercase;letter-spacing:.06em">🔥 学習ストリーク</div>
-      <div class="streak-fire">🔥</div>
-      <div class="streak-num" id="streak-num">3</div>
-      <div class="streak-label">日連続学習中</div>
-      <div style="margin-top:14px;display:flex;gap:5px;justify-content:center">
-        <div id="streak-dots"></div>
-      </div>
-      <div style="font-size:.68rem;color:var(--muted);margin-top:8px">最終学習: 2026年3月24日</div>
-    </div>
-
-    <!-- Countdown -->
+<!-- ===== ROW 1: COUNTDOWN ===== -->
+  <div class="section">
+    <div class="sec-title">🏆 ステータス</div>
+    <div style="max-width:500px;margin:0 auto">
+      <!-- Countdown -->
     <div class="count-card card">
       <div style="font-size:.72rem;color:#67e8f9;font-weight:600;text-transform:uppercase;letter-spacing:.06em;margin-bottom:8px">📅 試験まで</div>
       <div class="count-days" id="countdown"></div>
@@ -343,10 +301,10 @@ body{
       </div>
       <div style="font-size:.65rem;color:var(--muted);margin-top:3px" id="exam-prog-lbl"></div>
     </div>
+    </div>
   </div>
-</div>
 
-<!-- ===== ROW 2: OVERALL + STATS ===== -->
+  <!-- ===== ROW 2: OVERALL + STATS ===== -->
 <div class="section">
   <div class="sec-title">📊 全体進捗</div>
   <div class="g12">
@@ -737,8 +695,7 @@ const WEAK_DATA = [{"q": "R04下-問8", "topic": "", "cat": "電気回路", "p":
 
 // ===== ANIMATE BARS =====
 setTimeout(()=>{
-  document.getElementById('xp-bar').style.width='86%'; // 860/1000
-  document.getElementById('b1').style.width='40%';
+    document.getElementById('b1').style.width='40%';
   document.getElementById('b2').style.width='28%';
   document.getElementById('b3').style.width='5%';
   document.getElementById('b4').style.width='2%';
@@ -755,27 +712,6 @@ setTimeout(()=>{
     document.getElementById('exam-prog').style.width = pct+'%';
     document.getElementById('exam-prog-lbl').textContent = `学習期間 ${pct}% 経過`;
   }, 600);
-})();
-
-// ===== STREAK DOTS =====
-(function() {
-  const cont = document.getElementById('streak-dots');
-  const days = ['月','火','水','木','金','土','日'];
-  const active = [0,1,2]; // Mon=today, Tue=yesterday, Wed=day before (relative display)
-  cont.style.cssText = 'display:flex;gap:4px;align-items:center';
-  days.forEach((d,i)=>{
-    const el = document.createElement('div');
-    el.style.cssText = `
-      width:28px;height:28px;border-radius:7px;
-      background:${i<STREAK?'linear-gradient(135deg,#f97316,#fbbf24)':'#1f2937'};
-      display:flex;align-items:center;justify-content:center;
-      font-size:.6rem;font-weight:700;
-      color:${i<STREAK?'#fff':'#64748b'};
-      border:1px solid ${i<STREAK?'rgba(249,115,22,.4)':'transparent'};
-    `;
-    el.textContent = d;
-    cont.appendChild(el);
-  });
 })();
 
 // ===== WEAKNESS LIST =====
@@ -835,25 +771,6 @@ setTimeout(()=>{
 document.getElementById('updated-date').textContent =
   new Date('2026-03-25').toLocaleDateString('ja-JP',{year:'numeric',month:'long',day:'numeric'});
 
-// ===== NUMBER ANIMATION =====
-function animCount(el, target, dur=1200) {
-  const start = performance.now();
-  const update = (now) => {
-    const p = Math.min((now-start)/dur, 1);
-    el.textContent = Math.round(p * target);
-    if(p < 1) requestAnimationFrame(update);
-  };
-  requestAnimationFrame(update);
-}
-
-// ===== FLOATING PARTICLES on achievement hover =====
-document.querySelectorAll('.badge-item.badge-gold, .badge-item.badge-silver').forEach(b=>{
-  b.addEventListener('mouseenter',()=>{
-    b.style.transform='scale(1.08)';
-    b.style.transition='transform .2s';
-  });
-  b.addEventListener('mouseleave',()=>{ b.style.transform=''; });
-});
 </script>
 </body>
 </html>
