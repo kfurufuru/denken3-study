@@ -408,7 +408,40 @@ body{
   </div>
 </div>
 
-<!-- ===== ROW 3: 分野別 + TODAY ===== -->
+
+  <!-- ===== RANK S/A ALERT ===== -->
+  <div class="section">
+    <div class="sec-title">🚨 最重要問題（ランクS/A）間違いアラート</div>
+    <div class="card" style="background:linear-gradient(135deg,#1a0a0a,#2d1111);border:1px solid rgba(239,68,68,.4)">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:14px">
+        <div style="font-size:.95rem;font-weight:800;color:#fca5a5">⚠️ ランクS/A で間違えた問題</div>
+        <div style="font-size:.8rem;color:#ef4444;font-weight:700" id="ranksa-count"></div>
+      </div>
+      <div style="margin-bottom:14px">
+        <div style="display:flex;gap:16px;margin-bottom:8px">
+          <div style="text-align:center;padding:10px 16px;background:rgba(239,68,68,.1);border:1px solid rgba(239,68,68,.3);border-radius:10px;flex:1">
+            <div style="font-size:1.6rem;font-weight:900;color:#ef4444" id="rank-s-count">0</div>
+            <div style="font-size:.7rem;color:#fca5a5">ランクS 未解決</div>
+          </div>
+          <div style="text-align:center;padding:10px 16px;background:rgba(249,115,22,.1);border:1px solid rgba(249,115,22,.3);border-radius:10px;flex:1">
+            <div style="font-size:1.6rem;font-weight:900;color:#f97316" id="rank-a-count">0</div>
+            <div style="font-size:.7rem;color:#fdba74">ランクA 未解決</div>
+          </div>
+          <div style="text-align:center;padding:10px 16px;background:rgba(16,185,129,.1);border:1px solid rgba(16,185,129,.3);border-radius:10px;flex:1">
+            <div style="font-size:1.6rem;font-weight:900;color:#10b981" id="rank-sa-resolved">0</div>
+            <div style="font-size:.7rem;color:#6ee7b7">解決済み</div>
+          </div>
+        </div>
+        <div style="height:8px;background:var(--border);border-radius:99px;overflow:hidden">
+          <div id="ranksa-bar" style="height:100%;background:linear-gradient(90deg,#10b981,#34d399);border-radius:99px;width:0%;transition:width 1.2s"></div>
+        </div>
+        <div style="font-size:.68rem;color:var(--muted);margin-top:3px;text-align:right" id="ranksa-pct"></div>
+      </div>
+      <div id="ranksa-list" style="max-height:320px;overflow-y:auto"></div>
+    </div>
+  </div>
+
+  <!-- ===== ROW 3: 分野別 + TODAY ===== -->
 <div class="section">
   <div class="sec-title">🔬 分野別 進捗 & 今日やること</div>
   <div class="g21">
@@ -594,12 +627,15 @@ body{
 
 <!-- ===== LINKS ===== -->
 <div class="section">
-  <div class="sec-title">🔗 Notion へジャンプ</div>
+  <div class="sec-title">🔗 Notion & GitHub へジャンプ</div>
   <div class="notion-links">
     <a class="notion-btn" href="https://www.notion.so/af4180a0286e4c76b153fe6071cacf0a" target="_blank">📚 学習ダッシュボード</a>
     <a class="notion-btn" href="https://www.notion.so/ff4fcb73cc14408caedf87c904ae2fd9" target="_blank">📋 過去問管理DB</a>
     <a class="notion-btn" href="https://www.notion.so/ff4fcb73cc14408caedf87c904ae2fd9?v=81cd39ea-67fa-4a4f-8701-4926db05a044" target="_blank">❌ 弱点克服リスト</a>
     <a class="notion-btn" href="https://www.notion.so/6413af86a82e4bb390c4dc399b6f98cd" target="_blank">📖 学習マスターDB</a>
+      <a class="notion-btn" href="https://github.com/kfurufuru/denken3-study" target="_blank" style="background:#161b22;border-color:#30363d">🐙 GitHub リポジトリ</a>
+      <a class="notion-btn" href="https://github.com/kfurufuru/denken3-study/blob/main/data/theory-guide.md" target="_blank" style="background:#161b22;border-color:#30363d">📊 統計&出題傾向</a>
+      <a class="notion-btn" href="https://github.com/kfurufuru/denken3-study/blob/main/notes/theory-checklist.md" target="_blank" style="background:#161b22;border-color:#30363d">✅ 学習チェックリスト</a>
   </div>
 </div>
 
@@ -770,7 +806,31 @@ setTimeout(()=>{
   }
 })();
 
-// ===== DATE =====
+// ===== RANK S/A ALERT =====
+  (function() {
+    const saItems = WEAK_DATA.filter(w => w.p === 'S' || w.p === 'A');
+    const sCount = WEAK_DATA.filter(w => w.p === 'S').length;
+    const aCount = WEAK_DATA.filter(w => w.p === 'A').length;
+    const resolved = 0;
+    document.getElementById('rank-s-count').textContent = sCount;
+    document.getElementById('rank-a-count').textContent = aCount;
+    document.getElementById('rank-sa-resolved').textContent = resolved;
+    document.getElementById('ranksa-count').textContent = saItems.length + '問 未解決';
+    const pct = saItems.length > 0 ? Math.round(resolved / (saItems.length + resolved) * 100) : 0;
+    setTimeout(function(){ document.getElementById('ranksa-bar').style.width = pct + '%'; }, 600);
+    document.getElementById('ranksa-pct').textContent = '解決率 ' + pct + '% — 全' + (saItems.length + resolved) + '問中 ' + resolved + '問クリア';
+    var cont = document.getElementById('ranksa-list');
+    var catColor = {'電気回路':'#10b981','電磁気':'#f97316','電子理論':'#8b5cf6','電気計測':'#3b82f6'};
+    var pColor = {S:'#ef4444',A:'#f97316'};
+    saItems.forEach(function(w) {
+      var el = document.createElement('div');
+      el.style.cssText = 'display:flex;align-items:center;gap:8px;padding:7px 10px;border-radius:8px;background:rgba(255,255,255,.03);margin-bottom:4px;font-size:.8rem;border-left:3px solid '+(pColor[w.p]||'#666');
+      el.innerHTML = '<div style="min-width:22px;height:22px;border-radius:6px;background:'+(pColor[w.p]||'#666')+'20;display:flex;align-items:center;justify-content:center;font-size:.65rem;font-weight:800;color:'+(pColor[w.p]||'#666')+';flex-shrink:0">'+w.p+'</div><div style="flex:1"><span style="font-weight:600">'+w.q+'</span> <span style="font-size:.7rem;color:'+(catColor[w.cat]||'#94a3b8')+'">'+w.cat+'</span></div><div style="font-size:.67rem;color:#64748b">'+w.date+'</div>';
+      cont.appendChild(el);
+    });
+  })();
+
+  // ===== DATE =====
 document.getElementById('updated-date').textContent =
   new Date('2026-03-25').toLocaleDateString('ja-JP',{year:'numeric',month:'long',day:'numeric'});
 
