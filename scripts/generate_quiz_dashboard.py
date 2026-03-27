@@ -172,6 +172,21 @@ canvas{{max-height:200px!important}}
 new Chart(document.getElementById('ac'),{{type:'bar',data:{{labels:{json.dumps(act_labels,ensure_ascii=False)},datasets:[{{label:'\u8a18\u9332\u6570',data:{json.dumps(act_data)},backgroundColor:'rgba(96,165,250,.55)',borderColor:'#60a5fa',borderWidth:1,borderRadius:4}}]}},options:{{responsive:true,plugins:{{legend:{{display:false}}}},scales:{{y:{{beginAtZero:true,ticks:{{color:'#64748b',stepSize:1}},grid:{{color:'#1a2535'}}}},x:{{ticks:{{color:'#64748b',maxRotation:45,font:{{size:10}}}},grid:{{display:false}}}}}}}}}}}});
 new Chart(document.getElementById('rc'),{{type:'doughnut',data:{{labels:['OK','Risky','NG'],datasets:[{{data:[{ok_n},{risky_n},{ng_n}],backgroundColor:['#22c55e','#f59e0b','#ef4444'],borderColor:'#111827',borderWidth:4}}]}},options:{{responsive:true,plugins:{{legend:{{labels:{{color:'#94a3b8',font:{{size:12}}}}}}}}}}}}}});
 </script>
+<button onclick="refreshDashboard()" id="refresh-btn" style="position:fixed;bottom:20px;right:20px;background:#4c72af;color:white;border:none;padding:12px 20px;border-radius:8px;font-size:1rem;cursor:pointer;z-index:999;box-shadow:0 2px 8px rgba(0,0,0,0.3)">🔄 更新</button>
+<script>
+async function refreshDashboard() {{
+  const btn = document.getElementById('refresh-btn');
+  btn.textContent = '⏳ 更新中...';
+  btn.disabled = true;
+  try {{
+    await fetch('https://hook.eu1.make.com/gxj0wkwzcw78lvbm4op71reqqa45c3y5', {{method:'POST'}});
+    btn.textContent = '✅ リクエスト送信！';
+  }} catch(e) {{
+    btn.textContent = '❌ エラー';
+  }}
+  setTimeout(() => {{ btn.textContent = '🔄 更新'; btn.disabled = false; }}, 3000);
+}}
+</script>
 </body></html>"""
 
     with open(OUTPUT_PATH, "w", encoding="utf-8") as f:
