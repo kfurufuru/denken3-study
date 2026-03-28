@@ -612,7 +612,7 @@ function triggerUpdate() {
   const token = localStorage.getItem('gh_pat') || prompt('GitHub Personal Access Token を入力してください（repo権限が必要です）');
   if (!token) return;
   localStorage.setItem('gh_pat', token);
-  btn.textContent = '⏳ 更新中...';
+  btn.textContent = '⏳ 更新リクエスト中...';
   btn.disabled = true;
   btn.style.opacity = '0.6';
   fetch('https://api.github.com/repos/kfurufuru/denken3-study/actions/workflows/update.yml/dispatches', {
@@ -621,9 +621,17 @@ function triggerUpdate() {
     body: JSON.stringify({ ref: 'main' })
   }).then(r => {
     if (r.status === 204) {
-      btn.textContent = '✅ 更新開始！';
       btn.style.background = 'linear-gradient(135deg,#064e3b,#065f46)';
-      setTimeout(() => { btn.textContent = '🔄 データ更新'; btn.disabled = false; btn.style.opacity = '1'; }, 5000);
+      let sec = 90;
+      const iv = setInterval(() => {
+        btn.textContent = '⏳ 更新中... ' + sec + '秒後にリロード';
+        sec--;
+        if (sec < 0) {
+          clearInterval(iv);
+          btn.textContent = '✅ リロードします';
+          location.reload(true);
+        }
+      }, 1000);
     } else { throw new Error('Status: ' + r.status); }
   }).catch(e => {
     btn.textContent = '❌ 失敗';
