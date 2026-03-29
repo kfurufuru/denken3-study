@@ -22,5 +22,17 @@
     "result": "risky",
     "subject": "理論",
     "theme": "電磁誘導"
+  },
+  {
+    "L1": "MAP",
+    "L2": "CALC",
+    "date": "2026-03-28",
+    "memo": "導体球の静電容量 C=4πε0a と Q=CV の接続が曖昧。電位一定と電荷一定の条件切替で迷いあり。",
+    "next_review": "SR2",
+    "patch": "まず固定条件が V か Q かを先に確定する。導体球は C∝a、V一定なら Q=CV でQ↑、Q一定なら V=Q/C でV↑。",
+    "phase": "A",
+    "result": "risky",
+    "subject": "理論",
+    "theme": "静電容量"
   }
 ]
