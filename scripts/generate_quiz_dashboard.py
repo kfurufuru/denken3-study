@@ -9,6 +9,26 @@ OUTPUT_PATH  = "quiz.html"
 SUBJECT_ORDER = ["\u7406\u8ad6", "\u96fb\u529b", "\u6a5f\u68b0", "\u6cd5\u898f"]
 REVIEW_DAYS   = {"SR1": 1, "SR2": 3, "SR3": 7, "SR4": 14, "SR5": 30, "done": 9999}
 
+WIKI_BASE = "https://kfurufuru.github.io/denken-wiki-riron/themes/"
+WIKI_MAP = {
+    "三相交流": "sansou-kouryu",
+    "電磁誘導": "denjiryoku",
+    "コンデンサ": "condenser",
+    "磁気回路": "jiki-kairo",
+    "過渡現象": "kato-gensho",
+    "直流回路": "chokuryu-kairo",
+    "交流基礎": "kouryu-kiso",
+    "RLC回路": "rlc-kairo",
+    "交流電力": "kouryu-denryoku",
+    "静電気": "seidenki",
+    "インダクタンス": "inductance",
+    "半導体": "handotai",
+    "トランジスタ": "transistor",
+    "オペアンプ": "opamp",
+    "電気計測": "keiki",
+    "ブリッジ回路": "bridge",
+}
+
 def load():
     try:
         with open(RECORDS_PATH, encoding="utf-8") as f:
@@ -79,7 +99,12 @@ def generate():
                 cnt = Counter(rs)
                 tip = f"OK:{cnt['ok']} Risky:{cnt['risky']} NG:{cnt['ng']}"
                 lbl = {"ok":"OK","risky":"Risky","ng":"NG"}.get(dom,dom)
-                cells += f'<td style="background:{bg};color:{fg};text-align:center;padding:5px 8px;border-radius:5px;font-weight:700;font-size:.7rem;cursor:default" title="{tip}">{lbl}</td>'
+                wiki_slug = WIKI_MAP.get(t)
+                if wiki_slug:
+                    wiki_url = f"{WIKI_BASE}{wiki_slug}/"
+                    cells += f'<td style="background:{bg};color:{fg};text-align:center;padding:5px 8px;border-radius:5px;font-weight:700;font-size:.7rem" title="{tip} — Wikiへ"><a href="{wiki_url}" target="_blank" style="color:{fg};text-decoration:none;display:block">{lbl} <span style="font-size:.6rem;opacity:.8">📖</span></a></td>'
+                else:
+                    cells += f'<td style="background:{bg};color:{fg};text-align:center;padding:5px 8px;border-radius:5px;font-weight:700;font-size:.7rem;cursor:default" title="{tip}">{lbl}</td>'
         rows += f"<tr><td style='color:#94a3b8;white-space:nowrap;font-size:.72rem;padding:5px 10px'>{t}</td>{cells}</tr>"
     bugmap_html = f'<div style="overflow-x:auto"><table style="width:100%;border-collapse:separate;border-spacing:3px"><thead><tr><th style="text-align:left;color:#64748b;padding:6px 10px">\u30c6\u30fc\u30de\\\u79d1\u76ee</th>{th}</tr></thead><tbody>{rows}</tbody></table></div>'
 
