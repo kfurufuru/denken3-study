@@ -142,6 +142,48 @@ const WEAK_DATA = {weak_js};"""
     html = re.sub(r'(<div[^>]*class="stat-val"[^>]*style="color:var\(--green\)"[^>]*>)[^<]*(</div>)',
                   f'\\g<1>{achieved}\\g<2>', html, count=1)
 
+    # ===== DATE display (footer) =====
+    html = re.sub(
+        r"new Date\('[^']*'\)\.toLocaleDateString\('ja-JP'",
+        f"new Date('{stats['updated']}').toLocaleDateString('ja-JP'",
+        html
+    )
+
+    # ===== Category progress (bunya-pct) =====
+    # Notion category names → HTML display order: 電気回路, 電気・電子計測, 電磁気学, 電子理論
+    cat_map = [
+        ("green",  ["電気回路"]),
+        ("accent", ["電気・電子計測", "電気及び電子計測"]),
+        ("orange", ["電磁気学", "電磁気"]),
+        ("purple", ["電子理論"]),
+    ]
+    bar_ids = ["b1", "b2", "b3", "b4"]
+    bar_pcts = []
+    for color_var, aliases in cat_map:
+        d = {"total": 0, "achieved": 0}
+        for alias in aliases:
+            if alias in cat:
+                d = cat[alias]
+                break
+        c_pct = round(d["achieved"] / d["total"] * 100) if d["total"] else 0
+        c_ach = d["achieved"]
+        c_tot = d["total"] or "?"
+        bar_pcts.append(c_pct)
+        html = re.sub(
+            rf'(<div class="bunya-pct" style="color:var\(--{color_var}\)">)\d+%'
+            rf' <span[^>]*>[^<]*</span>',
+            rf'\g<1>{c_pct}% <span style="color:var(--muted);font-weight:400;font-size:.7rem">≈ {c_ach}/{c_tot}問</span>',
+            html
+        )
+
+    # ===== Bar widths (JS animation) =====
+    for i, (bid, bp) in enumerate(zip(bar_ids, bar_pcts)):
+        html = re.sub(
+            rf"document\.getElementById\('{bid}'\)\.style\.width='[^']*'",
+            f"document.getElementById('{bid}').style.width='{bp}%'",
+            html
+        )
+
     with open("index.html","w",encoding="utf-8") as f:
         f.write(html)
 
