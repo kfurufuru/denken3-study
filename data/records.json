@@ -70,5 +70,17 @@
     "result": "risky",
     "subject": "理論",
     "theme": "磁界"
+  },
+  {
+    "L1": "MAP",
+    "L2": "REL",
+    "date": "2026-04-03",
+    "memo": "需要率との区別で一部迷い（設備容量との関係が曖昧）",
+    "next_review": "SR3",
+    "patch": "不等率=負荷同士のズレ、需要率=設備との関係で固定",
+    "phase": "B",
+    "result": "risky",
+    "subject": "電力",
+    "theme": "不等率"
   }
 ]
