@@ -20,6 +20,42 @@ HEADERS = {
     "Content-Type": "application/json",
 }
 
+# ===== 定数定義 =====
+
+# 試験日・残日数
+EXAM_DATE = datetime.date(2026, 8, 23)
+
+# スロット割り当てルール: 分野カテゴリ → スロット
+THEORY_CATEGORIES = {"電気回路", "電磁気学", "電子理論", "電気計測", "電気・電子計測", "電気及び電子計測"}
+
+# Bugコード → 日本語説明
+BUG_TO_DESC = {
+    "ANCHOR": "思い込み",
+    "CONF":   "自信過剰",
+    "RUSH":   "焦り",
+    "MODEL":  "モデル誤り",
+    "TRACK":  "計算追跡ミス",
+    "READ":   "読み飛ばし",
+    "ASSUME": "前提見落とし",
+}
+
+# Bugコード → 対策文
+BUG_TO_THEME = {
+    "ANCHOR": "ANCHOR対策: 既知パターンを疑う問題を重点的に演習する",
+    "CONF":   "CONF対策: 自信ある分野の検算問題を追加する",
+    "RUSH":   "RUSH対策: 時間制限ありのスロー演習を計画する",
+    "MODEL":  "MODEL対策: 物理モデルの図解演習を計画する",
+    "TRACK":  "TRACK対策: 多ステップ計算の追跡訓練を計画する",
+    "READ":   "READ対策: 問題文の精読・マーキング練習を計画する",
+    "ASSUME": "ASSUME対策: 前提条件の明示化訓練を計画する",
+}
+
+# 優先度ランク
+RANK = {"S": 0, "A": 1, "B": 2, "C": 3, "D": 4}
+
+
+# ===== Notion API =====
+
 def query_all(db_id):
     """全レコードを取得"""
     results, cursor = [], None
@@ -52,6 +88,9 @@ def get_prop(page, name):
         d = p.get("date") or {}
         return d.get("start", "")
     return ""
+
+
+# ===== 統計計算（既存） =====
 
 def compute_stats(records):
     total = len(records)
@@ -102,7 +141,277 @@ def compute_stats(records):
         "updated": datetime.date.today().isoformat()
     }
 
-def inject_data(stats):
+
+# ===== records.json 読み込み =====
+
+def load_records():
+    """data/records.json を読み込む。ファイルが無ければ空リスト返却。"""
+    path = os.path.join(os.path.dirname(__file__), "data", "records.json")
+    if not os.path.exists(path):
+        return []
+    try:
+        with open(path, "r", encoding="utf-8") as f:
+            data = json.load(f)
+        return data if isinstance(data, list) else []
+    except Exception as e:
+        print(f"⚠️  data/records.json 読み込み失敗: {e}")
+        return []
+
+
+# ===== TODAY_SESSIONS 計算 =====
+
+def compute_today_sessions(notion_records, records_list):
+    """
+    Tab1「今日の学習」用データを生成する。
+
+    スロット割り当て:
+        morning  → 理論科目（電気回路/電磁気学/電子理論/電気計測 系）
+        noon     → 法規科目
+        evening  → 法規科目
+
+    選出優先度:
+        1. records.json で next_review が SR1〜SR5 かつ date が今日以前のもの → type:"review"
+        2. 不足分を Notion の priority 順（S→A→B→C）で補充 → type:"weak"
+    """
+    today_str = datetime.date.today().isoformat()
+    days_left = (EXAM_DATE - datetime.date.today()).days
+
+    # --- SR復習候補を抽出 ---
+    sr_candidates = []
+    for rec in records_list:
+        nr = rec.get("next_review", "")
+        rec_date = rec.get("date", "")
+        if nr in ("SR1", "SR2", "SR3", "SR4", "SR5") and rec_date <= today_str:
+            sr_candidates.append(rec)
+
+    # --- Notion弱点候補を抽出（未達成・重要度順）---
+    notion_weak = []
+    for r in notion_records:
+        done = get_prop(r, "達成") or (
+            get_prop(r, "1回目") == "×" and get_prop(r, "2回目") == "〇"
+        )
+        if get_prop(r, "1回目") == "×" and not done:
+            notion_weak.append({
+                "question_id":    get_prop(r, "問題ID"),
+                "category":       get_prop(r, "分野"),
+                "priority":       (get_prop(r, "重要度ランク") or "C")[:1],
+                "last_result":    None,
+            })
+    notion_weak.sort(key=lambda x: RANK.get(x["priority"], 9))
+
+    def _pick_for_slot(slot_name):
+        """スロットに最適な問題を1件選んでSessionオブジェクトを返す"""
+        is_theory = (slot_name == "morning")
+        slot_meta = {
+            "morning":  {"label": "朝", "emoji": "🌅",  "subject_label": "理論"},
+            "noon":     {"label": "昼", "emoji": "☀️", "subject_label": "法規"},
+            "evening":  {"label": "夜", "emoji": "🌙",  "subject_label": "法規"},
+        }[slot_name]
+
+        # SR復習から探す
+        for i, rec in enumerate(sr_candidates):
+            cat = rec.get("category", "") or rec.get("subject", "") or ""
+            cat_is_theory = any(
+                c in cat for c in ("理論", "電気回路", "電磁気", "電子", "計測")
+            )
+            if (is_theory and cat_is_theory) or (not is_theory and not cat_is_theory):
+                sr_candidates.pop(i)
+                last_res = rec.get("last_result", "ng")
+                return {
+                    "slot":          slot_name,
+                    "label":         slot_meta["label"],
+                    "emoji":         slot_meta["emoji"],
+                    "subject_label": slot_meta["subject_label"],
+                    "question_id":   rec.get("question_id", ""),
+                    "category":      rec.get("category", ""),
+                    "priority":      rec.get("priority", "B"),
+                    "type":          "review",
+                    "last_result":   last_res if last_res in ("ok", "risky", "ng") else "ng",
+                }
+
+        # Notion弱点から探す
+        for i, rec in enumerate(notion_weak):
+            cat = rec.get("category", "") or ""
+            cat_is_theory = cat in THEORY_CATEGORIES or any(
+                c in cat for c in ("理論", "電気回路", "電磁気", "電子", "計測")
+            )
+            if (is_theory and cat_is_theory) or (not is_theory and not cat_is_theory):
+                notion_weak.pop(i)
+                return {
+                    "slot":          slot_name,
+                    "label":         slot_meta["label"],
+                    "emoji":         slot_meta["emoji"],
+                    "subject_label": slot_meta["subject_label"],
+                    "question_id":   rec.get("question_id", ""),
+                    "category":      cat,
+                    "priority":      rec.get("priority", "C"),
+                    "type":          "weak",
+                }
+
+        # 候補なし → プレースホルダー
+        return {
+            "slot":          slot_name,
+            "label":         slot_meta["label"],
+            "emoji":         slot_meta["emoji"],
+            "subject_label": slot_meta["subject_label"],
+            "question_id":   "",
+            "category":      "",
+            "priority":      "C",
+            "type":          "weak",
+        }
+
+    sessions = [
+        _pick_for_slot("morning"),
+        _pick_for_slot("noon"),
+        _pick_for_slot("evening"),
+    ]
+
+    return {
+        "date":      today_str,
+        "days_left": days_left,
+        "sessions":  sessions,
+    }
+
+
+# ===== PDCA_DATA 計算 =====
+
+def compute_pdca_data(records_list):
+    """
+    Tab2「PDCA」用データを生成する。
+
+    - do_logs  : 直近10件の学習記録
+    - check_pending : next_review が SR2〜SR5 で直近7件
+    - act_bugs : error_sub フィールドの集計（上位5件）
+    - act_countermeasures : bug上位コードの対策文
+    """
+    today = datetime.date.today()
+
+    # 今週の情報
+    iso_week = today.isocalendar()[1]
+    week_label = f"W{iso_week:02d}"
+    # 今週の月曜〜日曜
+    monday = today - datetime.timedelta(days=today.weekday())
+    sunday = monday + datetime.timedelta(days=6)
+    period_label = f"{monday.month}/{monday.day}–{sunday.month}/{sunday.day}"
+
+    # --- do_logs: dateの降順で直近10件 ---
+    sorted_recs = sorted(
+        [r for r in records_list if r.get("date")],
+        key=lambda x: x["date"],
+        reverse=True
+    )
+    do_logs = []
+    for rec in sorted_recs[:10]:
+        rec_date = rec.get("date", "")
+        try:
+            d = datetime.date.fromisoformat(rec_date)
+            date_label = f"{d.month}/{d.day}"
+        except Exception:
+            date_label = rec_date
+
+        score_raw = rec.get("score")
+        try:
+            score = int(score_raw)
+        except (TypeError, ValueError):
+            score = 0
+
+        do_logs.append({
+            "date":   date_label,
+            "theme":  rec.get("question_id", rec.get("theme", "")),
+            "source": rec.get("source", "問題演習"),
+            "score":  score,
+            "result": rec.get("last_result", rec.get("result", "ok")),
+        })
+
+    # --- check_pending: SR2〜SR5 で直近7件（dateの降順）---
+    pending_recs = [
+        r for r in records_list
+        if r.get("next_review", "") in ("SR2", "SR3", "SR4", "SR5")
+    ]
+    pending_recs.sort(key=lambda x: x.get("date", ""), reverse=True)
+    check_pending = []
+    for rec in pending_recs[:7]:
+        rec_date = rec.get("date", "")
+        try:
+            d = datetime.date.fromisoformat(rec_date)
+            days_ago = (today - d).days
+        except Exception:
+            days_ago = 0
+
+        check_pending.append({
+            "theme":    rec.get("question_id", rec.get("theme", "")),
+            "result":   rec.get("last_result", rec.get("result", "risky")),
+            "category": rec.get("category", ""),
+            "days_ago": days_ago,
+        })
+
+    # --- act_bugs: error_sub フィールドを集計（上位5件）---
+    bug_counter = {}
+    for rec in records_list:
+        error_sub = rec.get("error_sub", "")
+        if not error_sub:
+            continue
+        # カンマ区切りで複数コードが入っている場合も考慮
+        for code in str(error_sub).split(","):
+            code = code.strip().upper()
+            if code:
+                bug_counter[code] = bug_counter.get(code, 0) + 1
+
+    sorted_bugs = sorted(bug_counter.items(), key=lambda x: x[1], reverse=True)
+    act_bugs = []
+    for code, count in sorted_bugs[:5]:
+        act_bugs.append({
+            "code":  code,
+            "desc":  BUG_TO_DESC.get(code, code),
+            "count": count,
+        })
+
+    # --- act_countermeasures: 上位バグの対策文 ---
+    act_countermeasures = []
+    for bug in act_bugs:
+        code = bug["code"]
+        if code in BUG_TO_THEME:
+            act_countermeasures.append(BUG_TO_THEME[code])
+
+    return {
+        "week":               week_label,
+        "period":             period_label,
+        "do_logs":            do_logs,
+        "check_pending":      check_pending,
+        "act_bugs":           act_bugs,
+        "act_countermeasures": act_countermeasures,
+    }
+
+
+# ===== HTML注入（TODAY_SESSIONS / PDCA_DATA）=====
+
+def inject_today_pdca(html, today_data, pdca_data):
+    """TODAY_SESSIONS と PDCA_DATA を HTML に注入する"""
+
+    # TODAY_SESSIONS 置換
+    today_js = json.dumps(today_data, ensure_ascii=False, indent=2)
+    html = re.sub(
+        r'// ===== TODAY_SESSIONS =====\s*\nconst TODAY_SESSIONS = \{.*?\};',
+        f'// ===== TODAY_SESSIONS =====\nconst TODAY_SESSIONS = {today_js};',
+        html,
+        flags=re.DOTALL
+    )
+
+    # PDCA_DATA 置換
+    pdca_js = json.dumps(pdca_data, ensure_ascii=False, indent=2)
+    html = re.sub(
+        r'// ===== PDCA_DATA =====\s*\nconst PDCA_DATA = \{.*?\};',
+        f'// ===== PDCA_DATA =====\nconst PDCA_DATA = {pdca_js};',
+        html,
+        flags=re.DOTALL
+    )
+
+    return html
+
+
+# ===== 既存 inject_data（stats 注入）=====
+
+def inject_data(stats, today_data, pdca_data):
     """index.html の DATA セクションを更新"""
     with open("index.html","r",encoding="utf-8") as f:
         html = f.read()
@@ -184,6 +493,9 @@ const WEAK_DATA = {weak_js};"""
             html
         )
 
+    # ===== TODAY_SESSIONS / PDCA_DATA 注入 =====
+    html = inject_today_pdca(html, today_data, pdca_data)
+
     with open("index.html","w",encoding="utf-8") as f:
         f.write(html)
 
@@ -194,6 +506,9 @@ const WEAK_DATA = {weak_js};"""
     for k,v in stats["by_cat"].items():
         p = round(v["achieved"]/v["total"]*100) if v["total"] else 0
         print(f"   {k}: {v['achieved']}/{v['total']} ({p}%)")
+    print(f"   今日のセッション: {len(today_data.get('sessions', []))}スロット")
+    print(f"   PDCAログ: do={len(pdca_data.get('do_logs',[]))}件 / pending={len(pdca_data.get('check_pending',[]))}件 / bugs={len(pdca_data.get('act_bugs',[]))}件")
+
 
 if __name__ == "__main__":
     if not NOTION_TOKEN:
@@ -201,7 +516,15 @@ if __name__ == "__main__":
         print("   export NOTION_TOKEN=your_token")
         exit(1)
     print("📡 Notion からデータ取得中...")
-    records = query_all(DB_ID)
-    print(f"   {len(records)}件 取得完了")
-    stats = compute_stats(records)
-    inject_data(stats)
+    notion_records = query_all(DB_ID)
+    print(f"   {len(notion_records)}件 取得完了")
+    stats = compute_stats(notion_records)
+
+    print("📂 data/records.json 読み込み中...")
+    records = load_records()
+    print(f"   {len(records)}件 ローカルレコード読み込み完了")
+
+    today_data = compute_today_sessions(notion_records, records)
+    pdca_data  = compute_pdca_data(records)
+
+    inject_data(stats, today_data, pdca_data)

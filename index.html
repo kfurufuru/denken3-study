@@ -3,65 +3,115 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>⚡ 電験3種「理論」— 学習ダッシュボード</title>
+<title>⚡ 電験3種 — 学習システム</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800;900&family=Noto+Sans+JP:wght@400;600;700;800&display=swap" rel="stylesheet">
 <style>
 :root {
-  --bg: #060810;
-  --card: #0d1117;
-  --card2: #161b27;
-  --border: #1f2937;
+  --bg:      #060810;
+  --card:    #0d1117;
+  --card2:   #161b27;
+  --border:  #1f2937;
   --border2: #2d3748;
-  --accent: #3b82f6;
+  --accent:  #3b82f6;
   --accent2: #6366f1;
-  --green: #10b981;
-  --red: #ef4444;
-  --yellow: #f59e0b;
-  --orange: #f97316;
-  --purple: #8b5cf6;
-  --cyan: #06b6d4;
-  --pink: #ec4899;
-  --text: #f1f5f9;
-  --muted: #64748b;
-  --muted2: #94a3b8;
+  --green:   #10b981;
+  --red:     #ef4444;
+  --yellow:  #f59e0b;
+  --orange:  #f97316;
+  --purple:  #8b5cf6;
+  --cyan:    #06b6d4;
+  --text:    #f1f5f9;
+  --muted:   #64748b;
+  --muted2:  #94a3b8;
+  --ok-color:    #22c55e;
+  --risky-color: #f59e0b;
+  --ng-color:    #ef4444;
+  /* spacing */
+  --sp-1:4px; --sp-2:8px; --sp-3:12px; --sp-4:16px;
+  --sp-6:24px; --sp-8:32px; --sp-12:48px; --sp-16:64px;
+  /* animation */
+  --transition:0.2s ease;
+  --hover-lift:translateY(-2px);
+  /* radius */
+  --radius-sm:6px; --radius-md:12px; --radius-lg:20px;
 }
 *{box-sizing:border-box;margin:0;padding:0}
 html{scroll-behavior:smooth}
 body{
-  font-family:'Segoe UI','Hiragino Sans','Yu Gothic UI',sans-serif;
+  font-family:'Inter','Noto Sans JP','Segoe UI',sans-serif;
   background:var(--bg);color:var(--text);
   min-height:100vh;overflow-x:hidden;
 }
 
 /* ===== CANVAS BG ===== */
-#bg-canvas{position:fixed;top:0;left:0;width:100%;height:100%;z-index:0;pointer-events:none;opacity:.4}
+#bg-canvas{position:fixed;top:0;left:0;width:100%;height:100%;z-index:0;pointer-events:none;opacity:.35}
 
-.page{position:relative;z-index:1;max-width:1200px;margin:0 auto;padding:20px 16px 60px}
+/* ===== PORTAL LINK ===== */
+.portal-link{
+  position:fixed;top:14px;left:14px;z-index:9999;
+  background:rgba(10,14,26,0.85);border:1px solid rgba(99,102,241,0.35);
+  color:#a5b4fc;padding:6px 14px;border-radius:20px;
+  font-size:0.75rem;font-weight:600;text-decoration:none;
+  backdrop-filter:blur(10px);letter-spacing:-.01em;
+  transition:var(--transition);
+}
+.portal-link:hover{border-color:rgba(99,102,241,0.6);color:#c4b5fd}
 
 /* ===== HEADER ===== */
-.header{text-align:center;padding:32px 0 28px;position:relative}
-.header-badge{
-  display:inline-block;padding:4px 14px;
-  background:linear-gradient(135deg,rgba(59,130,246,.15),rgba(99,102,241,.15));
-  border:1px solid rgba(99,102,241,.35);
-  border-radius:99px;font-size:.72rem;color:#a5b4fc;margin-bottom:14px;letter-spacing:.05em;
+.header{
+  position:relative;z-index:10;
+  display:flex;align-items:center;justify-content:space-between;
+  padding:18px 20px 14px;
+  border-bottom:1px solid var(--border);
+  background:rgba(6,8,16,0.9);backdrop-filter:blur(12px);
 }
-.header h1{
-  font-size:clamp(1.6rem,4vw,2.4rem);font-weight:900;line-height:1.15;
-  background:linear-gradient(135deg,#60a5fa,#818cf8,#c084fc);
-  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
-  margin-bottom:6px;
+.header-left{display:flex;align-items:center;gap:10px}
+.header-title{font-size:1.15rem;font-weight:900;background:linear-gradient(135deg,#60a5fa,#818cf8,#c084fc);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
+.header-sub{font-size:.78rem;color:var(--muted2);font-weight:600}
+.days-badge{
+  background:linear-gradient(135deg,rgba(6,182,212,.15),rgba(59,130,246,.15));
+  border:1px solid rgba(6,182,212,.3);
+  color:#67e8f9;padding:5px 14px;border-radius:99px;
+  font-size:.78rem;font-weight:700;letter-spacing:.03em;white-space:nowrap;
 }
-.header p{font-size:.82rem;color:var(--muted2)}
 
-/* ===== GRID LAYOUTS ===== */
+/* ===== TAB NAV ===== */
+.tab-nav{
+  position:sticky;top:0;z-index:100;
+  display:flex;gap:0;
+  background:rgba(6,8,16,0.95);backdrop-filter:blur(12px);
+  border-bottom:1px solid var(--border);
+  overflow-x:auto;-webkit-overflow-scrolling:touch;
+}
+.tab-nav::-webkit-scrollbar{height:2px}
+.tab-nav::-webkit-scrollbar-track{background:var(--bg)}
+.tab-nav::-webkit-scrollbar-thumb{background:var(--border2)}
+.tab-btn{
+  background:none;border:none;cursor:pointer;
+  padding:13px 20px;font-size:.85rem;font-weight:600;
+  color:var(--muted2);white-space:nowrap;
+  border-bottom:2px solid transparent;
+  transition:all var(--transition);font-family:inherit;
+}
+.tab-btn:hover{color:var(--text);background:rgba(255,255,255,.03)}
+.tab-btn.active{color:var(--accent);border-bottom-color:var(--accent)}
+
+/* ===== TAB CONTENT ===== */
+.tab-content{position:relative;z-index:1}
+.tab-pane{display:none}
+.tab-pane.active{display:block}
+.main{max-width:1200px;margin:0 auto;padding:20px 16px 60px}
+
+/* ===== GRID ===== */
 .g2{display:grid;grid-template-columns:1fr 1fr;gap:14px}
 .g3{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
 .g4{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}
 .g12{display:grid;grid-template-columns:1fr 2fr;gap:14px}
 .g21{display:grid;grid-template-columns:2fr 1fr;gap:14px}
-@media(max-width:900px){.g3,.g4{grid-template-columns:repeat(2,1fr)}.g12,.g21{grid-template-columns:1fr}}
-@media(max-width:580px){.g2,.g3,.g4{grid-template-columns:1fr}}
 
+/* ===== SECTION ===== */
 .section{margin-bottom:20px}
 .sec-title{
   font-size:.7rem;font-weight:700;text-transform:uppercase;letter-spacing:.1em;
@@ -73,88 +123,40 @@ body{
 .card{
   background:var(--card);border:1px solid var(--border);
   border-radius:16px;padding:18px;position:relative;overflow:hidden;
-  transition:border-color .2s,transform .2s;
+  transition:border-color var(--transition),transform var(--transition);
 }
-.card:hover{border-color:var(--border2);transform:translateY(-1px)}
+.card:hover{border-color:var(--border2);transform:var(--hover-lift)}
 .card::before{
   content:'';position:absolute;inset:0;border-radius:16px;
   background:radial-gradient(ellipse at top left,rgba(99,102,241,.04),transparent 60%);
   pointer-events:none;
 }
-
-/* ===== LEVEL / XP ===== */
-.level-card{
-  background:linear-gradient(135deg,#0f172a,#1e1b4b);
-  border:1px solid rgba(99,102,241,.4);
-}
-.level-top{display:flex;align-items:center;gap:16px;margin-bottom:14px}
-.level-badge{
-  width:72px;height:72px;border-radius:50%;
-  background:linear-gradient(135deg,#3b82f6,#8b5cf6,#c084fc);
-  display:flex;flex-direction:column;align-items:center;justify-content:center;
-  font-weight:900;flex-shrink:0;box-shadow:0 0 24px rgba(99,102,241,.5);
-  position:relative;
-}
-.level-badge::after{
-  content:'';position:absolute;inset:-3px;border-radius:50%;
-  border:2px solid transparent;
-  background:linear-gradient(135deg,#3b82f6,#c084fc) border-box;
-  -webkit-mask:linear-gradient(#fff 0 0) padding-box,linear-gradient(#fff 0 0);
-  -webkit-mask-composite:destination-out;mask-composite:exclude;
-  animation:spin 4s linear infinite;
-}
-@keyframes spin{to{transform:rotate(360deg)}}
-.level-num{font-size:1.5rem;line-height:1;color:#fff}
-.level-txt{font-size:.55rem;color:#a5b4fc;letter-spacing:.06em}
-.level-info{flex:1}
-.level-name{font-size:1.05rem;font-weight:800;color:#c4b5fd;margin-bottom:2px}
-.level-sub{font-size:.74rem;color:var(--muted2);margin-bottom:8px}
-.xp-bar-bg{background:rgba(255,255,255,.06);border-radius:99px;height:8px;overflow:hidden}
-.xp-bar{
-  height:100%;border-radius:99px;
-  background:linear-gradient(90deg,#3b82f6,#8b5cf6,#c084fc);
-  transition:width 1.2s cubic-bezier(.4,0,.2,1);
-  box-shadow:0 0 8px rgba(139,92,246,.6);
-}
-.xp-labels{display:flex;justify-content:space-between;font-size:.68rem;color:var(--muted);margin-top:4px}
-
-/* ===== STREAK ===== */
-.streak-card{
-  background:linear-gradient(135deg,#1c0a00,#2d1500);
-  border:1px solid rgba(249,115,22,.35);text-align:center;
-}
-.streak-num{
-  font-size:3rem;font-weight:900;line-height:1;
-  background:linear-gradient(135deg,#f97316,#fbbf24);
-  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
-}
-.streak-fire{font-size:1.8rem;animation:bounce .8s ease-in-out infinite alternate}
-@keyframes bounce{from{transform:scale(1)}to{transform:scale(1.2)}}
-.streak-label{font-size:.75rem;color:#fb923c;margin-top:2px}
+.card-header{font-size:.88rem;font-weight:700;margin-bottom:14px;color:#93c5fd}
 
 /* ===== STAT CARDS ===== */
 .stat-val{font-size:1.8rem;font-weight:800;line-height:1;margin-bottom:2px}
 .stat-lbl{font-size:.72rem;color:var(--muted2)}
 .stat-sub{font-size:.7rem;color:var(--muted);margin-top:3px}
 
+/* ===== PRIORITY BADGES ===== */
+.priority{font-size:.62rem;padding:1px 6px;border-radius:4px;font-weight:700;letter-spacing:.04em}
+.p-S{background:rgba(239,68,68,.15);color:#fca5a5}
+.p-A{background:rgba(249,115,22,.15);color:#fdba74}
+.p-B{background:rgba(234,179,8,.15);color:#fde047}
+.p-C{background:rgba(100,116,139,.15);color:#94a3b8}
+
 /* ===== RING CHART ===== */
 .ring-wrap{position:relative;width:130px;height:130px;flex-shrink:0}
-.ring-center{
-  position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);
-  text-align:center;
-}
+.ring-center{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);text-align:center;}
 .ring-pct{font-size:1.5rem;font-weight:800;color:#60a5fa}
 .ring-lbl{font-size:.6rem;color:var(--muted);margin-top:1px}
 .overall-row{display:flex;align-items:center;gap:18px}
 .overall-meta{flex:1}
-.ov-item{
-  display:flex;align-items:center;justify-content:space-between;
-  padding:5px 0;border-bottom:1px solid var(--border);font-size:.84rem;
-}
+.ov-item{display:flex;align-items:center;justify-content:space-between;padding:5px 0;border-bottom:1px solid var(--border);font-size:.84rem;}
 .ov-item:last-child{border-bottom:none}
 .ov-val{font-weight:700}
 
-/* ===== BUNYA BARS ===== */
+/* ===== PROGRESS BARS ===== */
 .bunya-item{margin-bottom:14px}
 .bunya-item:last-child{margin-bottom:0}
 .bunya-hd{display:flex;align-items:center;justify-content:space-between;margin-bottom:6px}
@@ -163,33 +165,10 @@ body{
 .bar-bg{background:var(--border);border-radius:99px;height:9px;overflow:hidden}
 .bar-fill{height:100%;border-radius:99px;transition:width 1.4s cubic-bezier(.4,0,.2,1)}
 .bunya-chips{display:flex;gap:6px;margin-top:6px;flex-wrap:wrap}
-.chip{
-  font-size:.65rem;padding:2px 7px;border-radius:6px;
-  border:1px solid var(--border);color:var(--muted2);
-}
+.chip{font-size:.65rem;padding:2px 7px;border-radius:6px;border:1px solid var(--border);color:var(--muted2);}
 .chip b{color:var(--text)}
 
-/* ===== TODAY ===== */
-.today-item{
-  display:flex;gap:12px;align-items:flex-start;
-  padding:10px 0;border-bottom:1px solid var(--border);
-}
-.today-item:last-child{border-bottom:none}
-.today-num{
-  width:26px;height:26px;border-radius:7px;flex-shrink:0;
-  display:flex;align-items:center;justify-content:center;
-  font-size:.78rem;font-weight:800;
-}
-.today-body{flex:1}
-.today-q{font-size:.85rem;font-weight:600;margin-bottom:2px}
-.today-meta{font-size:.7rem;color:var(--muted2);display:flex;gap:8px;flex-wrap:wrap}
-.priority{font-size:.62rem;padding:1px 6px;border-radius:4px;font-weight:700;letter-spacing:.04em}
-.p-S{background:rgba(239,68,68,.15);color:#fca5a5}
-.p-A{background:rgba(249,115,22,.15);color:#fdba74}
-.p-B{background:rgba(234,179,8,.15);color:#fde047}
-.p-C{background:rgba(100,116,139,.15);color:#94a3b8}
-
-/* ===== WEAKNESS ===== */
+/* ===== WEAK LIST ===== */
 .weak-item{
   padding:8px 10px;border-radius:10px;background:var(--card2);
   border:1px solid var(--border);margin-bottom:6px;
@@ -207,170 +186,375 @@ body{
   background:linear-gradient(135deg,rgba(6,182,212,.08),rgba(59,130,246,.08));
   border:1px solid rgba(6,182,212,.25);text-align:center;
 }
-.count-days{
-  font-size:3.2rem;font-weight:900;line-height:1;
-  background:linear-gradient(135deg,#06b6d4,#3b82f6);
-  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
-}
+.count-days{font-size:3.2rem;font-weight:900;line-height:1;background:linear-gradient(135deg,#06b6d4,#3b82f6);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
 .count-lbl{font-size:.8rem;color:#67e8f9;margin-top:4px}
 .count-sub{font-size:.7rem;color:var(--muted);margin-top:6px}
 
-/* ===== HISTORY CALENDAR ===== */
-.cal-wrap{display:flex;flex-wrap:wrap;gap:3px}
-.cal-day{
-  width:12px;height:12px;border-radius:2px;
-  background:var(--border);transition:transform .15s;cursor:default;
-}
-.cal-day:hover{transform:scale(1.4)}
-.cal-0{background:var(--border)}
-.cal-1{background:#1e3a5f}
-.cal-2{background:#1d4ed8}
-.cal-3{background:#2563eb}
-.cal-4{background:#3b82f6}
-.cal-lbl{font-size:.65rem;color:var(--muted);margin-top:4px}
-
-/* ===== PROGRESS RING ANIMATION ===== */
-@keyframes fadeUp{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:translateY(0)}}
-.card{animation:fadeUp .5s ease both}
-.card:nth-child(1){animation-delay:.05s}
-.card:nth-child(2){animation-delay:.1s}
-.card:nth-child(3){animation-delay:.15s}
-.card:nth-child(4){animation-delay:.2s}
-
-/* ===== GLOW EFFECT ===== */
-.glow-green{box-shadow:0 0 20px rgba(16,185,129,.15)}
-.glow-blue{box-shadow:0 0 20px rgba(59,130,246,.15)}
-.glow-purple{box-shadow:0 0 20px rgba(139,92,246,.15)}
-
-/* ===== ACHIEVEMENT BADGES ===== */
-.badges{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}
-.badge-item{
-  padding:5px 10px;border-radius:99px;font-size:.68rem;font-weight:600;
-  display:flex;align-items:center;gap:4px;
-  border:1px solid transparent;
-}
-.badge-gold{background:rgba(245,158,11,.1);border-color:rgba(245,158,11,.35);color:#fbbf24}
-.badge-silver{background:rgba(148,163,184,.1);border-color:rgba(148,163,184,.3);color:#cbd5e1}
-.badge-locked{background:rgba(30,41,59,.5);border-color:var(--border);color:var(--muted);opacity:.5}
-
-/* ===== NOTION LINK ===== */
+/* ===== NOTION LINKS ===== */
 .notion-links{display:flex;gap:8px;flex-wrap:wrap}
 .notion-btn{
   display:inline-flex;align-items:center;gap:7px;
   padding:9px 16px;background:var(--card2);
   border:1px solid var(--border);border-radius:10px;
   color:var(--text);text-decoration:none;font-size:.8rem;font-weight:600;
-  transition:all .2s;
+  transition:all var(--transition);
 }
-.notion-btn:hover{background:var(--border);border-color:var(--border2);transform:translateY(-1px)}
+.notion-btn:hover{background:var(--border);border-color:var(--border2);transform:var(--hover-lift)}
 
-/* ===== SPARKLE ===== */
-@keyframes sparkle{0%,100%{opacity:0;transform:scale(0)}50%{opacity:1;transform:scale(1)}}
-.sparkle{display:inline-block;animation:sparkle 1.5s ease infinite}
+/* ===== GLOW ===== */
+.glow-green{box-shadow:0 0 20px rgba(16,185,129,.15)}
+.glow-blue{box-shadow:0 0 20px rgba(59,130,246,.15)}
 
-.footer{text-align:center;color:var(--muted);font-size:.68rem;margin-top:32px;padding-top:16px;border-top:1px solid var(--border)}
+/* ===== ANIMATIONS ===== */
+@keyframes fadeUp{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:translateY(0)}}
+@keyframes spin{to{transform:rotate(360deg)}}
+@keyframes bounce{from{transform:scale(1)}to{transform:scale(1.2)}}
+.tab-pane.active .card{animation:fadeUp .45s ease both}
+.tab-pane.active .card:nth-child(1){animation-delay:.04s}
+.tab-pane.active .card:nth-child(2){animation-delay:.08s}
+.tab-pane.active .card:nth-child(3){animation-delay:.12s}
+.tab-pane.active .card:nth-child(4){animation-delay:.16s}
+
+/* ===== TAB1: TODAY SESSIONS ===== */
+.days-banner{
+  display:flex;align-items:center;justify-content:space-between;
+  padding:12px 16px;border-radius:12px;
+  background:linear-gradient(135deg,rgba(6,182,212,.08),rgba(59,130,246,.08));
+  border:1px solid rgba(6,182,212,.2);margin-bottom:16px;
+}
+.mobile-notice{
+  padding:10px 14px;border-radius:10px;
+  background:rgba(99,102,241,.06);border:1px solid rgba(99,102,241,.2);
+  font-size:.75rem;color:#a5b4fc;margin-bottom:16px;
+  display:flex;align-items:center;gap:8px;
+}
+.session-card{
+  background:var(--card);border:1px solid var(--border);
+  border-radius:16px;padding:18px;margin-bottom:14px;
+  position:relative;overflow:hidden;
+}
+.session-card:last-child{margin-bottom:0}
+.session-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px}
+.session-slot{display:flex;align-items:center;gap:8px}
+.session-emoji{font-size:1.3rem}
+.session-label{font-size:.95rem;font-weight:800;color:var(--text)}
+.subject-badge{
+  font-size:.72rem;font-weight:700;padding:3px 10px;border-radius:99px;
+  background:rgba(99,102,241,.15);border:1px solid rgba(99,102,241,.3);color:#a5b4fc;
+}
+.session-qid{font-size:1.3rem;font-weight:900;color:var(--text);margin-bottom:6px;letter-spacing:-.01em}
+.session-meta{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-bottom:14px}
+.session-cat{font-size:.78rem;color:var(--muted2)}
+.type-badge{
+  font-size:.65rem;font-weight:700;padding:2px 8px;border-radius:6px;
+}
+.type-weak{background:rgba(239,68,68,.12);color:#fca5a5;border:1px solid rgba(239,68,68,.25)}
+.type-review{background:rgba(59,130,246,.12);color:#93c5fd;border:1px solid rgba(59,130,246,.25)}
+.session-buttons{display:flex;gap:8px}
+.fb-btn{
+  flex:1;padding:9px 12px;border-radius:10px;border:1px solid var(--border);
+  background:var(--card2);color:var(--muted);font-size:.82rem;font-weight:600;
+  font-family:inherit;cursor:not-allowed;
+  display:flex;align-items:center;justify-content:center;gap:5px;
+  opacity:.45;transition:var(--transition);
+}
+.fb-btn.ok{border-color:rgba(34,197,94,.2);color:var(--ok-color)}
+.fb-btn.risky{border-color:rgba(245,158,11,.2);color:var(--risky-color)}
+.fb-btn.ng{border-color:rgba(239,68,68,.2);color:var(--ng-color)}
+.lock-notice{
+  font-size:.7rem;color:var(--muted);margin-top:10px;
+  display:flex;align-items:center;gap:5px;
+}
+.prev-result{
+  font-size:.7rem;padding:3px 8px;border-radius:6px;
+  background:rgba(255,255,255,.04);border:1px solid var(--border);
+  color:var(--muted2);
+}
+
+/* ===== TAB2: PDCA ===== */
+.pdca-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.pdca-label{
+  display:inline-flex;align-items:center;gap:6px;
+  font-size:1rem;font-weight:900;margin-bottom:4px;
+}
+.pdca-sub{font-size:.72rem;color:var(--muted2);margin-bottom:14px}
+.do-table{width:100%;border-collapse:collapse;font-size:.8rem}
+.do-table th{font-size:.67rem;color:var(--muted);font-weight:600;text-align:left;padding:0 6px 6px;border-bottom:1px solid var(--border)}
+.do-table td{padding:6px;border-bottom:1px solid rgba(255,255,255,.04);vertical-align:middle}
+.do-table tr:last-child td{border-bottom:none}
+.score-dots{display:flex;gap:2px}
+.score-dot{width:8px;height:8px;border-radius:50%;background:var(--border)}
+.score-dot.filled{background:var(--accent)}
+.result-ok{color:var(--ok-color);font-weight:700;font-size:.75rem}
+.result-risky{color:var(--risky-color);font-weight:700;font-size:.75rem}
+.result-ng{color:var(--ng-color);font-weight:700;font-size:.75rem}
+.check-item{
+  display:flex;align-items:center;justify-content:space-between;
+  padding:8px 10px;border-radius:8px;background:rgba(255,255,255,.03);
+  border-left:3px solid var(--risky-color);margin-bottom:6px;font-size:.8rem;
+}
+.check-item:last-child{margin-bottom:0}
+.bug-bar-wrap{margin-bottom:8px}
+.bug-bar-label{display:flex;align-items:center;justify-content:space-between;font-size:.8rem;margin-bottom:4px}
+.bug-bar-bg{background:var(--border);border-radius:99px;height:8px;overflow:hidden}
+.bug-bar-fill{height:100%;border-radius:99px;background:linear-gradient(90deg,var(--red),var(--orange));transition:width 1.2s cubic-bezier(.4,0,.2,1)}
+.countermeasure{
+  padding:8px 10px;border-radius:8px;background:rgba(16,185,129,.06);
+  border:1px solid rgba(16,185,129,.2);font-size:.8rem;color:#6ee7b7;margin-top:10px;
+}
+.pc-notice{
+  margin-top:10px;padding:8px 10px;border-radius:8px;
+  background:rgba(99,102,241,.05);border:1px solid rgba(99,102,241,.15);
+  font-size:.72rem;color:var(--muted2);
+}
+
+/* ===== TAB4: SYSTEM ===== */
+.sys-flow{display:flex;flex-direction:column;align-items:center;gap:4px;padding:8px 0}
+.sys-node{
+  padding:10px 24px;border-radius:10px;background:var(--card2);
+  border:1px solid var(--border2);font-size:.82rem;font-weight:600;
+  text-align:center;min-width:220px;
+}
+.sys-node.highlight{border-color:rgba(59,130,246,.5);background:rgba(59,130,246,.08);color:#93c5fd}
+.sys-node.action{border-color:rgba(16,185,129,.4);background:rgba(16,185,129,.07);color:#6ee7b7}
+.sys-arrow{
+  font-size:.9rem;color:var(--muted);display:flex;align-items:center;gap:4px;
+  font-weight:700;letter-spacing:.05em;
+}
+.sys-split{display:flex;gap:14px;align-items:flex-start;margin:4px 0}
+.sys-branch{display:flex;flex-direction:column;align-items:center;gap:4px}
+.sys-split-label{font-size:.65rem;color:var(--muted);text-align:center;margin-top:2px}
+.compare-table{width:100%;border-collapse:collapse;font-size:.8rem}
+.compare-table th{background:var(--card2);padding:8px 12px;text-align:left;font-size:.72rem;color:var(--muted2);font-weight:600;border-bottom:1px solid var(--border)}
+.compare-table td{padding:8px 12px;border-bottom:1px solid rgba(255,255,255,.04)}
+.compare-table tr:last-child td{border-bottom:none}
+.ok-mark{color:var(--green);font-weight:700}
+.ng-mark{color:var(--red);font-weight:700}
+.schedule-box{
+  background:var(--card2);border:1px solid var(--border2);border-radius:12px;
+  padding:16px;font-size:.82rem;line-height:1.8;
+}
+.schedule-box .time-slot{display:flex;gap:10px;align-items:flex-start;padding:4px 0}
+.schedule-box .time-label{
+  font-size:.72rem;font-weight:700;color:var(--accent);
+  min-width:28px;margin-top:2px;
+}
+.schedule-box .week-row{margin-top:10px;padding-top:10px;border-top:1px solid var(--border)}
+
+/* ===== FOOTER ===== */
+.footer{text-align:center;color:var(--muted);font-size:.68rem;margin-top:32px;padding:16px 16px 32px;border-top:1px solid var(--border)}
+
+/* ===== RESPONSIVE ===== */
+@media(max-width:900px){
+  .g3,.g4{grid-template-columns:repeat(2,1fr)}
+  .g12,.g21{grid-template-columns:1fr}
+  .pdca-grid{grid-template-columns:1fr}
+}
+@media(max-width:768px){
+  .tab-nav{gap:0;overflow-x:auto}
+  .tab-btn{font-size:.8rem;padding:10px 12px;white-space:nowrap}
+  .main{padding:16px 12px}
+  .g2{grid-template-columns:1fr}
+  .header{padding:12px 14px}
+  .header-sub{display:none}
+}
+@media(max-width:580px){
+  .g2,.g3,.g4{grid-template-columns:1fr}
+  .pdca-grid{grid-template-columns:1fr}
+}
+@media(max-width:480px){
+  .tab-btn{font-size:.72rem;padding:8px 10px}
+  .header-title{font-size:.95rem}
+}
 </style>
 </head>
 <body>
+<a href="../portal-v2.html" class="portal-link">← ポータル</a>
 <canvas id="bg-canvas"></canvas>
 
-<div class="page">
 <!-- ===== HEADER ===== -->
-<div class="header">
-  <div class="header-badge">⚡ DENKEN3 — 理論科目 学習ダッシュボード</div>
-  <h1>電気主任技術者への道</h1>
-  <p>データ: Notion 自動連携 ｜ 最終更新: <span id="updated-date"></span></p>
-  <div style="margin-top:14px">
-    <a href="quiz.html" style="display:inline-block;background:#1e3a5f;color:#60a5fa;border:1px solid #3b82f6;padding:7px 18px;border-radius:8px;font-size:.85rem;font-weight:700;text-decoration:none">⚡ テスト記録ダッシュボード →</a>
-      <a href="https://github.com/kfurufuru/denken3-study" target="_blank" style="display:inline-block;background:#161b22;color:#f0f6fc;border:1px solid #30363d;padding:7px 18px;border-radius:8px;font-size:.85rem;font-weight:700;text-decoration:none;margin-left:8px">🐙 GitHub →</a>
-      <a href="https://kfurufuru.github.io/denken-wiki/" target="_blank" style="display:inline-block;background:#0d4f4f;color:#5eead4;border:1px solid #14b8a6;padding:7px 18px;border-radius:8px;font-size:.85rem;font-weight:700;text-decoration:none;margin-left:8px">📖 法規Wiki →</a>
-      <button id="update-btn" onclick="triggerUpdate()" style="display:inline-block;background:linear-gradient(135deg,#065f46,#047857);color:#6ee7b7;border:1px solid #10b981;padding:7px 18px;border-radius:8px;font-size:.85rem;font-weight:700;cursor:pointer;margin-left:8px;transition:all .3s">🔄 データ更新</button>
+<header class="header">
+  <div class="header-left">
+    <span class="header-title">⚡ 電験3種</span>
+    <span class="header-sub">学習システム</span>
   </div>
+  <span class="days-badge" id="days-badge-main">試験まで --日</span>
+</header>
+
+<!-- ===== TAB NAV ===== -->
+<nav class="tab-nav">
+  <button class="tab-btn active" data-tab="today">📚 今日の学習</button>
+  <button class="tab-btn" data-tab="pdca">🔄 PDCA</button>
+  <button class="tab-btn" data-tab="history">📊 過去問履歴</button>
+  <button class="tab-btn" data-tab="system">⚙️ システム</button>
+</nav>
+
+<!-- ===== TAB CONTENT ===== -->
+<div class="tab-content">
+
+<!-- ========================================
+     TAB 1: 今日の学習
+     ======================================== -->
+<div id="tab-today" class="tab-pane active">
+<main class="main">
+
+  <div class="days-banner">
+    <div>
+      <div style="font-size:.72rem;color:#67e8f9;font-weight:600;letter-spacing:.06em;text-transform:uppercase">📅 試験まで</div>
+      <div style="font-size:2rem;font-weight:900;line-height:1;background:linear-gradient(135deg,#06b6d4,#3b82f6);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;" id="today-days-left">--</div>
+    </div>
+    <div style="text-align:right">
+      <div style="font-size:.72rem;color:var(--muted2)" id="today-date-display">--</div>
+      <div style="font-size:.7rem;color:var(--muted);margin-top:2px">R08上 (2026年8月下旬)</div>
+    </div>
+  </div>
+
+  <div class="mobile-notice">
+    <span>📱</span>
+    <span>携帯では閲覧のみ。記録・Claude解説は PC（localhost:8765）で実施してください。</span>
+  </div>
+
+  <div id="today-sessions-container"></div>
+
+</main>
 </div>
 
-<!-- ===== ROW 1: COUNTDOWN ===== -->
+<!-- ========================================
+     TAB 2: PDCA
+     ======================================== -->
+<div id="tab-pdca" class="tab-pane">
+<main class="main">
+
+  <div class="pdca-grid">
+
+    <!-- P: Plan -->
+    <div class="card">
+      <div class="pdca-label"><span style="color:var(--accent);font-size:1.3rem">P</span> Plan</div>
+      <div class="pdca-sub" id="pdca-week-label">W-- / --/-- – --/--</div>
+      <div style="font-size:.82rem;margin-bottom:10px;color:var(--muted2)">今週の課題</div>
+      <div style="padding:12px;border-radius:10px;background:rgba(59,130,246,.06);border:1px solid rgba(59,130,246,.2)">
+        <div style="font-size:.8rem;color:#93c5fd;font-weight:600">🔁 復習待ち</div>
+        <div style="font-size:1.6rem;font-weight:900;color:var(--accent);margin-top:2px" id="plan-review-count">--</div>
+        <div style="font-size:.7rem;color:var(--muted)">件 (Risky/NG 記録済)</div>
+      </div>
+      <div class="pc-notice">
+        💻 詳細な計画・目標設定は PC（localhost:8765）で確認できます
+      </div>
+    </div>
+
+    <!-- D: Do -->
+    <div class="card">
+      <div class="pdca-label"><span style="color:var(--green);font-size:1.3rem">D</span> Do</div>
+      <div class="pdca-sub">実行ログ（直近）</div>
+      <div id="pdca-do-table-wrap">
+        <table class="do-table">
+          <thead>
+            <tr>
+              <th>日付</th>
+              <th>問題ID</th>
+              <th>理解度</th>
+              <th>結果</th>
+            </tr>
+          </thead>
+          <tbody id="pdca-do-tbody"></tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- C: Check -->
+    <div class="card">
+      <div class="pdca-label"><span style="color:var(--yellow);font-size:1.3rem">C</span> Check</div>
+      <div class="pdca-sub">定着確認待ちリスト</div>
+      <div id="pdca-check-list"></div>
+      <div class="pc-notice" style="margin-top:10px">
+        ✅ 定着確認（OK → 解決）は PC（localhost:8765）で実施
+      </div>
+    </div>
+
+    <!-- A: Act -->
+    <div class="card">
+      <div class="pdca-label"><span style="color:var(--orange);font-size:1.3rem">A</span> Act</div>
+      <div class="pdca-sub">認知バグ分析</div>
+      <div id="pdca-bug-chart"></div>
+      <div id="pdca-countermeasures"></div>
+    </div>
+
+  </div>
+
+</main>
+</div>
+
+<!-- ========================================
+     TAB 3: 過去問履歴
+     ======================================== -->
+<div id="tab-history" class="tab-pane">
+<main class="main">
+
+  <!-- ROW 1: COUNTDOWN -->
   <div class="section">
     <div class="sec-title">🏆 ステータス</div>
     <div style="max-width:500px;margin:0 auto">
-      <!-- Countdown -->
-    <div class="count-card card">
-      <div style="font-size:.72rem;color:#67e8f9;font-weight:600;text-transform:uppercase;letter-spacing:.06em;margin-bottom:8px">📅 試験まで</div>
-      <div class="count-days" id="countdown"></div>
-      <div class="count-lbl">日</div>
-      <div class="count-sub">R08上 試験 (2026年8月下旬)</div>
-      <div style="margin-top:12px;height:5px;background:var(--border);border-radius:99px;overflow:hidden">
-        <div id="exam-prog" style="height:100%;background:linear-gradient(90deg,#06b6d4,#3b82f6);border-radius:99px;width:0%;transition:width 1s"></div>
+      <div class="count-card card">
+        <div style="font-size:.72rem;color:#67e8f9;font-weight:600;text-transform:uppercase;letter-spacing:.06em;margin-bottom:8px">📅 試験まで</div>
+        <div class="count-days" id="countdown"></div>
+        <div class="count-lbl">日</div>
+        <div class="count-sub">R08上 試験 (2026年8月下旬)</div>
+        <div style="margin-top:12px;height:5px;background:var(--border);border-radius:99px;overflow:hidden">
+          <div id="exam-prog" style="height:100%;background:linear-gradient(90deg,#06b6d4,#3b82f6);border-radius:99px;width:0%;transition:width 1s"></div>
+        </div>
+        <div style="font-size:.65rem;color:var(--muted);margin-top:3px" id="exam-prog-lbl"></div>
       </div>
-      <div style="font-size:.65rem;color:var(--muted);margin-top:3px" id="exam-prog-lbl"></div>
-    </div>
     </div>
   </div>
 
-  <!-- ===== ROW 2: OVERALL + STATS ===== -->
-<div class="section">
-  <div class="sec-title">📊 全体進捗</div>
-  <div class="g12">
-
-    <!-- Ring + overall -->
-    <div class="card glow-blue">
-      <div class="overall-row">
-        <div class="ring-wrap">
-          <canvas id="ring" width="130" height="130"></canvas>
-          <div class="ring-center">
-            <div class="ring-pct">18.9%</div>
-            <div class="ring-lbl">達成率</div>
+  <!-- ROW 2: OVERALL + STATS -->
+  <div class="section">
+    <div class="sec-title">📊 全体進捗</div>
+    <div class="g12">
+      <div class="card glow-blue">
+        <div class="overall-row">
+          <div class="ring-wrap">
+            <canvas id="ring" width="130" height="130"></canvas>
+            <div class="ring-center">
+              <div class="ring-pct" id="ring-pct-text">--</div>
+              <div class="ring-lbl">達成率</div>
+            </div>
           </div>
-        </div>
-        <div class="overall-meta">
-          <div style="font-size:1rem;font-weight:800;margin-bottom:10px;color:#93c5fd">📚 過去問 達成状況</div>
-          <div class="ov-item">
-            <span>✅ 達成済み</span>
-            <span class="ov-val" style="color:var(--green)">86 問</span>
-          </div>
-          <div class="ov-item">
-            <span>⏳ 未達成</span>
-            <span class="ov-val" style="color:var(--red)">400 問</span>
-          </div>
-          <div class="ov-item">
-            <span>📝 総問題数</span>
-            <span class="ov-val">486 問</span>
-          </div>
-          <div class="ov-item">
-            <span>❌ 弱点問題</span>
-            <span class="ov-val" style="color:var(--orange)">48 問</span>
+          <div class="overall-meta">
+            <div style="font-size:1rem;font-weight:800;margin-bottom:10px;color:#93c5fd">📚 過去問 達成状況</div>
+            <div class="ov-item"><span>✅ 達成済み</span><span class="ov-val" style="color:var(--green)" id="ov-achieved">-- 問</span></div>
+            <div class="ov-item"><span>⏳ 未達成</span><span class="ov-val" style="color:var(--red)" id="ov-remain">-- 問</span></div>
+            <div class="ov-item"><span>📝 総問題数</span><span class="ov-val" id="ov-total">-- 問</span></div>
+            <div class="ov-item"><span>❌ 弱点問題</span><span class="ov-val" style="color:var(--orange)" id="ov-weak">-- 問</span></div>
           </div>
         </div>
       </div>
-    </div>
-
-    <!-- Stats 2x2 -->
-    <div class="g2" style="align-content:start">
-      <div class="card" style="text-align:center">
-        <div class="stat-val" style="color:var(--green)">92</div>
-        <div class="stat-lbl">1回目 ○ 正解</div>
-        <div class="stat-sub">取組中 16.7%</div>
-      </div>
-      <div class="card" style="text-align:center">
-        <div class="stat-val" style="color:var(--red)">57</div>
-        <div class="stat-lbl">1回目 × 不正解</div>
-        <div class="stat-sub">要再学習</div>
-      </div>
-      <div class="card" style="text-align:center">
-        <div class="stat-val" style="color:var(--accent)">59%</div>
-        <div class="stat-lbl">1回目 正解率</div>
-        <div class="stat-sub">○÷(○+×)</div>
-      </div>
-      <div class="card" style="text-align:center">
-        <div class="stat-val" style="color:var(--yellow)">138</div>
-        <div class="stat-lbl">取り組み済み</div>
-        <div class="stat-sub">486問中 28%</div>
+      <div class="g2" style="align-content:start">
+        <div class="card" style="text-align:center">
+          <div class="stat-val" style="color:var(--green)" id="stat-maru">--</div>
+          <div class="stat-lbl">1回目 ○ 正解</div>
+          <div class="stat-sub" id="stat-maru-sub">--</div>
+        </div>
+        <div class="card" style="text-align:center">
+          <div class="stat-val" style="color:var(--red)" id="stat-batu">--</div>
+          <div class="stat-lbl">1回目 × 不正解</div>
+          <div class="stat-sub">要再学習</div>
+        </div>
+        <div class="card" style="text-align:center">
+          <div class="stat-val" style="color:var(--accent)" id="stat-rate">--%</div>
+          <div class="stat-lbl">1回目 正解率</div>
+          <div class="stat-sub">○÷(○+×)</div>
+        </div>
+        <div class="card" style="text-align:center">
+          <div class="stat-val" style="color:var(--yellow)" id="stat-tried">--</div>
+          <div class="stat-lbl">取り組み済み</div>
+          <div class="stat-sub" id="stat-tried-sub">--問中 --%</div>
+        </div>
       </div>
     </div>
   </div>
-</div>
 
-
-  <!-- ===== RANK S/A ALERT ===== -->
+  <!-- RANK S/A ALERT -->
   <div class="section">
     <div class="sec-title">🚨 最重要問題（ランクS/A）間違いアラート</div>
     <div class="card" style="background:linear-gradient(135deg,#1a0a0a,#2d1111);border:1px solid rgba(239,68,68,.4)">
@@ -402,218 +586,301 @@ body{
     </div>
   </div>
 
-  <!-- ===== ROW 3: 分野別 + TODAY ===== -->
-<div class="section">
-  <div class="sec-title">🔬 分野別 進捗 & 今日やること</div>
-  <div class="g21">
-
-    <!-- 分野別 -->
-    <div class="card">
-      <div style="font-size:.88rem;font-weight:700;margin-bottom:14px;color:#93c5fd">分野別 達成状況</div>
-
-      <div class="bunya-item">
-        <div class="bunya-hd">
-          <div class="bunya-nm"><span style="color:var(--green)">⚡</span> 電気回路</div>
-          <div class="bunya-pct" style="color:var(--green)">27% <span style="color:var(--muted);font-weight:400;font-size:.7rem">≈ 45/164問</span></div>
-        </div>
-        <div class="bar-bg"><div class="bar-fill" id="b1" style="width:0%;background:linear-gradient(90deg,#10b981,#34d399)"></div></div>
-        <div class="bunya-chips">
-          <div class="chip">直流回路 <b style="color:var(--green)">◎</b></div>
-          <div class="chip">交流回路 <b style="color:var(--yellow)">△</b></div>
-          <div class="chip">過渡現象 <b style="color:var(--red)">✗ 弱点</b> <a href="https://kfurufuru.github.io/denken-wiki-riron/themes/kato-gensho/" target="_blank" style="font-size:.65rem;background:#1e3a5f;color:#60a5fa;padding:1px 5px;border-radius:3px;text-decoration:none;margin-left:4px">📖Wiki</a></div>
-          <div class="chip">三相交流 <b style="color:var(--red)">✗ 弱点</b> <a href="https://kfurufuru.github.io/denken-wiki-riron/themes/sansou-kouryu/" target="_blank" style="font-size:.65rem;background:#1e3a5f;color:#60a5fa;padding:1px 5px;border-radius:3px;text-decoration:none;margin-left:4px">📖Wiki</a></div>
-        </div>
-      </div>
-
-      <div class="bunya-item">
-        <div class="bunya-hd">
-          <div class="bunya-nm"><span style="color:var(--accent)">📡</span> 電気・電子計測</div>
-          <div class="bunya-pct" style="color:var(--accent)">41% <span style="color:var(--muted);font-weight:400;font-size:.7rem">≈ 35/85問</span></div>
-        </div>
-        <div class="bar-bg"><div class="bar-fill" id="b2" style="width:0%;background:linear-gradient(90deg,#3b82f6,#818cf8)"></div></div>
-        <div class="bunya-chips">
-          <div class="chip">電圧・電流計 <b style="color:var(--green)">◎</b></div>
-          <div class="chip">電力計 <b style="color:var(--green)">◎</b></div>
-          <div class="chip">A-D変換 <b style="color:var(--red)">✗ 弱点</b></div>
-        </div>
-      </div>
-
-      <div class="bunya-item">
-        <div class="bunya-hd">
-          <div class="bunya-nm"><span style="color:var(--orange)">🔮</span> 電磁気学</div>
-          <div class="bunya-pct" style="color:var(--orange)">8% <span style="color:var(--muted);font-weight:400;font-size:.7rem">≈ 9/114問</span></div>
-        </div>
-        <div class="bar-bg"><div class="bar-fill" id="b3" style="width:0%;background:linear-gradient(90deg,#f97316,#fbbf24)"></div></div>
-        <div class="bunya-chips">
-          <div class="chip">コンデンサ <b style="color:var(--red)">✗ 最重要弱点</b> <a href="https://kfurufuru.github.io/denken-wiki-riron/themes/condenser/" target="_blank" style="font-size:.65rem;background:#1e3a5f;color:#60a5fa;padding:1px 5px;border-radius:3px;text-decoration:none;margin-left:4px">📖Wiki</a></div>
-          <div class="chip">磁界・磁束 <b style="color:var(--red)">✗ 弱点</b> <a href="https://kfurufuru.github.io/denken-wiki-riron/themes/jiki-kairo/" target="_blank" style="font-size:.65rem;background:#1e3a5f;color:#60a5fa;padding:1px 5px;border-radius:3px;text-decoration:none;margin-left:4px">📖Wiki</a></div>
-          <div class="chip">電磁誘導 <b style="color:var(--red)">✗ 弱点</b> <a href="https://kfurufuru.github.io/denken-wiki-riron/themes/denjiryoku/" target="_blank" style="font-size:.65rem;background:#1e3a5f;color:#60a5fa;padding:1px 5px;border-radius:3px;text-decoration:none;margin-left:4px">📖Wiki</a></div>
-        </div>
-      </div>
-
-      <div class="bunya-item" style="margin-bottom:0">
-        <div class="bunya-hd">
-          <div class="bunya-nm"><span style="color:var(--purple)">🔬</span> 電子理論</div>
-          <div class="bunya-pct" style="color:var(--purple)">2% <span style="color:var(--muted);font-weight:400;font-size:.7rem">≈ 3/123問</span></div>
-        </div>
-        <div class="bar-bg"><div class="bar-fill" id="b4" style="width:0%;background:linear-gradient(90deg,#8b5cf6,#c084fc)"></div></div>
-        <div class="bunya-chips">
-          <div class="chip">半導体 <b style="color:var(--muted)">— 未着手</b></div>
-          <div class="chip">トランジスタ <b style="color:var(--muted)">— 未着手</b></div>
-          <div class="chip">論理回路 <b style="color:var(--red)">✗ 弱点</b></div>
-        </div>
-      </div>
-    </div>
-
-    <!-- Today's plan -->
-    <div class="card" style="background:linear-gradient(135deg,#0f172a,#1a1035)">
-      <div style="font-size:.88rem;font-weight:700;margin-bottom:4px;color:#c4b5fd">
-        ✨ 今日やること TOP5
-      </div>
-      <div style="font-size:.68rem;color:var(--muted);margin-bottom:12px">S/A重要度 × 古い順</div>
-
-      <div class="today-item">
-        <div class="today-num" style="background:rgba(239,68,68,.15);color:#fca5a5">1</div>
-        <div class="today-body">
-          <div class="today-q">R04下-問8 交流の波形率・波高率</div>
-          <div class="today-meta">
-            <span class="priority p-S">S優先</span>
-            <span>電気回路</span>
-            <span>最終: 1/11</span>
-          </div>
-        </div>
-      </div>
-
-      <div class="today-item">
-        <div class="today-num" style="background:rgba(239,68,68,.15);color:#fca5a5">2</div>
-        <div class="today-body">
-          <div class="today-q">H18-問2 平行板コンデンサの等電位線</div>
-          <div class="today-meta">
-            <span class="priority p-S">S優先</span>
-            <span>電磁気</span>
-            <span>最終: 未実施</span>
-          </div>
-        </div>
-      </div>
-
-      <div class="today-item">
-        <div class="today-num" style="background:rgba(239,68,68,.15);color:#fca5a5">3</div>
-        <div class="today-body">
-          <div class="today-q">H24-問15 コンデンサの�t並列回路</div>
-          <div class="today-meta">
-            <span class="priority p-S">S優先</span>
-            <span>電磁気</span>
-            <span>最終: 3/1</span>
-          </div>
-        </div>
-      </div>
-
-      <div class="today-item">
-        <div class="today-num" style="background:rgba(249,115,22,.15);color:#fdba74">4</div>
-        <div class="today-body">
-          <div class="today-q">H25-問10 RLC直列回路の特性</div>
-          <div class="today-meta">
-            <span class="priority p-S">S優先</span>
-            <span>電気回路</span>
-            <span>最終: 3/8</span>
-          </div>
-        </div>
-      </div>
-
-      <div class="today-item">
-        <div class="today-num" style="background:rgba(249,115,22,.15);color:#fdba74">5</div>
-        <div class="today-body">
-          <div class="today-q">H26-問5 コンデンサの回路計算</div>
-          <div class="today-meta">
-            <span class="priority p-S">S優先</span>
-            <span>電磁気</span>
-            <span>最終: 3/1</span>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-</div>
-
-<!-- ===== ROW 4: 弱点リスト + 活動カレンダー ===== -->
-<div class="section">
-  <div class="sec-title">⚠️ 弱点リスト & 学習カレンダー</div>
-  <div class="g21">
-
-    <!-- 弱点 -->
-    <div class="card">
-      <div style="font-size:.85rem;font-weight:700;margin-bottom:4px">1回目× 未解決 (48問) — 重要度順</div>
-      <div style="font-size:.68rem;color:var(--muted);margin-bottom:12px">2回目で挽回できた問題は自動で達成となります</div>
-      <div id="weak-list"></div>
-    </div>
-
-    <!-- Calendar + 円グラフ -->
-    <div style="display:flex;flex-direction:column;gap:14px">
-      <!-- 1回目 donut -->
-      <div class="card" style="text-align:center">
-        <div style="font-size:.82rem;font-weight:700;margin-bottom:10px;color:#93c5fd">1回目 結果の内訳</div>
-        <canvas id="donut" width="160" height="160" style="display:block;margin:0 auto"></canvas>
-        <div style="display:flex;gap:10px;justify-content:center;margin-top:10px;flex-wrap:wrap">
-          <div style="display:flex;align-items:center;gap:4px;font-size:.72rem"><div style="width:8px;height:8px;border-radius:50%;background:#10b981"></div>○ 81問</div>
-          <div style="display:flex;align-items:center;gap:4px;font-size:.72rem"><div style="width:8px;height:8px;border-radius:50%;background:#ef4444"></div>× 57問</div>
-          <div style="display:flex;align-items:center;gap:4px;font-size:.72rem"><div style="width:8px;height:8px;border-radius:50%;background:#1f2937"}</div>未 348問</div>
-        </div>
-      </div>
-
-      <!-- Activity -->
+  <!-- ROW 3: 分野別 + WEAK LIST -->
+  <div class="section">
+    <div class="sec-title">🔬 分野別 進捗 & 弱点リスト</div>
+    <div class="g21">
       <div class="card">
-        <div style="font-size:.8rem;font-weight:700;margin-bottom:10px">📅 最近の学習記録</div>
-        <div style="font-size:.78rem;display:flex;flex-direction:column;gap:7px">
-          <div style="display:flex;gap:8px;align-items:flex-start;padding-bottom:7px;border-bottom:1px solid var(--border)">
-            <div style="width:6px;height:6px;border-radius:50%;background:var(--green);margin-top:5px;flex-shrink:0"></div>
-            <div><div>R06下-問9 ✅ 過渡現象 達成!</div><div style="font-size:.67rem;color:var(--muted)">3/23 ｜ 電気回路</div></div>
+        <div class="card-header">分野別 達成状況</div>
+        <div class="bunya-item">
+          <div class="bunya-hd">
+            <div class="bunya-nm"><span style="color:var(--green)">⚡</span> 電気回路</div>
+            <div class="bunya-pct" style="color:var(--green)">27% <span style="color:var(--muted);font-weight:400;font-size:.7rem">≈ 45/164問</span></div>
           </div>
-          <div style="display:flex;gap:8px;align-items:flex-start;padding-bottom:7px;border-bottom:1px solid var(--border)">
-            <div style="width:6px;height:6px;border-radius:50%;background:var(--red);margin-top:5px;flex-shrink:0"></div>
-            <div><div>R01-問18 1回目× A-D変換</div><div style="font-size:.67rem;color:var(--muted)">3/24 ｜ 電気計測</div></div>
+          <div class="bar-bg"><div class="bar-fill" id="b1" style="width:0%;background:linear-gradient(90deg,#10b981,#34d399)"></div></div>
+          <div class="bunya-chips">
+            <div class="chip">直流回路 <b style="color:var(--green)">◎</b></div>
+            <div class="chip">交流回路 <b style="color:var(--yellow)">△</b></div>
+            <div class="chip">過渡現象 <b style="color:var(--red)">✗ 弱点</b> <a href="https://kfurufuru.github.io/denken-wiki-riron/themes/kato-gensho/" target="_blank" style="font-size:.65rem;background:#1e3a5f;color:#60a5fa;padding:1px 5px;border-radius:3px;text-decoration:none;margin-left:4px">📖Wiki</a></div>
+            <div class="chip">三相交流 <b style="color:var(--red)">✗ 弱点</b> <a href="https://kfurufuru.github.io/denken-wiki-riron/themes/sansou-kouryu/" target="_blank" style="font-size:.65rem;background:#1e3a5f;color:#60a5fa;padding:1px 5px;border-radius:3px;text-decoration:none;margin-left:4px">📖Wiki</a></div>
           </div>
-          <div style="display:flex;gap:8px;align-items:flex-start;padding-bottom:7px;border-bottom:1px solid var(--border)">
-            <div style="width:6px;height:6px;border-radius:50%;background:var(--red);margin-top:5px;flex-shrink:0"></div>
-            <div><div>R07上-問9 1回目× インピーダンス</div><div style="font-size:.67rem;color:var(--muted)">3/22 ｜ 電気回路</div></div>
+        </div>
+        <div class="bunya-item">
+          <div class="bunya-hd">
+            <div class="bunya-nm"><span style="color:var(--accent)">📡</span> 電気・電子計測</div>
+            <div class="bunya-pct" style="color:var(--accent)">41% <span style="color:var(--muted);font-weight:400;font-size:.7rem">≈ 35/85問</span></div>
           </div>
-          <div style="display:flex;gap:8px;align-items:flex-start">
-            <div style="width:6px;height:6px;border-radius:50%;background:var(--accent);margin-top:5px;flex-shrink:0"></div>
-            <div><div>H23-問8 1回目× インピーダンス</div><div style="font-size:.67rem;color:var(--muted)">3/20 ｜ 電気回路</div></div>
+          <div class="bar-bg"><div class="bar-fill" id="b2" style="width:0%;background:linear-gradient(90deg,#3b82f6,#818cf8)"></div></div>
+          <div class="bunya-chips">
+            <div class="chip">電圧・電流計 <b style="color:var(--green)">◎</b></div>
+            <div class="chip">電力計 <b style="color:var(--green)">◎</b></div>
+            <div class="chip">A-D変換 <b style="color:var(--red)">✗ 弱点</b></div>
+          </div>
+        </div>
+        <div class="bunya-item">
+          <div class="bunya-hd">
+            <div class="bunya-nm"><span style="color:var(--orange)">🔮</span> 電磁気学</div>
+            <div class="bunya-pct" style="color:var(--orange)">8% <span style="color:var(--muted);font-weight:400;font-size:.7rem">≈ 9/114問</span></div>
+          </div>
+          <div class="bar-bg"><div class="bar-fill" id="b3" style="width:0%;background:linear-gradient(90deg,#f97316,#fbbf24)"></div></div>
+          <div class="bunya-chips">
+            <div class="chip">コンデンサ <b style="color:var(--red)">✗ 最重要弱点</b> <a href="https://kfurufuru.github.io/denken-wiki-riron/themes/condenser/" target="_blank" style="font-size:.65rem;background:#1e3a5f;color:#60a5fa;padding:1px 5px;border-radius:3px;text-decoration:none;margin-left:4px">📖Wiki</a></div>
+            <div class="chip">磁界・磁束 <b style="color:var(--red)">✗ 弱点</b> <a href="https://kfurufuru.github.io/denken-wiki-riron/themes/jiki-kairo/" target="_blank" style="font-size:.65rem;background:#1e3a5f;color:#60a5fa;padding:1px 5px;border-radius:3px;text-decoration:none;margin-left:4px">📖Wiki</a></div>
+            <div class="chip">電磁誘導 <b style="color:var(--red)">✗ 弱点</b></div>
+          </div>
+        </div>
+        <div class="bunya-item" style="margin-bottom:0">
+          <div class="bunya-hd">
+            <div class="bunya-nm"><span style="color:var(--purple)">🔬</span> 電子理論</div>
+            <div class="bunya-pct" style="color:var(--purple)">2% <span style="color:var(--muted);font-weight:400;font-size:.7rem">≈ 3/123問</span></div>
+          </div>
+          <div class="bar-bg"><div class="bar-fill" id="b4" style="width:0%;background:linear-gradient(90deg,#8b5cf6,#c084fc)"></div></div>
+          <div class="bunya-chips">
+            <div class="chip">半導体 <b style="color:var(--muted)">— 未着手</b></div>
+            <div class="chip">トランジスタ <b style="color:var(--muted)">— 未着手</b></div>
+            <div class="chip">論理回路 <b style="color:var(--red)">✗ 弱点</b></div>
+          </div>
+        </div>
+      </div>
+
+      <div style="display:flex;flex-direction:column;gap:14px">
+        <div class="card" style="text-align:center">
+          <div style="font-size:.82rem;font-weight:700;margin-bottom:10px;color:#93c5fd">1回目 結果の内訳</div>
+          <canvas id="donut" width="160" height="160" style="display:block;margin:0 auto"></canvas>
+          <div style="display:flex;gap:10px;justify-content:center;margin-top:10px;flex-wrap:wrap">
+            <div style="display:flex;align-items:center;gap:4px;font-size:.72rem"><div style="width:8px;height:8px;border-radius:50%;background:#10b981"></div>○ <span id="donut-maru">81</span>問</div>
+            <div style="display:flex;align-items:center;gap:4px;font-size:.72rem"><div style="width:8px;height:8px;border-radius:50%;background:#ef4444"></div>× <span id="donut-batu">57</span>問</div>
+            <div style="display:flex;align-items:center;gap:4px;font-size:.72rem"><div style="width:8px;height:8px;border-radius:50%;background:#1f2937"></div>未 <span id="donut-未">348</span>問</div>
+          </div>
+        </div>
+        <div class="card">
+          <div style="font-size:.85rem;font-weight:700;margin-bottom:4px">1回目× 未解決 (<span id="weak-total">--</span>問) — 重要度順</div>
+          <div style="font-size:.68rem;color:var(--muted);margin-bottom:12px">2回目で挽回できた問題は自動で達成となります</div>
+          <div id="weak-list"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- LINKS -->
+  <div class="section">
+    <div class="sec-title">🔗 Notion & GitHub へジャンプ</div>
+    <div class="notion-links">
+      <a class="notion-btn" href="https://www.notion.so/af4180a0286e4c76b153fe6071cacf0a" target="_blank">📚 学習ダッシュボード</a>
+      <a class="notion-btn" href="https://www.notion.so/ff4fcb73cc14408caedf87c904ae2fd9" target="_blank">📋 過去問管理DB</a>
+      <a class="notion-btn" href="https://www.notion.so/ff4fcb73cc14408caedf87c904ae2fd9?v=81cd39ea-67fa-4a4f-8701-4926db05a044" target="_blank">❌ 弱点克服リスト</a>
+      <a class="notion-btn" href="https://www.notion.so/6413af86a82e4bb390c4dc399b6f98cd" target="_blank">📖 学習マスターDB</a>
+      <a class="notion-btn" href="https://github.com/kfurufuru/denken3-study" target="_blank" style="background:#161b22;border-color:#30363d">🐙 GitHub</a>
+      <a class="notion-btn" href="https://kfurufuru.github.io/denken-wiki/" target="_blank" style="background:#0d4f4f;border-color:#14b8a6">📖 法規Wiki</a>
+      <button id="update-btn" onclick="triggerUpdate()" style="display:inline-flex;align-items:center;gap:7px;background:linear-gradient(135deg,#065f46,#047857);color:#6ee7b7;border:1px solid #10b981;padding:9px 16px;border-radius:10px;font-size:.8rem;font-weight:700;cursor:pointer;font-family:inherit;transition:all .3s">🔄 データ更新</button>
+    </div>
+  </div>
+
+  <div class="footer">
+    ⚡ 電験3種 学習ダッシュボード ｜ Notion連携 ｜ 最終更新: <span id="updated-date"></span>
+  </div>
+
+</main>
+</div>
+
+<!-- ========================================
+     TAB 4: システム
+     ======================================== -->
+<div id="tab-system" class="tab-pane">
+<main class="main">
+
+  <!-- データフロー図 -->
+  <div class="section">
+    <div class="sec-title">🔁 データフロー</div>
+    <div class="card">
+      <div class="card-header">データパイプライン概要</div>
+      <div class="sys-flow">
+
+        <div style="display:flex;gap:14px;justify-content:center">
+          <div style="display:flex;flex-direction:column;align-items:center;gap:4px">
+            <div class="sys-node" style="min-width:140px">🗂️ Notion DB<br><span style="font-size:.68rem;color:var(--muted)">過去問記録</span></div>
+          </div>
+          <div style="display:flex;flex-direction:column;align-items:center;gap:4px">
+            <div class="sys-node" style="min-width:140px">📄 records.json<br><span style="font-size:.68rem;color:var(--muted)">学習ログ</span></div>
+          </div>
+        </div>
+
+        <div class="sys-arrow">↓ 統合 ↓</div>
+
+        <div class="sys-node action">⚙️ update_dashboard.py<br><span style="font-size:.68rem">TODAY_SESSIONS / PDCA_DATA / DATA を注入</span></div>
+
+        <div class="sys-arrow">↓</div>
+
+        <div class="sys-node highlight">🤖 GitHub Actions<br><span style="font-size:.68rem">⏰ 毎朝 7:00 JST 自動実行</span></div>
+
+        <div class="sys-arrow">↓ デプロイ ↓</div>
+
+        <div style="display:flex;gap:14px;justify-content:center">
+          <div style="display:flex;flex-direction:column;align-items:center;gap:4px">
+            <div class="sys-node highlight" style="min-width:155px">🌐 GitHub Pages<br><span style="font-size:.68rem">📱 携帯アクセス</span></div>
+            <div class="sys-split-label" style="color:#93c5fd">閲覧専用</div>
+          </div>
+          <div style="display:flex;flex-direction:column;align-items:center;gap:4px">
+            <div class="sys-node action" style="min-width:155px">💻 Flask localhost:8765<br><span style="font-size:.68rem">PC アクセス</span></div>
+            <div class="sys-split-label" style="color:#6ee7b7">記録・Claude解説</div>
+          </div>
+        </div>
+
+        <div style="display:flex;justify-content:flex-end;width:100%;max-width:350px">
+          <div style="display:flex;align-items:center;gap:6px;font-size:.72rem;color:var(--muted);margin-top:4px">
+            <span>↑</span>
+            <span>PC記録 → records.json 更新 → 翌朝 Actions に反映</span>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <!-- 機能比較表 -->
+  <div class="section">
+    <div class="sec-title">📊 携帯 vs PC 機能比較</div>
+    <div class="card">
+      <table class="compare-table">
+        <thead>
+          <tr>
+            <th>機能</th>
+            <th>📱 携帯 (GitHub Pages)</th>
+            <th>💻 PC (localhost:8765)</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>今日の3問確認</td>
+            <td><span class="ok-mark">✅ 閲覧</span></td>
+            <td><span class="ok-mark">✅ 閲覧 + 実行</span></td>
+          </tr>
+          <tr>
+            <td>OK / Risky / NG 記録</td>
+            <td><span class="ng-mark">❌</span></td>
+            <td><span class="ok-mark">✅</span></td>
+          </tr>
+          <tr>
+            <td>Claude 解説生成</td>
+            <td><span class="ng-mark">❌</span></td>
+            <td><span class="ok-mark">✅</span></td>
+          </tr>
+          <tr>
+            <td>PDCA 確認</td>
+            <td><span class="ok-mark">✅ 読み取り</span></td>
+            <td><span class="ok-mark">✅ 読み取り + 更新</span></td>
+          </tr>
+          <tr>
+            <td>過去問履歴</td>
+            <td><span class="ok-mark">✅</span></td>
+            <td><span class="ok-mark">✅</span></td>
+          </tr>
+          <tr>
+            <td>データ更新トリガー</td>
+            <td><span class="ok-mark">✅</span></td>
+            <td><span class="ok-mark">✅</span></td>
+          </tr>
+          <tr>
+            <td>スペースト・リピティション</td>
+            <td><span class="ng-mark">❌</span></td>
+            <td><span class="ok-mark">✅ 自動スケジュール</span></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- 運用スケジュール -->
+  <div class="section">
+    <div class="sec-title">📅 日次 / 週次 運用フロー</div>
+    <div class="g2">
+      <div class="card">
+        <div class="card-header">📅 日次ルーティン</div>
+        <div class="schedule-box" style="background:none;border:none;padding:0">
+          <div class="time-slot">
+            <div class="time-label">朝</div>
+            <div>GitHub Pages で今日の3問を確認（通勤・バスの中でもOK）</div>
+          </div>
+          <div class="time-slot">
+            <div class="time-label">夜</div>
+            <div>localhost:8765 で問題を解く → OK/Risky/NG 記録 → Claude に解説依頼</div>
+          </div>
+          <div class="time-slot">
+            <div class="time-label">翌朝</div>
+            <div>7:00 JST に Actions が自動実行 → GitHub Pages に反映</div>
+          </div>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-header">🔁 週次ルーティン</div>
+        <div class="schedule-box" style="background:none;border:none;padding:0">
+          <div class="time-slot">
+            <div class="time-label">月</div>
+            <div>PDCA タブで先週の C/A を確認 → 今週の優先問題を決定</div>
+          </div>
+          <div class="time-slot">
+            <div class="time-label">木</div>
+            <div>Risky 問題の定着確認（localhost で）</div>
+          </div>
+          <div class="time-slot">
+            <div class="time-label">日</div>
+            <div>週次レビュー → e-log パターン分析 → 次週 Plan 素材生成</div>
+          </div>
+          <div class="time-slot" style="margin-top:6px">
+            <div style="font-size:.72rem;color:var(--muted2)">Make.com 経由のテスト記録は即時 GitHub Pages に反映</div>
           </div>
         </div>
       </div>
     </div>
   </div>
-</div>
 
-<!-- ===== LINKS ===== -->
-<div class="section">
-  <div class="sec-title">🔗 Notion & GitHub へジャンプ</div>
-  <div class="notion-links">
-    <a class="notion-btn" href="https://www.notion.so/af4180a0286e4c76b153fe6071cacf0a" target="_blank">📚 学習ダッシュボード</a>
-    <a class="notion-btn" href="https://www.notion.so/ff4fcb73cc14408caedf87c904ae2fd9" target="_blank">📋 過去問管理DB</a>
-    <a class="notion-btn" href="https://www.notion.so/ff4fcb73cc14408caedf87c904ae2fd9?v=81cd39ea-67fa-4a4f-8701-4926db05a044" target="_blank">❌ 弱点克服リスト</a>
-    <a class="notion-btn" href="https://www.notion.so/6413af86a82e4bb390c4dc399b6f98cd" target="_blank">📖 学習マスターDB</a>
-      <a class="notion-btn" href="https://github.com/kfurufuru/denken3-study" target="_blank" style="background:#161b22;border-color:#30363d">🐙 GitHub リポジトリ</a>
-      <a class="notion-btn" href="https://github.com/kfurufuru/denken3-study/blob/main/data/theory-guide.md" target="_blank" style="background:#161b22;border-color:#30363d">📊 統計&出題傾向</a>
-      <a class="notion-btn" href="https://github.com/kfurufuru/denken3-study/blob/main/notes/theory-checklist.md" target="_blank" style="background:#161b22;border-color:#30363d">✅ 学習チェックリスト</a>
-      <a class="notion-btn" href="https://kfurufuru.github.io/denken-wiki/" target="_blank" style="background:#0d4f4f;border-color:#14b8a6">📖 法規Wiki（条文×過去問）</a>
+  <!-- 技術スタック -->
+  <div class="section">
+    <div class="sec-title">⚙️ 技術スタック</div>
+    <div class="card">
+      <div class="g2">
+        <div>
+          <div style="font-size:.75rem;color:var(--muted2);font-weight:600;margin-bottom:8px">フロントエンド</div>
+          <div style="font-size:.82rem;line-height:1.9;color:var(--muted2)">
+            HTML/CSS/JS 単一ファイル構成<br>
+            外部依存: Google Fonts CDN のみ<br>
+            Chart: Canvas 2D API (ネイティブ)<br>
+            アニメ: CSS transitions + requestAnimationFrame<br>
+            デプロイ: GitHub Pages (静的)
+          </div>
+        </div>
+        <div>
+          <div style="font-size:.75rem;color:var(--muted2);font-weight:600;margin-bottom:8px">バックエンド / CI</div>
+          <div style="font-size:.82rem;line-height:1.9;color:var(--muted2)">
+            Python 3.x (update_dashboard.py)<br>
+            Flask (localhost:8765 — PC専用)<br>
+            GitHub Actions (cron: 毎朝7:00 JST)<br>
+            Notion API (記録取得)<br>
+            Make.com (テスト即時反映 Webhook)
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
+
+  <div class="footer">
+    ⚡ 電験3種 学習システム ｜ システム構成図 ｜ <span id="sys-footer-date"></span>
+  </div>
+
+</main>
 </div>
 
-<div class="footer">
-  ⚡ 電験3種「理論」進捗ダッシュボード ｜ Notion連携 ｜ 2026-03-25<br>
-  GitHub Pages にデプロイして毎日チェック！ update_dashboard.py で最新データに更新できます
-</div>
-</div><!-- /page -->
+</div><!-- /tab-content -->
 
 <script>
+// ================================================================
 // ===== DATA UPDATE =====
+// ================================================================
 function triggerUpdate() {
   const btn = document.getElementById('update-btn');
-  const token = localStorage.getItem('gh_pat') || prompt('GitHub Personal Access Token を入力してください（repo権限が必要です）');
+  const token = sessionStorage.getItem('gh_pat') || prompt('GitHub Personal Access Token を入力してください（repo権限が必要です）\n※ このタブを閉じると消去されます');
   if (!token) return;
-  localStorage.setItem('gh_pat', token);
+  sessionStorage.setItem('gh_pat', token);
   btn.textContent = '⏳ 更新リクエスト中...';
   btn.disabled = true;
   btn.style.opacity = '0.6';
@@ -628,31 +895,43 @@ function triggerUpdate() {
       const iv = setInterval(() => {
         btn.textContent = '⏳ 更新中... ' + sec + '秒後にリロード';
         sec--;
-        if (sec < 0) {
-          clearInterval(iv);
-          btn.textContent = '✅ リロードします';
-          location.reload(true);
-        }
+        if (sec < 0) { clearInterval(iv); btn.textContent = '✅ リロードします'; location.reload(true); }
       }, 1000);
     } else { throw new Error('Status: ' + r.status); }
   }).catch(e => {
     btn.textContent = '❌ 失敗';
     btn.style.background = 'linear-gradient(135deg,#7f1d1d,#991b1b)';
-    localStorage.removeItem('gh_pat');
+    sessionStorage.removeItem('gh_pat');
     setTimeout(() => { btn.textContent = '🔄 データ更新'; btn.disabled = false; btn.style.opacity = '1'; btn.style.background = 'linear-gradient(135deg,#065f46,#047857)'; }, 3000);
   });
 }
+
+// ================================================================
 // ===== DATA =====
-const ACHIEVED = 92, TOTAL = 486;
-const FIRST_MARU = 84, FIRST_BATU = 62;
+// ================================================================
+const ACHIEVED = 86, TOTAL = 486;
+const FIRST_MARU = 81, FIRST_BATU = 57;
 const STREAK = 3;
 const EXAM_DATE = new Date('2026-08-23');
 const STUDY_START = new Date('2025-09-01');
-const TODAY = new Date('2026-04-10');
+const TODAY_DATE = new Date();
 
 const WEAK_DATA = [{"q": "R04下-問8", "topic": "", "cat": "電気回路", "p": "S", "date": "2026-01-11"}, {"q": "R04下-問6", "topic": "", "cat": "電磁気", "p": "S", "date": "2026-01-11"}, {"q": "H19-問7", "topic": "", "cat": "電気回路", "p": "S", "date": "2026-02-07"}, {"q": "R04-問8", "topic": "", "cat": "電気回路", "p": "S", "date": "2026-02-28"}, {"q": "R03-問7", "topic": "", "cat": "電気回路", "p": "S", "date": "2026-02-28"}, {"q": "H24-問15", "topic": "", "cat": "電磁気", "p": "S", "date": "2026-03-01"}, {"q": "H26-問5", "topic": "", "cat": "電磁気", "p": "S", "date": "2026-03-01"}, {"q": "H25-問10", "topic": "", "cat": "電気回路", "p": "S", "date": "2026-03-08"}, {"q": "R01-問15", "topic": "", "cat": "電磁気", "p": "S", "date": "2026-03-25"}, {"q": "R01-問8", "topic": "", "cat": "電気回路", "p": "S", "date": "未実施"}, {"q": "R04上-問1", "topic": "", "cat": "電磁気", "p": "S", "date": "未実施"}, {"q": "H18-問2", "topic": "", "cat": "電磁気", "p": "S", "date": "未実施"}, {"q": "R05上-問5", "topic": "", "cat": "電磁気", "p": "A", "date": "2026-01-12"}, {"q": "R05上-問9", "topic": "", "cat": "電気回路", "p": "A", "date": "2026-01-12"}, {"q": "R04-問15", "topic": "", "cat": "電気回路", "p": "A", "date": "2026-02-23"}, {"q": "R02-問8", "topic": "", "cat": "電気回路", "p": "A", "date": "2026-03-08"}, {"q": "H26-問14", "topic": "", "cat": "電気回路", "p": "A", "date": "2026-03-08"}, {"q": "H25-問15", "topic": "", "cat": "電気回路", "p": "A", "date": "2026-03-14"}, {"q": "H24-問16", "topic": "", "cat": "電気回路", "p": "A", "date": "2026-03-15"}, {"q": "H23-問8", "topic": "", "cat": "電気回路", "p": "A", "date": "2026-03-20"}];
+const WEAK_DATA_HOUKI = [{"q": "R03-問1", "topic": "", "cat": "電気設備技術基準", "p": "A", "date": "未実施"}, {"q": "R03-問2", "topic": "", "cat": "電気設備技術基準", "p": "A", "date": "未実施"}, {"q": "R03-問3", "topic": "", "cat": "電気設備技術基準", "p": "A", "date": "未実施"}, {"q": "H27-問3", "topic": "", "cat": "電気設備技術基準", "p": "B", "date": "未実施"}, {"q": "R03-問4", "topic": "", "cat": "電気設備技術基準", "p": "A", "date": "未実施"}, {"q": "R03-問5", "topic": "", "cat": "電気設備技術基準", "p": "A", "date": "未実施"}, {"q": "R03-問6", "topic": "", "cat": "電気設備技術基準", "p": "A", "date": "未実施"}, {"q": "R03-問7", "topic": "", "cat": "電気設備技術基準", "p": "A", "date": "未実施"}, {"q": "R03-問8", "topic": "", "cat": "電気設備技術基準", "p": "A", "date": "未実施"}, {"q": "R03-問9", "topic": "", "cat": "電気設備技術基準", "p": "A", "date": "未実施"}, {"q": "R03-問10", "topic": "", "cat": "電気事業法", "p": "A", "date": "未実施"}, {"q": "R03-問11", "topic": "", "cat": "電気事業法", "p": "A", "date": "未実施"}, {"q": "R03-問12", "topic": "", "cat": "電気設備技術基準", "p": "A", "date": "未実施"}, {"q": "H24-問11", "topic": "", "cat": "電気施設管理", "p": "B", "date": "未実施"}, {"q": "R03-問13", "topic": "", "cat": "電気施設管理", "p": "A", "date": "未実施"}, {"q": "R02-問1", "topic": "", "cat": "電気事業法", "p": "A", "date": "未実施"}, {"q": "R02-問2", "topic": "", "cat": "電気事業法", "p": "A", "date": "未実施"}];
 
+// ================================================================
+// ===== TODAY_SESSIONS =====
+// ================================================================
+const TODAY_SESSIONS = {"date":"2026-04-11","days_left":134,"sessions":[{"slot":"morning","label":"朝","emoji":"🌅","subject_label":"理論","question_id":"R04-問8","category":"電気回路","priority":"S","type":"weak","last_result":null},{"slot":"noon","label":"昼","emoji":"☀️","subject_label":"法規","question_id":"R03-問1","category":"電気設備技術基準","priority":"A","type":"weak","last_result":null},{"slot":"evening","label":"夜","emoji":"🌙","subject_label":"法規","question_id":"H24-問11","category":"電気施設管理","priority":"B","type":"weak","last_result":null}]};
+
+// ================================================================
+// ===== PDCA_DATA =====
+// ================================================================
+const PDCA_DATA = {"week":"W15","period":"4/7–4/13","do_logs":[{"date":"4/10","theme":"R04-問8","source":"問題演習","score":4,"result":"ok"},{"date":"4/9","theme":"R03-問1","source":"問題演習","score":3,"result":"risky"}],"check_pending":[{"theme":"H23-問8","result":"risky","category":"電気回路","days_ago":3}],"act_bugs":[{"code":"ANCHOR","desc":"思い込み","count":3},{"code":"CONF","desc":"自信過剰","count":2}],"act_countermeasures":["ANCHOR対策: 既知パターンを疑う問題を重点的に演習する"]};
+
+// ================================================================
 // ===== CANVAS BACKGROUND (stars) =====
+// ================================================================
 (function() {
   const canvas = document.getElementById('bg-canvas');
   const ctx = canvas.getContext('2d');
@@ -662,13 +941,7 @@ const WEAK_DATA = [{"q": "R04下-問8", "topic": "", "cat": "電気回路", "p":
     H = canvas.height = window.innerHeight;
     stars = [];
     for (let i = 0; i < 120; i++) {
-      stars.push({
-        x: Math.random()*W, y: Math.random()*H,
-        r: Math.random()*1.5+.3,
-        o: Math.random()*.6+.1,
-        s: Math.random()*.003+.001,
-        d: Math.random() > .5 ? 1 : -1
-      });
+      stars.push({ x:Math.random()*W, y:Math.random()*H, r:Math.random()*1.5+.3, o:Math.random()*.6+.1, s:Math.random()*.003+.001, d:Math.random()>.5?1:-1 });
     }
   }
   function draw() {
@@ -676,10 +949,8 @@ const WEAK_DATA = [{"q": "R04下-問8", "topic": "", "cat": "電気回路", "p":
     stars.forEach(s => {
       s.o += s.s * s.d;
       if (s.o > .7 || s.o < .1) s.d *= -1;
-      ctx.beginPath();
-      ctx.arc(s.x, s.y, s.r, 0, Math.PI*2);
-      ctx.fillStyle = `rgba(148,163,184,${s.o})`;
-      ctx.fill();
+      ctx.beginPath(); ctx.arc(s.x, s.y, s.r, 0, Math.PI*2);
+      ctx.fillStyle = `rgba(148,163,184,${s.o})`; ctx.fill();
     });
     requestAnimationFrame(draw);
   }
@@ -687,100 +958,275 @@ const WEAK_DATA = [{"q": "R04下-問8", "topic": "", "cat": "電気回路", "p":
   init(); draw();
 })();
 
-// ===== RING CHART =====
-(function() {
-  const c = document.getElementById('ring');
-  const ctx = c.getContext('2d');
-  const cx=65, cy=65, r=52, lw=12;
-  ctx.beginPath(); ctx.arc(cx,cy,r,0,Math.PI*2);
-  ctx.strokeStyle='#1f2937'; ctx.lineWidth=lw; ctx.stroke();
-  const pct = ACHIEVED/TOTAL;
-  const start = -Math.PI/2;
-  const grad = ctx.createLinearGradient(cx-r, cy, cx+r, cy);
-  grad.addColorStop(0,'#3b82f6'); grad.addColorStop(.5,'#8b5cf6'); grad.addColorStop(1,'#c084fc');
-  ctx.beginPath(); ctx.arc(cx,cy,r,start,start+Math.PI*2*pct);
-  ctx.strokeStyle=grad; ctx.lineWidth=lw; ctx.lineCap='round'; ctx.stroke();
-})();
+// ================================================================
+// ===== TAB SWITCH =====
+// ================================================================
+function switchTab(tabId) {
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+  document.querySelectorAll('.tab-pane').forEach(p => p.classList.remove('active'));
+  document.querySelector(`[data-tab="${tabId}"]`).classList.add('active');
+  document.getElementById('tab-' + tabId).classList.add('active');
 
-// ===== DONUT CHART =====
-(function() {
-  const c = document.getElementById('donut');
-  const ctx = c.getContext('2d');
-  const cx=80, cy=80, r=66;
-  const data=[
-    {v:FIRST_MARU, c:'#10b981'},
-    {v:FIRST_BATU, c:'#ef4444'},
-    {v:TOTAL-FIRST_MARU-FIRST_BATU, c:'#1f2937'},
-  ];
-  const total = data.reduce((s,d)=>s+d.v,0);
-  let start=-Math.PI/2;
-  data.forEach(d=>{
-    const slice=d.v/total*Math.PI*2;
-    ctx.beginPath(); ctx.moveTo(cx,cy);
-    ctx.arc(cx,cy,r,start,start+slice);
-    ctx.closePath(); ctx.fillStyle=d.c; ctx.fill();
-    start+=slice;
+  if (tabId === 'history' && !window._historyInited) {
+    window._historyInited = true;
+    initHistory();
+  }
+}
+document.querySelectorAll('.tab-btn').forEach(btn => {
+  btn.addEventListener('click', () => switchTab(btn.dataset.tab));
+});
+
+// ================================================================
+// ===== TAB1: TODAY SESSIONS RENDER =====
+// ================================================================
+function renderTodaySessions() {
+  const container = document.getElementById('today-sessions-container');
+  const priorityColor = { S:'#ef4444', A:'#f97316', B:'#f59e0b', C:'#94a3b8' };
+  const priorityBg   = { S:'rgba(239,68,68,.12)', A:'rgba(249,115,22,.12)', B:'rgba(245,158,11,.12)', C:'rgba(100,116,139,.12)' };
+
+  TODAY_SESSIONS.sessions.forEach(s => {
+    const typeBadge = s.type === 'review'
+      ? '<span class="type-badge type-review">🔁 SR復習</span>'
+      : '<span class="type-badge type-weak">⚠️ 弱点</span>';
+
+    const prevResult = s.last_result
+      ? `<span class="prev-result">前回: ${s.last_result === 'ok' ? '🟢 OK' : s.last_result === 'risky' ? '🟡 Risky' : '🔴 NG'}</span>`
+      : '';
+
+    const rankColor = priorityColor[s.priority] || '#94a3b8';
+    const rankBg    = priorityBg[s.priority]    || 'rgba(100,116,139,.12)';
+
+    const el = document.createElement('div');
+    el.className = 'session-card';
+    el.innerHTML = `
+      <div class="session-header">
+        <div class="session-slot">
+          <span class="session-emoji">${s.emoji}</span>
+          <span class="session-label">${s.label}セッション</span>
+        </div>
+        <span class="subject-badge">${s.subject_label}</span>
+      </div>
+      <div class="session-qid">${s.question_id}</div>
+      <div class="session-meta">
+        <span class="session-cat">${s.category}</span>
+        <span class="priority" style="background:${rankBg};color:${rankColor}">ランク: ${s.priority}</span>
+        ${typeBadge}
+        ${prevResult}
+      </div>
+      <div class="session-buttons">
+        <button class="fb-btn ok" disabled>✓ OK</button>
+        <button class="fb-btn risky" disabled>△ Risky</button>
+        <button class="fb-btn ng" disabled>✗ NG</button>
+      </div>
+      <div class="lock-notice">🔒 記録は PC（localhost:8765）で実施してください</div>
+    `;
+    container.appendChild(el);
   });
-  ctx.beginPath(); ctx.arc(cx,cy,40,0,Math.PI*2);
-  ctx.fillStyle='#0d1117'; ctx.fill();
-  ctx.fillStyle='#f1f5f9'; ctx.font='bold 16px sans-serif';
-  ctx.textAlign='center'; ctx.textBaseline='middle';
-  ctx.fillText('59%',cx,cy-7);
-  ctx.font='10px sans-serif'; ctx.fillStyle='#64748b';
-  ctx.fillText('正解率',cx,cy+8);
-})();
 
-// ===== ANIMATE BARS =====
-setTimeout(()=>{
-    document.getElementById('b1').style.width='27%';
-  document.getElementById('b2').style.width='41%';
-  document.getElementById('b3').style.width='8%';
-  document.getElementById('b4').style.width='2%';
-}, 400);
+  // 上部バナーを更新
+  const daysLeft = TODAY_SESSIONS.days_left;
+  document.getElementById('today-days-left').textContent = daysLeft;
+  document.getElementById('days-badge-main').textContent = `試験まで ${daysLeft}日`;
+  const dateStr = new Date(TODAY_SESSIONS.date).toLocaleDateString('ja-JP',{month:'long',day:'numeric',weekday:'short'});
+  document.getElementById('today-date-display').textContent = dateStr;
+}
 
-// ===== COUNTDOWN =====
-(function() {
-  const diff = Math.ceil((EXAM_DATE - TODAY) / 86400000);
+// ================================================================
+// ===== TAB2: PDCA RENDER =====
+// ================================================================
+function renderPdca() {
+  // Plan
+  document.getElementById('pdca-week-label').textContent = `${PDCA_DATA.week} / ${PDCA_DATA.period}`;
+  document.getElementById('plan-review-count').textContent = PDCA_DATA.check_pending.length;
+
+  // Do: 表
+  const tbody = document.getElementById('pdca-do-tbody');
+  const doLogs = PDCA_DATA.do_logs.slice(0, 10);
+  doLogs.forEach(log => {
+    const tr = document.createElement('tr');
+    const dots = Array.from({length:5}, (_,i) =>
+      `<div class="score-dot${i < log.score ? ' filled' : ''}"></div>`
+    ).join('');
+    const resultClass = log.result === 'ok' ? 'result-ok' : log.result === 'risky' ? 'result-risky' : 'result-ng';
+    const resultLabel = log.result === 'ok' ? '🟢 OK' : log.result === 'risky' ? '🟡 Risky' : '🔴 NG';
+    tr.innerHTML = `
+      <td style="color:var(--muted2)">${log.date}</td>
+      <td style="font-weight:600">${log.theme}</td>
+      <td><div class="score-dots">${dots}</div></td>
+      <td><span class="${resultClass}">${resultLabel}</span></td>
+    `;
+    tbody.appendChild(tr);
+  });
+  if (doLogs.length === 0) {
+    const tr = document.createElement('tr');
+    tr.innerHTML = '<td colspan="4" style="color:var(--muted);text-align:center;padding:12px">記録なし</td>';
+    tbody.appendChild(tr);
+  }
+
+  // Check
+  const checkList = document.getElementById('pdca-check-list');
+  if (PDCA_DATA.check_pending.length === 0) {
+    checkList.innerHTML = '<div style="color:var(--muted);font-size:.8rem;text-align:center;padding:10px">確認待ちなし 🎉</div>';
+  } else {
+    PDCA_DATA.check_pending.forEach(item => {
+      const el = document.createElement('div');
+      el.className = 'check-item';
+      el.innerHTML = `
+        <div style="flex:1">
+          <div style="font-weight:600">${item.theme}</div>
+          <div style="font-size:.7rem;color:var(--muted2)">${item.category}</div>
+        </div>
+        <div style="display:flex;flex-direction:column;align-items:flex-end;gap:3px">
+          <span class="result-risky" style="font-size:.7rem">${item.result === 'risky' ? '🟡 Risky' : '🔴 NG'}</span>
+          <span style="font-size:.67rem;color:var(--muted)">${item.days_ago}日前</span>
+        </div>
+      `;
+      checkList.appendChild(el);
+    });
+  }
+
+  // Act: バグバー
+  const bugChart = document.getElementById('pdca-bug-chart');
+  const maxCount = Math.max(...PDCA_DATA.act_bugs.map(b => b.count), 1);
+  PDCA_DATA.act_bugs.forEach(bug => {
+    const pct = Math.round(bug.count / maxCount * 100);
+    const el = document.createElement('div');
+    el.className = 'bug-bar-wrap';
+    el.innerHTML = `
+      <div class="bug-bar-label">
+        <span><b>${bug.code}</b> — ${bug.desc}</span>
+        <span style="color:var(--red);font-weight:700">${bug.count}件</span>
+      </div>
+      <div class="bug-bar-bg">
+        <div class="bug-bar-fill" style="width:0%" data-target="${pct}"></div>
+      </div>
+    `;
+    bugChart.appendChild(el);
+  });
+  setTimeout(() => {
+    document.querySelectorAll('.bug-bar-fill').forEach(el => {
+      el.style.width = el.dataset.target + '%';
+    });
+  }, 400);
+
+  // Act: 対策
+  const cm = document.getElementById('pdca-countermeasures');
+  PDCA_DATA.act_countermeasures.forEach(text => {
+    const el = document.createElement('div');
+    el.className = 'countermeasure';
+    el.innerHTML = '✅ ' + text;
+    cm.appendChild(el);
+  });
+}
+
+// ================================================================
+// ===== TAB3: HISTORY INIT (遅延初期化) =====
+// ================================================================
+function initHistory() {
+  const pct = Math.round(ACHIEVED / TOTAL * 100 * 10) / 10;
+  const tried = FIRST_MARU + FIRST_BATU;
+  const rate = Math.round(FIRST_MARU / tried * 100);
+
+  // テキスト更新
+  document.getElementById('ring-pct-text').textContent = pct + '%';
+  document.getElementById('ov-achieved').textContent = ACHIEVED + ' 問';
+  document.getElementById('ov-remain').textContent = (TOTAL - ACHIEVED) + ' 問';
+  document.getElementById('ov-total').textContent = TOTAL + ' 問';
+  document.getElementById('ov-weak').textContent = WEAK_DATA.length + ' 問';
+  document.getElementById('stat-maru').textContent = FIRST_MARU;
+  document.getElementById('stat-maru-sub').textContent = '取組中 ' + Math.round(FIRST_MARU/TOTAL*100) + '%';
+  document.getElementById('stat-batu').textContent = FIRST_BATU;
+  document.getElementById('stat-rate').textContent = rate + '%';
+  document.getElementById('stat-tried').textContent = tried;
+  document.getElementById('stat-tried-sub').textContent = TOTAL + '問中 ' + Math.round(tried/TOTAL*100) + '%';
+  document.getElementById('donut-maru').textContent = FIRST_MARU;
+  document.getElementById('donut-batu').textContent = FIRST_BATU;
+  document.getElementById('donut-未').textContent = TOTAL - tried;
+  document.getElementById('weak-total').textContent = WEAK_DATA.length;
+
+  // カウントダウン
+  const diff = Math.ceil((EXAM_DATE - TODAY_DATE) / 86400000);
   document.getElementById('countdown').textContent = diff;
   const totalDays = (EXAM_DATE - STUDY_START) / 86400000;
-  const elapsed = (TODAY - STUDY_START) / 86400000;
-  const pct = Math.min(100, Math.round(elapsed/totalDays*100));
-  setTimeout(()=>{
-    document.getElementById('exam-prog').style.width = pct+'%';
-    document.getElementById('exam-prog-lbl').textContent = `学習期間 ${pct}% 経過`;
+  const elapsed = (TODAY_DATE - STUDY_START) / 86400000;
+  const progPct = Math.min(100, Math.round(elapsed / totalDays * 100));
+  setTimeout(() => {
+    document.getElementById('exam-prog').style.width = progPct + '%';
+    document.getElementById('exam-prog-lbl').textContent = `学習期間 ${progPct}% 経過`;
   }, 600);
-})();
 
-// ===== WEAKNESS LIST =====
-(function() {
-  const cont = document.getElementById('weak-list');
-  const catColor = {
-    '電気回路':'#10b981','電磁気':'#f97316',
-    '電子理論':'#8b5cf6','電気及び電子計測':'#3b82f6'
-  };
-  const pIcon = {S:'🔴',A:'🟠',B:'🟡',C:'⚪'};
-  WEAK_DATA.slice(0,12).forEach(w=>{
-    const el = document.createElement('div');
-    el.className = 'weak-item';
-    el.innerHTML = `
-      <div class="weak-icon">${pIcon[w.p]||'⚪'}</div>
-      <div class="weak-body">
-        <div class="weak-q">${w.q} <span style="font-size:.7rem;color:${catColor[w.cat]||'#94a3b8'}">${w.cat}</span></div>
-        <div class="weak-sub">${w.topic}</div>
-      </div>
-      <div class="weak-date">最終: ${w.date}</div>
-    `;
-    cont.appendChild(el);
-  });
-  if(WEAK_DATA.length > 12) {
-    const more = document.createElement('div');
-    more.style.cssText = 'font-size:.72rem;color:var(--muted);text-align:center;padding-top:8px;';
-    more.textContent = `... 他 ${WEAK_DATA.length-12} 問。Notionで全件確認。`;
-    cont.appendChild(more);
-  }
-})();
+  // リングチャート
+  (function() {
+    const c = document.getElementById('ring');
+    const ctx = c.getContext('2d');
+    const cx=65, cy=65, r=52, lw=12;
+    ctx.beginPath(); ctx.arc(cx,cy,r,0,Math.PI*2);
+    ctx.strokeStyle='#1f2937'; ctx.lineWidth=lw; ctx.stroke();
+    const ratio = ACHIEVED / TOTAL;
+    const start = -Math.PI/2;
+    const grad = ctx.createLinearGradient(cx-r,cy,cx+r,cy);
+    grad.addColorStop(0,'#3b82f6'); grad.addColorStop(.5,'#8b5cf6'); grad.addColorStop(1,'#c084fc');
+    ctx.beginPath(); ctx.arc(cx,cy,r,start,start+Math.PI*2*ratio);
+    ctx.strokeStyle=grad; ctx.lineWidth=lw; ctx.lineCap='round'; ctx.stroke();
+  })();
 
-// ===== RANK S/A ALERT =====
+  // ドーナツチャート
+  (function() {
+    const c = document.getElementById('donut');
+    const ctx = c.getContext('2d');
+    const cx=80, cy=80, r=66;
+    const data = [{v:FIRST_MARU,c:'#10b981'},{v:FIRST_BATU,c:'#ef4444'},{v:TOTAL-FIRST_MARU-FIRST_BATU,c:'#1f2937'}];
+    const total = data.reduce((s,d)=>s+d.v,0);
+    let start=-Math.PI/2;
+    data.forEach(d=>{
+      const slice=d.v/total*Math.PI*2;
+      ctx.beginPath(); ctx.moveTo(cx,cy); ctx.arc(cx,cy,r,start,start+slice);
+      ctx.closePath(); ctx.fillStyle=d.c; ctx.fill(); start+=slice;
+    });
+    ctx.beginPath(); ctx.arc(cx,cy,40,0,Math.PI*2);
+    ctx.fillStyle='#0d1117'; ctx.fill();
+    ctx.fillStyle='#f1f5f9'; ctx.font='bold 16px sans-serif';
+    ctx.textAlign='center'; ctx.textBaseline='middle';
+    ctx.fillText(rate+'%',cx,cy-7);
+    ctx.font='10px sans-serif'; ctx.fillStyle='#64748b';
+    ctx.fillText('正解率',cx,cy+8);
+  })();
+
+  // バーアニメ
+  setTimeout(() => {
+    document.getElementById('b1').style.width = '27%';
+    document.getElementById('b2').style.width = '41%';
+    document.getElementById('b3').style.width = '8%';
+    document.getElementById('b4').style.width = '2%';
+  }, 400);
+
+  // 弱点リスト
+  (function() {
+    const cont = document.getElementById('weak-list');
+    const catColor = {'電気回路':'#10b981','電磁気':'#f97316','電子理論':'#8b5cf6','電気及び電子計測':'#3b82f6'};
+    const pIcon = {S:'🔴',A:'🟠',B:'🟡',C:'⚪'};
+    WEAK_DATA.slice(0,12).forEach(w => {
+      const el = document.createElement('div');
+      el.className = 'weak-item';
+      el.innerHTML = `
+        <div class="weak-icon">${pIcon[w.p]||'⚪'}</div>
+        <div class="weak-body">
+          <div class="weak-q">${w.q} <span style="font-size:.7rem;color:${catColor[w.cat]||'#94a3b8'}">${w.cat}</span></div>
+          <div class="weak-sub">${w.topic}</div>
+        </div>
+        <div class="weak-date">最終: ${w.date}</div>
+      `;
+      cont.appendChild(el);
+    });
+    if (WEAK_DATA.length > 12) {
+      const more = document.createElement('div');
+      more.style.cssText = 'font-size:.72rem;color:var(--muted);text-align:center;padding-top:8px;';
+      more.textContent = `... 他 ${WEAK_DATA.length-12} 問。Notionで全件確認。`;
+      cont.appendChild(more);
+    }
+  })();
+
+  // ランクS/Aアラート
   (function() {
     const saItems = WEAK_DATA.filter(w => w.p === 'S' || w.p === 'A');
     const sCount = WEAK_DATA.filter(w => w.p === 'S').length;
@@ -790,23 +1236,48 @@ setTimeout(()=>{
     document.getElementById('rank-a-count').textContent = aCount;
     document.getElementById('rank-sa-resolved').textContent = resolved;
     document.getElementById('ranksa-count').textContent = saItems.length + '問 未解決';
-    const pct = saItems.length > 0 ? Math.round(resolved / (saItems.length + resolved) * 100) : 0;
-    setTimeout(function(){ document.getElementById('ranksa-bar').style.width = pct + '%'; }, 600);
-    document.getElementById('ranksa-pct').textContent = '解決率 ' + pct + '% — 全' + (saItems.length + resolved) + '問中 ' + resolved + '問クリア';
-    var cont = document.getElementById('ranksa-list');
-    var catColor = {'電気回路':'#10b981','電磁気':'#f97316','電子理論':'#8b5cf6','電気計測':'#3b82f6'};
-    var pColor = {S:'#ef4444',A:'#f97316'};
-    saItems.forEach(function(w) {
-      var el = document.createElement('div');
+    const saPct = saItems.length > 0 ? Math.round(resolved / (saItems.length + resolved) * 100) : 0;
+    setTimeout(() => { document.getElementById('ranksa-bar').style.width = saPct + '%'; }, 600);
+    document.getElementById('ranksa-pct').textContent = '解決率 ' + saPct + '% — 全' + (saItems.length + resolved) + '問中 ' + resolved + '問クリア';
+    const listEl = document.getElementById('ranksa-list');
+    const catColor = {'電気回路':'#10b981','電磁気':'#f97316','電子理論':'#8b5cf6','電気計測':'#3b82f6'};
+    const pColor = {S:'#ef4444',A:'#f97316'};
+    saItems.forEach(w => {
+      const el = document.createElement('div');
       el.style.cssText = 'display:flex;align-items:center;gap:8px;padding:7px 10px;border-radius:8px;background:rgba(255,255,255,.03);margin-bottom:4px;font-size:.8rem;border-left:3px solid '+(pColor[w.p]||'#666');
       el.innerHTML = '<div style="min-width:22px;height:22px;border-radius:6px;background:'+(pColor[w.p]||'#666')+'20;display:flex;align-items:center;justify-content:center;font-size:.65rem;font-weight:800;color:'+(pColor[w.p]||'#666')+';flex-shrink:0">'+w.p+'</div><div style="flex:1"><span style="font-weight:600">'+w.q+'</span> <span style="font-size:.7rem;color:'+(catColor[w.cat]||'#94a3b8')+'">'+w.cat+'</span></div><div style="font-size:.67rem;color:#64748b">'+w.date+'</div>';
-      cont.appendChild(el);
+      listEl.appendChild(el);
     });
   })();
 
-  // ===== DATE =====
-document.getElementById('updated-date').textContent =
-  new Date('2026-04-10').toLocaleDateString('ja-JP',{year:'numeric',month:'long',day:'numeric'});
+  // 日付
+  const now = new Date();
+  const dateStr = now.toLocaleDateString('ja-JP',{year:'numeric',month:'long',day:'numeric'});
+  const el = document.getElementById('updated-date');
+  if (el) el.textContent = dateStr;
+}
+
+// ================================================================
+// ===== INITIAL RENDER =====
+// ================================================================
+// Tab1: Today sessions
+renderTodaySessions();
+
+// Tab2: PDCA
+renderPdca();
+
+// Tab3: Historyは初回アクティブ時に initHistory() を呼ぶ（tab-today がデフォルト）
+
+// システムタブ: 日付
+(function() {
+  const d = new Date();
+  const s = d.toLocaleDateString('ja-JP',{year:'numeric',month:'long',day:'numeric'});
+  const el = document.getElementById('sys-footer-date');
+  if (el) el.textContent = s;
+})();
+
+// 初期タブ
+switchTab('today');
 
 </script>
 </body>
