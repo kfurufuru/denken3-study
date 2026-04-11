@@ -158,6 +158,29 @@ def load_records():
         return []
 
 
+# ===== PAST_ERRORS 計算 =====
+
+def compute_past_errors(records_list):
+    """records.jsonからNG/Riskyの未解決誤答を抽出してリスト返却"""
+    errors = []
+    for r in records_list:
+        result = r.get("result", "")
+        nr = r.get("next_review", "")
+        if result in ("ng", "risky") and nr != "done":
+            errors.append({
+                "question_id": r.get("theme", r.get("q", "")),
+                "category":    r.get("category", r.get("theme", "")),
+                "subject":     r.get("subject", "理論"),
+                "result":      result,
+                "date":        r.get("date", ""),
+                "memo":        r.get("memo", ""),
+                "next_review": nr,
+            })
+    # 日付の新しい順にソート
+    errors.sort(key=lambda x: x.get("date", ""), reverse=True)
+    return errors
+
+
 # ===== TODAY_SESSIONS 計算 =====
 
 def compute_today_sessions(notion_records, records_list):
@@ -383,10 +406,10 @@ def compute_pdca_data(records_list):
     }
 
 
-# ===== HTML注入（TODAY_SESSIONS / PDCA_DATA）=====
+# ===== HTML注入（TODAY_SESSIONS / PDCA_DATA / PAST_ERRORS）=====
 
-def inject_today_pdca(html, today_data, pdca_data):
-    """TODAY_SESSIONS と PDCA_DATA を HTML に注入する"""
+def inject_today_pdca(html, today_data, pdca_data, past_errors):
+    """TODAY_SESSIONS と PDCA_DATA と PAST_ERRORS を HTML に注入する"""
 
     # TODAY_SESSIONS 置換
     today_js = json.dumps(today_data, ensure_ascii=False, indent=2)
@@ -406,12 +429,20 @@ def inject_today_pdca(html, today_data, pdca_data):
         flags=re.DOTALL
     )
 
+    # PAST_ERRORS 置換
+    past_js = json.dumps(past_errors, ensure_ascii=False)
+    html = re.sub(
+        r'// ===== PAST_ERRORS =====\s*\nconst PAST_ERRORS = \[.*?\];',
+        f'// ===== PAST_ERRORS =====\nconst PAST_ERRORS = {past_js};',
+        html, flags=re.DOTALL
+    )
+
     return html
 
 
 # ===== 既存 inject_data（stats 注入）=====
 
-def inject_data(stats, today_data, pdca_data):
+def inject_data(stats, today_data, pdca_data, past_errors):
     """index.html の DATA セクションを更新"""
     with open("index.html","r",encoding="utf-8") as f:
         html = f.read()
@@ -493,8 +524,8 @@ const WEAK_DATA = {weak_js};"""
             html
         )
 
-    # ===== TODAY_SESSIONS / PDCA_DATA 注入 =====
-    html = inject_today_pdca(html, today_data, pdca_data)
+    # ===== TODAY_SESSIONS / PDCA_DATA / PAST_ERRORS 注入 =====
+    html = inject_today_pdca(html, today_data, pdca_data, past_errors)
 
     with open("index.html","w",encoding="utf-8") as f:
         f.write(html)
@@ -508,6 +539,7 @@ const WEAK_DATA = {weak_js};"""
         print(f"   {k}: {v['achieved']}/{v['total']} ({p}%)")
     print(f"   今日のセッション: {len(today_data.get('sessions', []))}スロット")
     print(f"   PDCAログ: do={len(pdca_data.get('do_logs',[]))}件 / pending={len(pdca_data.get('check_pending',[]))}件 / bugs={len(pdca_data.get('act_bugs',[]))}件")
+    print(f"   記憶チェック(PAST_ERRORS): {len(past_errors)}件")
 
 
 if __name__ == "__main__":
@@ -524,7 +556,8 @@ if __name__ == "__main__":
     records = load_records()
     print(f"   {len(records)}件 ローカルレコード読み込み完了")
 
-    today_data = compute_today_sessions(notion_records, records)
-    pdca_data  = compute_pdca_data(records)
+    today_data  = compute_today_sessions(notion_records, records)
+    pdca_data   = compute_pdca_data(records)
+    past_errors = compute_past_errors(records)
 
-    inject_data(stats, today_data, pdca_data)
+    inject_data(stats, today_data, pdca_data, past_errors)

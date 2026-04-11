@@ -551,6 +551,24 @@ body{
   .tab-btn{font-size:.72rem;padding:8px 10px}
   .header-title{font-size:.95rem}
 }
+/* ── 記憶チェック ── */
+.advisor-banner{display:flex;align-items:flex-start;gap:8px;padding:10px 14px;background:rgba(56,189,248,0.06);border:1px solid rgba(56,189,248,0.2);border-radius:8px;margin-bottom:12px;font-size:.82rem;line-height:1.6}
+.advisor-icon{font-size:1.1rem}
+.advisor-highlight{color:var(--accent);font-weight:700}
+.error-list{display:flex;flex-direction:column;gap:10px}
+.error-card{background:var(--card);border:1px solid var(--border);border-left:3px solid var(--border);border-radius:8px;padding:10px 14px;transition:border-color .2s}
+.error-card.urgency-critical{border-left-color:var(--red)}
+.error-card.urgency-warning{border-left-color:var(--yellow)}
+.err-header{display:flex;align-items:center;gap:8px;margin-bottom:4px}
+.err-qid{font-size:.88rem;font-weight:700;color:var(--text)}
+.err-badge{font-size:.72rem;padding:2px 8px;border-radius:10px;font-weight:600}
+.err-badge.badge-ng{background:rgba(239,68,68,.15);color:var(--red)}
+.err-badge.badge-risky{background:rgba(245,158,11,.15);color:var(--yellow)}
+.err-days{font-size:.72rem;color:var(--muted);margin-bottom:6px}
+.err-days .days-num{font-weight:700}
+.err-days .days-num.critical{color:var(--red)}
+.err-days .days-num.warning{color:var(--yellow)}
+.err-memo{font-size:.72rem;color:var(--muted);margin-top:4px;padding-top:4px;border-top:1px solid var(--border)}
 </style>
 </head>
 <body>
@@ -622,13 +640,15 @@ body{
         <div class="info-card">読み込み中…</div>
       </div>
     </div>
-    <!-- Right: 記憶チェック (PC専用) -->
+    <!-- Right: 記憶チェック -->
     <div class="col-right">
-      <div class="col-title">🧠 記憶チェック</div>
-      <div class="info-card" style="padding:32px 20px">
-        <div style="font-size:2rem;margin-bottom:12px">💻</div>
-        <div style="font-size:.88rem;font-weight:700;margin-bottom:8px;color:var(--muted2)">PCで実施してください</div>
-        <div style="font-size:.78rem;color:var(--muted);line-height:1.6">Active Recallは<br>localhost:8765 で実施できます</div>
+      <div class="col-title">🧠 記憶チェック <span class="col-count" id="error-count">—</span></div>
+      <div id="advisor-area"></div>
+      <div class="error-list" id="error-list">
+        <div class="info-card">読み込み中…</div>
+      </div>
+      <div style="margin-top:10px;padding:8px 12px;background:rgba(56,189,248,0.05);border:1px dashed rgba(56,189,248,0.2);border-radius:8px;font-size:0.72rem;color:var(--muted2)">
+        🔒 答え合わせ・Active Recall は PC（localhost:8765）で
       </div>
     </div>
   </div>
@@ -1197,6 +1217,9 @@ const TODAY_SESSIONS = {"date":"2026-04-11","days_left":134,"done_count":0,"sess
 // ================================================================
 const PDCA_DATA = {"week":"W15","period":"4/7–4/13","current_phase":"D","is_update_day":false,"next_action":{"phase":"C","text":"フェインマン RL回路の位相遷移","cmd":"フェインマン RL回路の位相遷移"},"plan":{"themes":[{"name":"RL回路の位相とインピーダンス","why":"なぜ: インピーダンス🔴×4件・ANCHOR誤答2件","badge_type":"weak","done":true,"phase":"D","phase_dots":2},{"name":"RLC直列・並列共振の特性","why":"なぜ: RLC共振🔴×4件・S優先未達成","badge_type":"weak","done":false,"phase":"P","phase_dots":1},{"name":"三相回路のΔ→Y変換計算","why":"なぜ: 3/22フェインマンで穴発見・未復習","badge_type":"other","done":false,"phase":"P","phase_dots":1}]},"do_logs":[{"date":"4/10","theme":"RL回路の位相遷移（H21問8）","source":"Gemini","score":4},{"date":"3/22","theme":"Y-Δ変換","source":"フェインマン","score":4}],"check":{"rewrites":[{"date":"3/22","pattern":"Δ→Y変換は1/3倍（逆に覚えていた）","verified":null,"pending_checks":[]},{"date":"4/10","pattern":"位相はR/Xの構成比で決まる（部品単体で判断しない）","verified":null,"pending_checks":[]}]},"act_bugs":[{"code":"ANCHOR","desc":"思い込みで全体判断する","count":2},{"code":"MODEL","desc":"物理モデルの誤認識","count":2}],"act_countermeasures":["ANCHOR対策: 必ず「極端条件（R=0 or ∞）」を代入してから判断する"]};
 
+// ===== PAST_ERRORS =====
+const PAST_ERRORS = [{"question_id":"R04-問8","category":"電気回路","subject":"理論","result":"ng","date":"2026-04-08","memo":"","next_review":"SR1"},{"question_id":"R03-問1","category":"電気設備技術基準","subject":"法規","result":"risky","date":"2026-04-07","memo":"","next_review":"SR2"}];
+
 // ================================================================
 // ===== CANVAS BACKGROUND (stars) =====
 // ================================================================
@@ -1634,10 +1657,79 @@ function initHistory() {
 }
 
 // ================================================================
+// ===== PAST ERRORS (記憶チェック) =====
+// ================================================================
+function daysAgo(dateStr) {
+  if (!dateStr) return 0;
+  return Math.floor((new Date() - new Date(dateStr)) / 86400000);
+}
+function urgencyClass(days, result) {
+  const t = result === 'ng' ? 3 : 5;
+  if (days >= t * 2) return 'critical';
+  if (days >= t)     return 'warning';
+  return 'stable';
+}
+function advisorMessage(errors) {
+  const critical = errors.filter(e => urgencyClass(daysAgo(e.date), e.result) === 'critical');
+  const warning  = errors.filter(e => urgencyClass(daysAgo(e.date), e.result) === 'warning');
+  if (critical.length > 0)
+    return `<span class="advisor-highlight">⚠️ ${critical.length}件が忘却危険ゾーン</span>に入っています。特に「<span class="advisor-highlight">${critical[0].question_id}</span>」は${daysAgo(critical[0].date)}日前の誤答です。`;
+  if (warning.length > 0)
+    return `${warning.length}件の誤答が<span class="advisor-highlight">記憶の薄れ始め</span>です。今のうちに確認を。`;
+  return `すべての誤答が<span class="advisor-highlight">記憶の新鮮な範囲内</span>です。`;
+}
+function renderPastErrors() {
+  const list      = document.getElementById('error-list');
+  const countEl   = document.getElementById('error-count');
+  const advisorEl = document.getElementById('advisor-area');
+  if (!list) return;
+  const errors = [...PAST_ERRORS].sort((a, b) => {
+    const ord = {critical:0, warning:1, stable:2};
+    const ua = urgencyClass(daysAgo(a.date), a.result);
+    const ub = urgencyClass(daysAgo(b.date), b.result);
+    return (ord[ua] - ord[ub]) || (daysAgo(b.date) - daysAgo(a.date));
+  });
+  if (countEl) countEl.textContent = `${errors.length}件`;
+  if (!errors.length) {
+    if (advisorEl) advisorEl.innerHTML = '';
+    list.innerHTML = '<div class="info-card" style="text-align:center;padding:24px">🎉 未解決の誤答はありません</div>';
+    return;
+  }
+  if (advisorEl) advisorEl.innerHTML =
+    `<div class="advisor-banner"><span class="advisor-icon">🎓</span><span>${advisorMessage(errors)}</span></div>`;
+  list.innerHTML = errors.map(err => {
+    const days = daysAgo(err.date);
+    const urg  = urgencyClass(days, err.result);
+    const S    = err.result === 'ng' ? 3 : 5;
+    const pct  = Math.round(Math.exp(-days / S) * 100);
+    const lv   = pct >= 60 ? 'level-ok' : pct >= 30 ? 'level-warn' : pct >= 10 ? 'level-danger' : 'level-critical';
+    const pc   = pct >= 60 ? 'pct-ok' : 'pct-danger';
+    const msg  = pct >= 60 ? '' : pct >= 30 ? '記憶が薄れ始めています' : pct >= 10 ? '今やらないと忘れます' : 'ほぼ忘却 — 再学習が必要';
+    const bc   = err.result === 'ng' ? 'badge-ng' : 'badge-risky';
+    const bl   = err.result === 'ng' ? '❌ NG' : '⚠️ あいまい';
+    return `<div class="error-card urgency-${urg}">
+      <div class="err-header">
+        <span class="err-qid">${err.question_id}</span>
+        <span class="err-badge ${bc}">${bl}</span>
+      </div>
+      <div class="err-days"><span class="days-num ${urg}">${days}日前</span> · ${err.subject||''}</div>
+      <div class="memory-bar-wrap">
+        <span class="memory-bar-label">記憶残量</span>
+        <div class="memory-bar-track"><div class="memory-bar-fill ${lv}" style="width:${pct}%"></div></div>
+        <span class="memory-pct ${pc}">${pct}%</span>
+      </div>
+      ${msg ? `<div class="memory-msg ${pct<30?'msg-danger':''}">${msg}</div>` : ''}
+      ${err.memo ? `<div class="err-memo">📝 ${err.memo}</div>` : ''}
+    </div>`;
+  }).join('');
+}
+
+// ================================================================
 // ===== INITIAL RENDER =====
 // ================================================================
 // Tab1: Today sessions
 renderTodaySessions();
+renderPastErrors();
 
 // Tab2: PDCA
 renderPdca();
