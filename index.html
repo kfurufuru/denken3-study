@@ -344,23 +344,208 @@ body{
 /* ===== FOOTER ===== */
 .footer{text-align:center;color:var(--muted);font-size:.68rem;margin-top:32px;padding:16px 16px 32px;border-top:1px solid var(--border)}
 
+/* ===== TAB1: RICH SESSION CARDS ===== */
+/* Progress bar */
+.progress-bar-wrap{padding:12px 20px 0;display:flex;align-items:center;gap:12px}
+.progress-label{font-size:.75rem;color:var(--muted);white-space:nowrap}
+.progress-track{flex:1;height:6px;background:var(--card2);border-radius:9px;overflow:hidden}
+.progress-fill{height:100%;background:linear-gradient(90deg,#38bdf8,#818cf8);border-radius:9px;transition:width .5s ease}
+.progress-count{font-size:.75rem;color:#38bdf8;font-weight:700;white-space:nowrap}
+/* Intensity meter */
+.intensity-wrap{display:flex;align-items:center;gap:12px;padding:6px 20px}
+.intensity-label{font-size:.72rem;color:var(--muted);white-space:nowrap}
+.intensity-bar{display:flex;gap:3px}
+.intensity-seg{width:20px;height:8px;border-radius:3px;background:var(--card2);border:1px solid var(--border);transition:background .3s}
+.intensity-seg.filled-low{background:#22c55e;border-color:#22c55e}
+.intensity-seg.filled-mid{background:#f59e0b;border-color:#f59e0b}
+.intensity-seg.filled-high{background:#ef4444;border-color:#ef4444}
+.intensity-text{font-size:.72rem;color:var(--muted)}
+/* Two column layout */
+.two-col{display:grid;grid-template-columns:1fr 1fr;gap:24px}
+.col-title{font-size:1rem;font-weight:700;color:#38bdf8;margin-bottom:16px;display:flex;align-items:center;gap:8px}
+.col-title .col-count{background:rgba(56,189,248,.12);border:1px solid rgba(56,189,248,.3);color:#38bdf8;padding:2px 10px;border-radius:12px;font-size:.75rem;font-weight:600}
+/* Rich session card (denken-study style) */
+.session-card-rich{background:var(--card2);border:1px solid var(--border);border-radius:14px;overflow:hidden;transition:border-color var(--transition);margin-bottom:16px}
+.session-card-rich:last-child{margin-bottom:0}
+.session-card-rich.s-active{border-color:rgba(56,189,248,.4)}
+.session-card-rich.s-done-ok{border-color:rgba(34,197,94,.4)}
+.session-card-rich.s-done-risky{border-color:rgba(245,158,11,.4)}
+.session-card-rich.s-done-ng{border-color:rgba(239,68,68,.4)}
+/* Session header */
+.s-header{display:flex;align-items:center;gap:12px;padding:16px 16px 12px;cursor:pointer;user-select:none}
+.slot-badge{width:44px;height:44px;border-radius:12px;background:rgba(56,189,248,.1);border:1px solid rgba(56,189,248,.2);display:flex;align-items:center;justify-content:center;font-size:1.3rem;flex-shrink:0}
+.slot-info{flex:1;min-width:0}
+.slot-label{font-size:.75rem;color:var(--muted);font-weight:600}
+.slot-qid{font-size:1.05rem;font-weight:700;color:var(--text)}
+.slot-meta{font-size:.75rem;color:var(--muted);margin-top:2px}
+.slot-status{flex-shrink:0}
+.status-dot{width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:.8rem;font-weight:700}
+.status-dot.pending{background:rgba(100,116,139,.2);color:var(--muted)}
+.status-dot.s-ok{background:rgba(34,197,94,.2);color:#22c55e}
+.status-dot.s-risky{background:rgba(245,158,11,.2);color:#f59e0b}
+.status-dot.s-ng{background:rgba(239,68,68,.2);color:#ef4444}
+/* Session detail */
+.s-detail{display:none;border-top:1px solid var(--border);padding:16px}
+.s-detail.open{display:block}
+/* Memory bar */
+.memory-bar-wrap{display:flex;align-items:center;gap:8px;margin-bottom:12px;padding:0 2px}
+.memory-bar-label{font-size:.68rem;color:var(--muted);white-space:nowrap;min-width:44px}
+.memory-bar-track{flex:1;height:10px;background:rgba(255,255,255,.06);border-radius:5px;overflow:hidden}
+.memory-bar-fill{height:100%;border-radius:5px;transition:width .8s ease}
+.memory-bar-fill.level-ok{background:linear-gradient(90deg,#22c55e,#4ade80)}
+.memory-bar-fill.level-warn{background:linear-gradient(90deg,#f59e0b,#fbbf24)}
+.memory-bar-fill.level-danger{background:linear-gradient(90deg,#ef4444,#f87171);animation:pulse-bar 1.5s ease-in-out infinite}
+.memory-bar-fill.level-critical{background:linear-gradient(90deg,#dc2626,#ef4444);animation:pulse-bar .8s ease-in-out infinite}
+@keyframes pulse-bar{0%,100%{opacity:1}50%{opacity:.5}}
+.memory-pct{font-size:.72rem;font-weight:700;min-width:32px;text-align:right}
+.memory-pct.pct-ok{color:#22c55e}
+.memory-pct.pct-warn{color:#f59e0b}
+.memory-pct.pct-danger{color:#ef4444}
+.memory-msg{font-size:.68rem;color:var(--muted);margin-top:2px;font-style:italic}
+.memory-msg.msg-danger{color:#ef4444}
+/* Feedback row (disabled on mobile) */
+.feedback-row{display:flex;gap:12px;margin-bottom:8px}
+.fb-btn-rich{flex:1;padding:10px 8px;border:2px solid transparent;border-radius:8px;font-size:.8rem;font-weight:700;cursor:not-allowed;transition:all var(--transition);background:var(--card);display:flex;flex-direction:column;align-items:center;gap:4px;opacity:.5}
+.fb-btn-rich .fb-icon{font-size:1.3rem}
+.fb-btn-rich.btn-ok{color:#22c55e;border-color:rgba(34,197,94,.3)}
+.fb-btn-rich.btn-risky{color:#f59e0b;border-color:rgba(245,158,11,.3)}
+.fb-btn-rich.btn-ng{color:#ef4444;border-color:rgba(239,68,68,.3)}
+.lock-notice-rich{font-size:.7rem;color:var(--muted);display:flex;align-items:center;gap:5px;margin-top:8px}
+.pc-explain-notice{margin-top:8px;padding:8px 10px;border-radius:8px;background:rgba(99,102,241,.05);border:1px solid rgba(99,102,241,.15);font-size:.72rem;color:var(--muted2)}
+/* Error context (previous error hint) */
+.err-context-inner{background:rgba(56,189,248,.06);border:1px solid rgba(56,189,248,.2);border-radius:6px;padding:10px 14px;font-size:.8rem;line-height:1.6;margin-bottom:10px}
+.err-context-label{font-size:.7rem;font-weight:700;color:#38bdf8;letter-spacing:.06em;margin-bottom:6px}
+/* Info card */
+.info-card{background:var(--card2);border:1px solid var(--border);border-radius:14px;padding:32px;text-align:center;color:var(--muted)}
+
+/* ===== TAB2: RICH PDCA ===== */
+/* PDCA flow stepper */
+.pdca-flow{display:flex;flex-direction:row;flex-wrap:nowrap;align-items:center;gap:8px;padding:12px 20px;background:var(--card2);border-bottom:1px solid var(--border);overflow-x:auto}
+.pdca-flow-step{display:inline-flex;flex-direction:row;align-items:center;gap:6px;flex-shrink:0;padding:6px 16px;border-radius:20px;border:1px solid var(--border);transition:all var(--transition);white-space:nowrap}
+.pdca-done{background:rgba(56,189,248,.06);border-color:rgba(56,189,248,.35)}
+.pdca-current{background:#38bdf8;border-color:#38bdf8;box-shadow:0 0 14px rgba(56,189,248,.35)}
+.pdca-next{background:rgba(255,255,255,.02);border-color:rgba(255,255,255,.07);opacity:.55}
+.flow-letter{font-size:.95rem;font-weight:900;line-height:1}
+.pdca-done .flow-letter{color:#38bdf8}
+.pdca-current .flow-letter{color:#0f172a}
+.pdca-next .flow-letter{color:var(--muted)}
+.flow-name{font-size:.8rem;font-weight:700}
+.pdca-done .flow-name{color:var(--text)}
+.pdca-current .flow-name{color:#0f172a}
+.pdca-next .flow-name{color:var(--muted)}
+.pdca-flow-arrow{font-size:.9rem;color:var(--muted);flex-shrink:0}
+/* Next action banner */
+.pdca-next-action{margin:16px 0 0;display:flex;flex-direction:row;align-items:center;gap:16px;background:rgba(245,158,11,.07);border-left:4px solid #f59e0b;border-radius:12px;padding:14px 20px;border-top:1px solid rgba(245,158,11,.2);border-right:1px solid rgba(245,158,11,.2);border-bottom:1px solid rgba(245,158,11,.2)}
+.next-action-label{font-size:.72rem;font-weight:800;letter-spacing:.07em;color:#f59e0b;white-space:nowrap;flex-shrink:0}
+.next-action-body{display:flex;align-items:center;gap:12px;flex:1}
+.next-action-phase{font-size:.78rem;font-weight:700;padding:3px 10px;border-radius:10px;background:rgba(245,158,11,.15);border:1px solid rgba(245,158,11,.35);color:#f59e0b;white-space:nowrap;flex-shrink:0}
+.next-action-text{font-size:.92rem;font-weight:600;color:var(--text);line-height:1.4}
+.next-action-cmd{font-size:.8rem;color:var(--muted);white-space:nowrap;flex-shrink:0}
+.next-action-cmd code{background:rgba(255,255,255,.07);border:1px solid var(--border);border-radius:4px;padding:1px 6px;color:#38bdf8;font-size:.85em}
+/* PDCA 2x2 grid */
+.pdca-grid-rich{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:16px}
+/* PDCA card */
+.pdca-card{background:var(--card2);border:1px solid var(--border);border-radius:12px;padding:20px;transition:border-color var(--transition)}
+.pdca-card:hover{border-color:rgba(56,189,248,.2)}
+.pdca-card-highlight{border-color:rgba(245,158,11,.35)}
+.pdca-card-header{display:flex;align-items:flex-start;gap:12px;margin-bottom:16px}
+.pdca-phase-badge{width:40px;height:40px;border-radius:10px;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:1.2rem;font-weight:900}
+.phase-p{background:rgba(129,140,248,.15);color:#818cf8;border:1px solid rgba(129,140,248,.3)}
+.phase-d{background:rgba(56,189,248,.15);color:#38bdf8;border:1px solid rgba(56,189,248,.3)}
+.phase-c{background:rgba(245,158,11,.15);color:#f59e0b;border:1px solid rgba(245,158,11,.3)}
+.phase-a{background:rgba(34,197,94,.15);color:#22c55e;border:1px solid rgba(34,197,94,.3)}
+.pdca-card-title{font-size:.88rem;font-weight:700;color:var(--text);margin-bottom:2px}
+.pdca-card-sub{font-size:.72rem;color:var(--muted);line-height:1.4}
+/* Week label */
+.pdca-week-label-rich{display:inline-block;background:rgba(129,140,248,.12);border:1px solid rgba(129,140,248,.25);color:#818cf8;padding:2px 10px;border-radius:12px;font-size:.8rem;font-weight:600;margin-bottom:14px}
+/* Plan theme list */
+.plan-theme-list{display:flex;flex-direction:column;gap:10px}
+.plan-theme-row{display:flex;align-items:center;gap:10px;padding:10px;background:rgba(255,255,255,.03);border:1px solid var(--border);border-radius:8px}
+.theme-check{font-size:1rem;flex-shrink:0}
+.plan-theme-info{flex:1;display:flex;flex-direction:column;gap:2px}
+.plan-theme-name{font-size:.82rem;color:var(--text);font-weight:600}
+.plan-theme-why{font-size:.7rem;color:var(--muted)}
+.reason-badge{font-size:.7rem;padding:2px 8px;border-radius:10px;background:rgba(245,158,11,.12);border:1px solid rgba(245,158,11,.25);color:#f59e0b;white-space:nowrap}
+.reason-badge.type-weak{background:rgba(239,68,68,.12);border-color:rgba(239,68,68,.25);color:#ef4444}
+.reason-badge.type-new{background:rgba(56,189,248,.1);border-color:rgba(56,189,248,.25);color:#38bdf8}
+.plan-status{font-size:1rem;flex-shrink:0}
+.theme-phase-dots{display:flex;gap:3px;align-items:center;margin-left:auto}
+.phase-dot{font-size:.65rem;color:var(--muted)}
+.phase-dot.filled.p{color:#818cf8}
+.phase-dot.filled.d{color:#38bdf8}
+.phase-dot.filled.c{color:#f59e0b}
+.theme-phase-label{font-size:.62rem;font-weight:700;padding:2px 7px;border-radius:10px;white-space:nowrap}
+.phase-label-p{background:rgba(129,140,248,.12);color:#818cf8}
+.phase-label-d{background:rgba(56,189,248,.12);color:#38bdf8}
+.phase-label-c{background:rgba(245,158,11,.12);color:#f59e0b}
+/* Do log */
+.do-log-list{display:flex;flex-direction:column;gap:10px}
+.do-log-row{display:flex;align-items:center;gap:10px;padding:10px;background:rgba(255,255,255,.03);border:1px solid var(--border);border-radius:8px}
+.do-log-date{font-size:.72rem;color:var(--muted);white-space:nowrap;min-width:36px}
+.do-log-theme{flex:1;font-size:.82rem;color:var(--text);font-weight:600}
+.do-log-source{font-size:.7rem;padding:2px 8px;border-radius:10px;background:rgba(129,140,248,.1);border:1px solid rgba(129,140,248,.2);color:#818cf8;white-space:nowrap}
+.score-dots-rich{display:flex;gap:3px;flex-shrink:0}
+.score-dot-rich{width:8px;height:8px;border-radius:50%;background:var(--border);border:1px solid rgba(255,255,255,.1)}
+.score-dot-rich.filled{background:#3b82f6;border-color:#3b82f6}
+/* Check table */
+.check-table-rich{width:100%;border-collapse:collapse;font-size:.82rem}
+.check-table-rich th{text-align:left;color:var(--muted);font-weight:600;font-size:.7rem;letter-spacing:.05em;padding:8px 10px;border-bottom:1px solid var(--border)}
+.check-table-rich td{padding:10px;border-bottom:1px solid rgba(255,255,255,.04);color:var(--text);vertical-align:top}
+.check-table-rich tr:last-child td{border-bottom:none}
+.check-table-rich td.date-cell{color:var(--muted);white-space:nowrap;font-size:.7rem}
+.verify-badge{display:inline-block;padding:2px 8px;border-radius:10px;font-size:.7rem;font-weight:600;white-space:nowrap}
+.verify-badge.unverified{background:rgba(100,116,139,.15);border:1px solid rgba(100,116,139,.3);color:var(--muted)}
+.verify-badge.settled{background:rgba(34,197,94,.12);border:1px solid rgba(34,197,94,.3);color:#22c55e}
+.verify-badge.relearn{background:rgba(239,68,68,.12);border:1px solid rgba(239,68,68,.3);color:#ef4444}
+.check-howto{margin-top:10px;font-size:.72rem;color:var(--muted);padding:8px 10px;background:rgba(255,255,255,.03);border-radius:6px;border-left:2px solid rgba(245,158,11,.4)}
+/* Bug bar */
+.bug-bar-list-rich{display:flex;flex-direction:column;gap:10px;margin-bottom:16px}
+.bug-bar-row{display:flex;align-items:center;gap:10px}
+.bug-bar-info{display:flex;flex-direction:column;gap:1px;width:80px;flex-shrink:0}
+.bug-bar-label-rich{font-size:.82rem;font-weight:600;color:var(--text)}
+.bug-bar-desc{font-size:.65rem;color:var(--muted)}
+.bug-bar-track{flex:1;height:10px;background:rgba(255,255,255,.06);border-radius:6px;overflow:hidden}
+.bug-bar-fill-rich{height:100%;border-radius:6px;background:linear-gradient(90deg,#818cf8,#38bdf8);transition:width .6s ease}
+.bug-bar-count{font-size:.82rem;color:var(--muted);width:28px;text-align:right;flex-shrink:0}
+.act-section-label{font-size:.7rem;font-weight:700;letter-spacing:.06em;color:var(--muted);margin-bottom:10px}
+/* Countermeasure */
+.act-countermeasure{margin-top:8px;padding:10px;background:rgba(34,197,94,.06);border:1px solid rgba(34,197,94,.2);border-radius:8px}
+.countermeasure-label{font-size:.7rem;font-weight:700;color:#22c55e;margin-bottom:4px}
+.countermeasure-body{font-size:.82rem;color:var(--text);line-height:1.5}
+/* A to P bridge */
+.act-ap-bridge{margin-top:14px;padding:10px 14px;background:linear-gradient(135deg,rgba(129,140,248,.08),rgba(56,189,248,.08));border:1px solid rgba(129,140,248,.25);border-radius:8px;display:flex;align-items:flex-start;gap:10px}
+.act-ap-bridge.hidden{display:none}
+.act-ap-arrow{font-size:1.2rem;flex-shrink:0;margin-top:2px}
+.act-ap-body{flex:1}
+.act-ap-label{font-size:.7rem;font-weight:700;letter-spacing:.06em;color:#818cf8;margin-bottom:6px}
+.act-ap-theme{font-size:.82rem;color:var(--text);font-weight:600;margin-bottom:4px}
+.act-ap-cmd{font-size:.7rem;color:var(--muted)}
+.act-ap-cmd code{background:rgba(255,255,255,.06);padding:1px 6px;border-radius:4px;color:#818cf8}
+/* Update day banner */
+.update-day-banner{background:rgba(245,158,11,.08);border:1px solid rgba(245,158,11,.3);border-radius:6px;padding:8px 12px;margin-bottom:12px;font-size:.8rem;color:#fde68a;line-height:1.5}
+.update-day-banner code{background:rgba(245,158,11,.15);padding:1px 6px;border-radius:4px;font-size:.78rem}
+
 /* ===== RESPONSIVE ===== */
 @media(max-width:900px){
   .g3,.g4{grid-template-columns:repeat(2,1fr)}
   .g12,.g21{grid-template-columns:1fr}
   .pdca-grid{grid-template-columns:1fr}
+  .pdca-grid-rich{grid-template-columns:1fr}
 }
 @media(max-width:768px){
   .tab-nav{gap:0;overflow-x:auto}
   .tab-btn{font-size:.8rem;padding:10px 12px;white-space:nowrap}
   .main{padding:16px 12px}
   .g2{grid-template-columns:1fr}
+  .two-col{grid-template-columns:1fr}
   .header{padding:12px 14px}
   .header-sub{display:none}
+  .pdca-next-action{flex-direction:column;gap:8px}
 }
 @media(max-width:580px){
   .g2,.g3,.g4{grid-template-columns:1fr}
   .pdca-grid{grid-template-columns:1fr}
+  .pdca-grid-rich{grid-template-columns:1fr}
 }
 @media(max-width:480px){
   .tab-btn{font-size:.72rem;padding:8px 10px}
@@ -396,9 +581,24 @@ body{
      TAB 1: 今日の学習
      ======================================== -->
 <div id="tab-today" class="tab-pane active">
+
+<!-- Progress bar -->
+<div class="progress-bar-wrap">
+  <span class="progress-label">今日の進捗</span>
+  <div class="progress-track"><div class="progress-fill" id="progress-fill" style="width:0%"></div></div>
+  <span class="progress-count" id="progress-count">0/3</span>
+</div>
+
+<!-- Intensity meter -->
+<div class="intensity-wrap" id="intensity-wrap">
+  <span class="intensity-label">🔥 練習強度</span>
+  <div class="intensity-bar" id="intensity-bar"></div>
+  <span class="intensity-text" id="intensity-text"></span>
+</div>
+
 <main class="main">
 
-  <div class="days-banner">
+  <div class="days-banner" style="display:flex;align-items:center;justify-content:space-between;padding:12px 16px;border-radius:12px;background:linear-gradient(135deg,rgba(6,182,212,.08),rgba(59,130,246,.08));border:1px solid rgba(6,182,212,.2);margin-bottom:16px">
     <div>
       <div style="font-size:.72rem;color:#67e8f9;font-weight:600;letter-spacing:.06em;text-transform:uppercase">📅 試験まで</div>
       <div style="font-size:2rem;font-weight:900;line-height:1;background:linear-gradient(135deg,#06b6d4,#3b82f6);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;" id="today-days-left">--</div>
@@ -414,7 +614,24 @@ body{
     <span>携帯では閲覧のみ。記録・Claude解説は PC（localhost:8765）で実施してください。</span>
   </div>
 
-  <div id="today-sessions-container"></div>
+  <div class="two-col">
+    <!-- Left: 3問セッション -->
+    <div class="col-left">
+      <div class="col-title">⭐ 今日の3問 <span class="col-count" id="session-done-count">0/3</span></div>
+      <div id="session-list-rich">
+        <div class="info-card">読み込み中…</div>
+      </div>
+    </div>
+    <!-- Right: 記憶チェック (PC専用) -->
+    <div class="col-right">
+      <div class="col-title">🧠 記憶チェック</div>
+      <div class="info-card" style="padding:32px 20px">
+        <div style="font-size:2rem;margin-bottom:12px">💻</div>
+        <div style="font-size:.88rem;font-weight:700;margin-bottom:8px;color:var(--muted2)">PCで実施してください</div>
+        <div style="font-size:.78rem;color:var(--muted);line-height:1.6">Active Recallは<br>localhost:8765 で実施できます</div>
+      </div>
+    </div>
+  </div>
 
 </main>
 </div>
@@ -423,60 +640,111 @@ body{
      TAB 2: PDCA
      ======================================== -->
 <div id="tab-pdca" class="tab-pane">
+
+<!-- PDCA flow stepper -->
+<div class="pdca-flow" id="pdca-flow">
+  <div class="pdca-flow-step pdca-done" id="flow-p">
+    <span class="flow-letter">P</span><span class="flow-name">計画</span>
+  </div>
+  <div class="pdca-flow-arrow">→</div>
+  <div class="pdca-flow-step pdca-current" id="flow-d">
+    <span class="flow-letter">D</span><span class="flow-name">実行</span>
+  </div>
+  <div class="pdca-flow-arrow">→</div>
+  <div class="pdca-flow-step pdca-next" id="flow-c">
+    <span class="flow-letter">C</span><span class="flow-name">確認</span>
+  </div>
+  <div class="pdca-flow-arrow">→</div>
+  <div class="pdca-flow-step pdca-next" id="flow-a">
+    <span class="flow-letter">A</span><span class="flow-name">改善</span>
+  </div>
+</div>
+
 <main class="main">
 
-  <div class="pdca-grid">
+  <!-- Next action banner -->
+  <div class="pdca-next-action" id="pdca-next-action">
+    <div class="next-action-label">今すぐやること</div>
+    <div class="next-action-body">
+      <span class="next-action-phase" id="next-action-phase">—</span>
+      <span class="next-action-text" id="next-action-text">—</span>
+    </div>
+    <div class="next-action-cmd" id="next-action-cmd"></div>
+  </div>
+
+  <!-- Update day banner (月/金のみ表示) -->
+  <div class="update-day-banner" id="update-day-banner" style="display:none;margin-top:14px">
+    📅 <b>今日はPDCA更新日（月・金）</b>です。<code>学習プラン</code> コマンドでPカードを更新してください。
+  </div>
+
+  <!-- 2x2 PDCA grid -->
+  <div class="pdca-grid-rich">
 
     <!-- P: Plan -->
-    <div class="card">
-      <div class="pdca-label"><span style="color:var(--accent);font-size:1.3rem">P</span> Plan</div>
-      <div class="pdca-sub" id="pdca-week-label">W-- / --/-- – --/--</div>
-      <div style="font-size:.82rem;margin-bottom:10px;color:var(--muted2)">今週の課題</div>
-      <div style="padding:12px;border-radius:10px;background:rgba(59,130,246,.06);border:1px solid rgba(59,130,246,.2)">
-        <div style="font-size:.8rem;color:#93c5fd;font-weight:600">🔁 復習待ち</div>
-        <div style="font-size:1.6rem;font-weight:900;color:var(--accent);margin-top:2px" id="plan-review-count">--</div>
-        <div style="font-size:.7rem;color:var(--muted)">件 (Risky/NG 記録済)</div>
+    <div class="pdca-card" id="pdca-card-p">
+      <div class="pdca-card-header">
+        <div class="pdca-phase-badge phase-p">P</div>
+        <div>
+          <div class="pdca-card-title">計画 — 何を・なぜ学ぶか決める</div>
+          <div class="pdca-card-sub">弱点マップ＋e-logから月・金に更新</div>
+        </div>
       </div>
-      <div class="pc-notice">
-        💻 詳細な計画・目標設定は PC（localhost:8765）で確認できます
+      <div class="pdca-week-label-rich" id="pdca-week-label-rich">W—</div>
+      <div class="plan-theme-list" id="plan-theme-list">
+        <div class="info-card" style="padding:16px">読み込み中…</div>
       </div>
     </div>
 
     <!-- D: Do -->
-    <div class="card">
-      <div class="pdca-label"><span style="color:var(--green);font-size:1.3rem">D</span> Do</div>
-      <div class="pdca-sub">実行ログ（直近）</div>
-      <div id="pdca-do-table-wrap">
-        <table class="do-table">
-          <thead>
-            <tr>
-              <th>日付</th>
-              <th>問題ID</th>
-              <th>理解度</th>
-              <th>結果</th>
-            </tr>
-          </thead>
-          <tbody id="pdca-do-tbody"></tbody>
-        </table>
+    <div class="pdca-card" id="pdca-card-d">
+      <div class="pdca-card-header">
+        <div class="pdca-phase-badge phase-d">D</div>
+        <div>
+          <div class="pdca-card-title">実行 — Geminiで深掘り学習する</div>
+          <div class="pdca-card-sub">学習後はキャプチャを貼ってここに記録</div>
+        </div>
+      </div>
+      <div class="do-log-list" id="do-log-list">
+        <div class="info-card" style="padding:16px">読み込み中…</div>
       </div>
     </div>
 
     <!-- C: Check -->
-    <div class="card">
-      <div class="pdca-label"><span style="color:var(--yellow);font-size:1.3rem">C</span> Check</div>
-      <div class="pdca-sub">定着確認待ちリスト</div>
-      <div id="pdca-check-list"></div>
-      <div class="pc-notice" style="margin-top:10px">
-        ✅ 定着確認（OK → 解決）は PC（localhost:8765）で実施
+    <div class="pdca-card pdca-card-highlight" id="pdca-card-c">
+      <div class="pdca-card-header">
+        <div class="pdca-phase-badge phase-c">C</div>
+        <div>
+          <div class="pdca-card-title">確認 — 本当に定着したか検証する</div>
+          <div class="pdca-card-sub">「OS書き換え」が次の類似問題で出なくなれば✅定着</div>
+        </div>
       </div>
+      <table class="check-table-rich">
+        <thead><tr><th>日付</th><th>書き換えた思考パターン</th><th>定着</th></tr></thead>
+        <tbody id="check-table-tbody"></tbody>
+      </table>
+      <div class="check-howto">確認方法: 次回の類似問題で同じバグが出なければ✅、出たら❌再学習</div>
     </div>
 
     <!-- A: Act -->
-    <div class="card">
-      <div class="pdca-label"><span style="color:var(--orange);font-size:1.3rem">A</span> Act</div>
-      <div class="pdca-sub">認知バグ分析</div>
-      <div id="pdca-bug-chart"></div>
-      <div id="pdca-countermeasures"></div>
+    <div class="pdca-card" id="pdca-card-a">
+      <div class="pdca-card-header">
+        <div class="pdca-phase-badge phase-a">A</div>
+        <div>
+          <div class="pdca-card-title">改善 — 癖を分析し次の計画に反映する</div>
+          <div class="pdca-card-sub">同じバグを繰り返さないための対策を打つ</div>
+        </div>
+      </div>
+      <div class="act-section-label">繰り返している認知バグ（L2）</div>
+      <div class="bug-bar-list-rich" id="bug-bar-list"></div>
+      <div id="act-countermeasure-wrap"></div>
+      <div class="act-ap-bridge hidden" id="act-ap-bridge">
+        <div class="act-ap-arrow">↩</div>
+        <div class="act-ap-body">
+          <div class="act-ap-label">→ P（計画）に反映</div>
+          <div class="act-ap-theme" id="act-ap-theme"></div>
+          <div class="act-ap-cmd">コマンド: <code>学習プラン</code> を実行してPカードに自動反映</div>
+        </div>
+      </div>
     </div>
 
   </div>
@@ -922,12 +1190,12 @@ const WEAK_DATA_HOUKI = [{"q": "R03-問1", "topic": "", "cat": "電気設備技�
 // ================================================================
 // ===== TODAY_SESSIONS =====
 // ================================================================
-const TODAY_SESSIONS = {"date":"2026-04-11","days_left":134,"sessions":[{"slot":"morning","label":"朝","emoji":"🌅","subject_label":"理論","question_id":"R04-問8","category":"電気回路","priority":"S","type":"weak","last_result":null},{"slot":"noon","label":"昼","emoji":"☀️","subject_label":"法規","question_id":"R03-問1","category":"電気設備技術基準","priority":"A","type":"weak","last_result":null},{"slot":"evening","label":"夜","emoji":"🌙","subject_label":"法規","question_id":"H24-問11","category":"電気施設管理","priority":"B","type":"weak","last_result":null}]};
+const TODAY_SESSIONS = {"date":"2026-04-11","days_left":134,"done_count":0,"sessions":[{"slot":"morning","label":"朝","emoji":"🌅","subject_label":"理論","question_id":"R04-問8","category":"電気回路","priority":"S","type":"weak","last_result":null,"memory_retention":45,"days_since":3},{"slot":"noon","label":"昼","emoji":"☀️","subject_label":"法規","question_id":"R03-問1","category":"電気設備技術基準","priority":"A","type":"weak","last_result":null,"memory_retention":72,"days_since":1},{"slot":"evening","label":"夜","emoji":"🌙","subject_label":"法規","question_id":"H24-問11","category":"電気施設管理","priority":"B","type":"weak","last_result":null,"memory_retention":88,"days_since":0}]};
 
 // ================================================================
 // ===== PDCA_DATA =====
 // ================================================================
-const PDCA_DATA = {"week":"W15","period":"4/7–4/13","do_logs":[{"date":"4/10","theme":"R04-問8","source":"問題演習","score":4,"result":"ok"},{"date":"4/9","theme":"R03-問1","source":"問題演習","score":3,"result":"risky"}],"check_pending":[{"theme":"H23-問8","result":"risky","category":"電気回路","days_ago":3}],"act_bugs":[{"code":"ANCHOR","desc":"思い込み","count":3},{"code":"CONF","desc":"自信過剰","count":2}],"act_countermeasures":["ANCHOR対策: 既知パターンを疑う問題を重点的に演習する"]};
+const PDCA_DATA = {"week":"W15","period":"4/7–4/13","current_phase":"D","is_update_day":false,"next_action":{"phase":"C","text":"フェインマン RL回路の位相遷移","cmd":"フェインマン RL回路の位相遷移"},"plan":{"themes":[{"name":"RL回路の位相とインピーダンス","why":"なぜ: インピーダンス🔴×4件・ANCHOR誤答2件","badge_type":"weak","done":true,"phase":"D","phase_dots":2},{"name":"RLC直列・並列共振の特性","why":"なぜ: RLC共振🔴×4件・S優先未達成","badge_type":"weak","done":false,"phase":"P","phase_dots":1},{"name":"三相回路のΔ→Y変換計算","why":"なぜ: 3/22フェインマンで穴発見・未復習","badge_type":"other","done":false,"phase":"P","phase_dots":1}]},"do_logs":[{"date":"4/10","theme":"RL回路の位相遷移（H21問8）","source":"Gemini","score":4},{"date":"3/22","theme":"Y-Δ変換","source":"フェインマン","score":4}],"check":{"rewrites":[{"date":"3/22","pattern":"Δ→Y変換は1/3倍（逆に覚えていた）","verified":null,"pending_checks":[]},{"date":"4/10","pattern":"位相はR/Xの構成比で決まる（部品単体で判断しない）","verified":null,"pending_checks":[]}]},"act_bugs":[{"code":"ANCHOR","desc":"思い込みで全体判断する","count":2},{"code":"MODEL","desc":"物理モデルの誤認識","count":2}],"act_countermeasures":["ANCHOR対策: 必ず「極端条件（R=0 or ∞）」を代入してから判断する"]};
 
 // ================================================================
 // ===== CANVAS BACKGROUND (stars) =====
@@ -979,143 +1247,251 @@ document.querySelectorAll('.tab-btn').forEach(btn => {
 // ================================================================
 // ===== TAB1: TODAY SESSIONS RENDER =====
 // ================================================================
+function memoryBarHTML(pct) {
+  let levelClass, pctClass, msg;
+  if (pct >= 80) { levelClass='level-ok'; pctClass='pct-ok'; msg=''; }
+  else if (pct >= 50) { levelClass='level-warn'; pctClass='pct-warn'; msg='記憶が薄れ始めています'; }
+  else if (pct >= 30) { levelClass='level-danger'; pctClass='pct-danger'; msg='今やらないと忘れます'; }
+  else { levelClass='level-critical'; pctClass='pct-danger'; msg='ほぼ忘却 — 再学習が必要'; }
+  return `
+    <div class="memory-bar-wrap">
+      <span class="memory-bar-label">記憶残量</span>
+      <div class="memory-bar-track">
+        <div class="memory-bar-fill ${levelClass}" style="width:${pct}%"></div>
+      </div>
+      <span class="memory-pct ${pctClass}">${pct}%</span>
+    </div>
+    ${msg ? `<div class="memory-msg${pct<50?' msg-danger':''}">${msg}</div>` : ''}`;
+}
+
 function renderTodaySessions() {
-  const container = document.getElementById('today-sessions-container');
+  const list = document.getElementById('session-list-rich');
   const priorityColor = { S:'#ef4444', A:'#f97316', B:'#f59e0b', C:'#94a3b8' };
-  const priorityBg   = { S:'rgba(239,68,68,.12)', A:'rgba(249,115,22,.12)', B:'rgba(245,158,11,.12)', C:'rgba(100,116,139,.12)' };
 
-  TODAY_SESSIONS.sessions.forEach(s => {
-    const typeBadge = s.type === 'review'
-      ? '<span class="type-badge type-review">🔁 SR復習</span>'
-      : '<span class="type-badge type-weak">⚠️ 弱点</span>';
-
-    const prevResult = s.last_result
-      ? `<span class="prev-result">前回: ${s.last_result === 'ok' ? '🟢 OK' : s.last_result === 'risky' ? '🟡 Risky' : '🔴 NG'}</span>`
-      : '';
-
-    const rankColor = priorityColor[s.priority] || '#94a3b8';
-    const rankBg    = priorityBg[s.priority]    || 'rgba(100,116,139,.12)';
-
-    const el = document.createElement('div');
-    el.className = 'session-card';
-    el.innerHTML = `
-      <div class="session-header">
-        <div class="session-slot">
-          <span class="session-emoji">${s.emoji}</span>
-          <span class="session-label">${s.label}セッション</span>
-        </div>
-        <span class="subject-badge">${s.subject_label}</span>
-      </div>
-      <div class="session-qid">${s.question_id}</div>
-      <div class="session-meta">
-        <span class="session-cat">${s.category}</span>
-        <span class="priority" style="background:${rankBg};color:${rankColor}">ランク: ${s.priority}</span>
-        ${typeBadge}
-        ${prevResult}
-      </div>
-      <div class="session-buttons">
-        <button class="fb-btn ok" disabled>✓ OK</button>
-        <button class="fb-btn risky" disabled>△ Risky</button>
-        <button class="fb-btn ng" disabled>✗ NG</button>
-      </div>
-      <div class="lock-notice">🔒 記録は PC（localhost:8765）で実施してください</div>
-    `;
-    container.appendChild(el);
-  });
-
-  // 上部バナーを更新
+  // Update header
   const daysLeft = TODAY_SESSIONS.days_left;
   document.getElementById('today-days-left').textContent = daysLeft;
   document.getElementById('days-badge-main').textContent = `試験まで ${daysLeft}日`;
-  const dateStr = new Date(TODAY_SESSIONS.date).toLocaleDateString('ja-JP',{month:'long',day:'numeric',weekday:'short'});
+  const dateStr = new Date(TODAY_SESSIONS.date + 'T00:00:00').toLocaleDateString('ja-JP',{month:'long',day:'numeric',weekday:'short'});
   document.getElementById('today-date-display').textContent = dateStr;
+
+  // Progress bar
+  const doneCount = TODAY_SESSIONS.done_count || 0;
+  document.getElementById('progress-fill').style.width = `${Math.round(doneCount/3*100)}%`;
+  document.getElementById('progress-count').textContent = `${doneCount}/3`;
+  document.getElementById('session-done-count').textContent = `${doneCount}/3`;
+
+  // Intensity meter
+  const intensityBar = document.getElementById('intensity-bar');
+  const intensityText = document.getElementById('intensity-text');
+  const score = doneCount;
+  const segs = 5;
+  intensityBar.innerHTML = '';
+  for (let i=0;i<segs;i++){
+    const seg = document.createElement('div');
+    seg.className = 'intensity-seg' + (i < score ? (score<=2?' filled-low':score<=4?' filled-mid':' filled-high') : '');
+    intensityBar.appendChild(seg);
+  }
+  intensityText.textContent = score===0?'未着手':score<3?'実施中':'完了';
+
+  list.innerHTML = '';
+  const currentHour = new Date().getHours();
+  const currentSlot = currentHour < 12 ? 'morning' : currentHour < 17 ? 'noon' : 'evening';
+
+  TODAY_SESSIONS.sessions.forEach((s, idx) => {
+    const isActive = s.slot === currentSlot;
+    const pColor = priorityColor[s.priority] || '#94a3b8';
+    const typeBadgeHtml = s.type === 'review'
+      ? `<span style="font-size:.65rem;font-weight:700;padding:2px 8px;border-radius:6px;background:rgba(59,130,246,.12);color:#93c5fd;border:1px solid rgba(59,130,246,.25)">🔁 SR復習</span>`
+      : `<span style="font-size:.65rem;font-weight:700;padding:2px 8px;border-radius:6px;background:rgba(239,68,68,.12);color:#fca5a5;border:1px solid rgba(239,68,68,.25)">⚠️ 弱点</span>`;
+    const prevResultHtml = s.last_result
+      ? `<span style="font-size:.7rem;padding:3px 8px;border-radius:6px;background:rgba(255,255,255,.04);border:1px solid var(--border);color:var(--muted2)">前回: ${s.last_result==='ok'?'🟢 OK':s.last_result==='risky'?'🟡 Risky':'🔴 NG'}</span>`
+      : '';
+    const pct = s.memory_retention !== undefined ? s.memory_retention : 70;
+    const errCtxHtml = s.last_result && s.last_result !== 'ok' && s.memo
+      ? `<div class="err-context-inner"><div class="err-context-label">前回のメモ</div><div>${s.memo}</div></div>`
+      : '';
+
+    const card = document.createElement('div');
+    card.className = `session-card-rich${isActive?' s-active':''}`;
+    card.dataset.idx = idx;
+    card.innerHTML = `
+      <div class="s-header" onclick="toggleSessionDetail(${idx})">
+        <div class="slot-badge">${s.emoji}</div>
+        <div class="slot-info">
+          <div class="slot-label">${s.label}セッション &nbsp;·&nbsp; ${s.subject_label}</div>
+          <div class="slot-qid">${s.question_id}</div>
+          <div class="slot-meta">
+            <span style="color:${pColor};font-weight:700">${s.priority}</span>
+            &nbsp;·&nbsp; ${s.category}
+            &nbsp;·&nbsp; ${s.type==='review'?'📋 復習':'⭐ 弱点'}
+            ${s.last_result ? '&nbsp;·&nbsp; 前回:'+( s.last_result==='ok'?'✅':s.last_result==='risky'?'⚠️':'❌') : ''}
+          </div>
+        </div>
+        <div class="slot-status">
+          <div class="status-dot pending">○</div>
+        </div>
+      </div>
+      <div class="s-detail${isActive?' open':''}" id="s-detail-${idx}">
+        ${memoryBarHTML(pct)}
+        ${errCtxHtml}
+        <div class="feedback-row">
+          <button class="fb-btn-rich btn-ok" disabled>
+            <span class="fb-icon">✅</span>わかった
+          </button>
+          <button class="fb-btn-rich btn-risky" disabled>
+            <span class="fb-icon">⚠️</span>あいまい
+          </button>
+          <button class="fb-btn-rich btn-ng" disabled>
+            <span class="fb-icon">❌</span>わからなかった
+          </button>
+        </div>
+        <div class="lock-notice-rich">🔒 記録はPCで &nbsp;·&nbsp; ${typeBadgeHtml} ${prevResultHtml}</div>
+        <div class="pc-explain-notice">💻 Claude解説・Active Recallは localhost:8765 で実施してください</div>
+      </div>`;
+    list.appendChild(card);
+  });
+}
+
+function toggleSessionDetail(idx) {
+  const detail = document.getElementById(`s-detail-${idx}`);
+  detail.classList.toggle('open');
 }
 
 // ================================================================
 // ===== TAB2: PDCA RENDER =====
 // ================================================================
 function renderPdca() {
-  // Plan
-  document.getElementById('pdca-week-label').textContent = `${PDCA_DATA.week} / ${PDCA_DATA.period}`;
-  document.getElementById('plan-review-count').textContent = PDCA_DATA.check_pending.length;
+  const d = PDCA_DATA;
 
-  // Do: 表
-  const tbody = document.getElementById('pdca-do-tbody');
-  const doLogs = PDCA_DATA.do_logs.slice(0, 10);
-  doLogs.forEach(log => {
-    const tr = document.createElement('tr');
-    const dots = Array.from({length:5}, (_,i) =>
-      `<div class="score-dot${i < log.score ? ' filled' : ''}"></div>`
-    ).join('');
-    const resultClass = log.result === 'ok' ? 'result-ok' : log.result === 'risky' ? 'result-risky' : 'result-ng';
-    const resultLabel = log.result === 'ok' ? '🟢 OK' : log.result === 'risky' ? '🟡 Risky' : '🔴 NG';
-    tr.innerHTML = `
-      <td style="color:var(--muted2)">${log.date}</td>
-      <td style="font-weight:600">${log.theme}</td>
-      <td><div class="score-dots">${dots}</div></td>
-      <td><span class="${resultClass}">${resultLabel}</span></td>
-    `;
-    tbody.appendChild(tr);
+  // Flow stepper
+  const phases = ['p','d','c','a'];
+  const phaseMap = {P:'p',D:'d',C:'c',A:'a'};
+  const currentIdx = phases.indexOf(phaseMap[d.current_phase] || 'd');
+  phases.forEach((ph, i) => {
+    const el = document.getElementById('flow-'+ph);
+    if (!el) return;
+    el.className = 'pdca-flow-step ' + (i < currentIdx ? 'pdca-done' : i === currentIdx ? 'pdca-current' : 'pdca-next');
   });
-  if (doLogs.length === 0) {
+
+  // Next action banner
+  if (d.next_action) {
+    document.getElementById('next-action-phase').textContent = d.next_action.phase + '（' + {P:'計画',D:'実行',C:'確認',A:'改善'}[d.next_action.phase] + '）';
+    document.getElementById('next-action-text').textContent = d.next_action.text;
+    const cmdEl = document.getElementById('next-action-cmd');
+    if (d.next_action.cmd) cmdEl.innerHTML = `コマンド: <code>${d.next_action.cmd}</code>`;
+  }
+
+  // Update day banner
+  if (d.is_update_day) {
+    document.getElementById('update-day-banner').style.display = 'block';
+  }
+
+  // P card: week label + theme list
+  document.getElementById('pdca-week-label-rich').textContent = `${d.week}: ${d.period}`;
+  const planList = document.getElementById('plan-theme-list');
+  planList.innerHTML = '';
+  if (d.plan && d.plan.themes && d.plan.themes.length) {
+    d.plan.themes.forEach(t => {
+      const dots = Array.from({length:3}, (_,i) => {
+        const dotPhase = ['p','d','c'][i];
+        const filled = t.phase_dots > i;
+        const phClass = ['p','d','c'][i];
+        return `<span class="phase-dot${filled?' filled '+phClass:''}">${['P','D','C'][i]}</span>`;
+      }).join('');
+      const badgeClass = t.badge_type==='weak' ? 'type-weak' : '';
+      const badgeLabel = t.badge_type==='weak' ? '弱点🔴' : '穴未復習';
+      const row = document.createElement('div');
+      row.className = 'plan-theme-row';
+      row.innerHTML = `
+        <span class="theme-check">${t.done?'☑':'⬜'}</span>
+        <div class="plan-theme-info">
+          <span class="plan-theme-name">${t.name}</span>
+          <span class="plan-theme-why">${t.why}</span>
+        </div>
+        <span class="reason-badge ${badgeClass}">${badgeLabel}</span>
+        <span class="plan-status">${t.done?'✅':'⬜'}</span>
+        <div class="theme-phase-dots">${dots}</div>`;
+      planList.appendChild(row);
+    });
+  } else {
+    planList.innerHTML = '<div style="color:var(--muted);font-size:.8rem;text-align:center;padding:10px">テーマなし</div>';
+  }
+
+  // D card: do logs
+  const doLogList = document.getElementById('do-log-list');
+  doLogList.innerHTML = '';
+  if (d.do_logs && d.do_logs.length) {
+    d.do_logs.forEach(log => {
+      const dots = Array.from({length:5}, (_,i) =>
+        `<div class="score-dot-rich${i < log.score ? ' filled' : ''}"></div>`
+      ).join('');
+      const row = document.createElement('div');
+      row.className = 'do-log-row';
+      row.innerHTML = `
+        <span class="do-log-date">${log.date}</span>
+        <span class="do-log-theme">${log.theme}</span>
+        <span class="do-log-source">${log.source}</span>
+        <div class="score-dots-rich">${dots}</div>`;
+      doLogList.appendChild(row);
+    });
+  } else {
+    doLogList.innerHTML = '<div style="color:var(--muted);font-size:.8rem;text-align:center;padding:10px">記録なし</div>';
+  }
+
+  // C card: check table
+  const tbody = document.getElementById('check-table-tbody');
+  tbody.innerHTML = '';
+  if (d.check && d.check.rewrites && d.check.rewrites.length) {
+    d.check.rewrites.forEach(rw => {
+      const verifiedClass = rw.verified === true ? 'settled' : rw.verified === false ? 'relearn' : 'unverified';
+      const verifiedLabel = rw.verified === true ? '✅ 定着' : rw.verified === false ? '❌ 再学習' : '⬜ 未確認';
+      const tr = document.createElement('tr');
+      tr.innerHTML = `
+        <td class="date-cell">${rw.date}</td>
+        <td>${rw.pattern}</td>
+        <td><span class="verify-badge ${verifiedClass}">${verifiedLabel}</span></td>`;
+      tbody.appendChild(tr);
+    });
+  } else {
     const tr = document.createElement('tr');
-    tr.innerHTML = '<td colspan="4" style="color:var(--muted);text-align:center;padding:12px">記録なし</td>';
+    tr.innerHTML = '<td colspan="3" style="color:var(--muted);text-align:center;padding:12px">記録なし</td>';
     tbody.appendChild(tr);
   }
 
-  // Check
-  const checkList = document.getElementById('pdca-check-list');
-  if (PDCA_DATA.check_pending.length === 0) {
-    checkList.innerHTML = '<div style="color:var(--muted);font-size:.8rem;text-align:center;padding:10px">確認待ちなし 🎉</div>';
-  } else {
-    PDCA_DATA.check_pending.forEach(item => {
-      const el = document.createElement('div');
-      el.className = 'check-item';
-      el.innerHTML = `
-        <div style="flex:1">
-          <div style="font-weight:600">${item.theme}</div>
-          <div style="font-size:.7rem;color:var(--muted2)">${item.category}</div>
-        </div>
-        <div style="display:flex;flex-direction:column;align-items:flex-end;gap:3px">
-          <span class="result-risky" style="font-size:.7rem">${item.result === 'risky' ? '🟡 Risky' : '🔴 NG'}</span>
-          <span style="font-size:.67rem;color:var(--muted)">${item.days_ago}日前</span>
-        </div>
-      `;
-      checkList.appendChild(el);
-    });
-  }
-
-  // Act: バグバー
-  const bugChart = document.getElementById('pdca-bug-chart');
-  const maxCount = Math.max(...PDCA_DATA.act_bugs.map(b => b.count), 1);
-  PDCA_DATA.act_bugs.forEach(bug => {
+  // A card: bug bars
+  const bugList = document.getElementById('bug-bar-list');
+  bugList.innerHTML = '';
+  const maxCount = Math.max(...(d.act_bugs||[]).map(b=>b.count), 1);
+  (d.act_bugs||[]).forEach(bug => {
     const pct = Math.round(bug.count / maxCount * 100);
-    const el = document.createElement('div');
-    el.className = 'bug-bar-wrap';
-    el.innerHTML = `
-      <div class="bug-bar-label">
-        <span><b>${bug.code}</b> — ${bug.desc}</span>
-        <span style="color:var(--red);font-weight:700">${bug.count}件</span>
+    const row = document.createElement('div');
+    row.className = 'bug-bar-row';
+    row.innerHTML = `
+      <div class="bug-bar-info">
+        <span class="bug-bar-label-rich">${bug.code}</span>
+        <span class="bug-bar-desc">${bug.desc}</span>
       </div>
-      <div class="bug-bar-bg">
-        <div class="bug-bar-fill" style="width:0%" data-target="${pct}"></div>
+      <div class="bug-bar-track">
+        <div class="bug-bar-fill-rich" style="width:0%" data-target="${pct}"></div>
       </div>
-    `;
-    bugChart.appendChild(el);
+      <span class="bug-bar-count">${bug.count}件</span>`;
+    bugList.appendChild(row);
   });
   setTimeout(() => {
-    document.querySelectorAll('.bug-bar-fill').forEach(el => {
+    document.querySelectorAll('.bug-bar-fill-rich').forEach(el => {
       el.style.width = el.dataset.target + '%';
     });
   }, 400);
 
-  // Act: 対策
-  const cm = document.getElementById('pdca-countermeasures');
-  PDCA_DATA.act_countermeasures.forEach(text => {
+  // A card: countermeasures
+  const cmWrap = document.getElementById('act-countermeasure-wrap');
+  cmWrap.innerHTML = '';
+  (d.act_countermeasures||[]).forEach(text => {
     const el = document.createElement('div');
-    el.className = 'countermeasure';
-    el.innerHTML = '✅ ' + text;
-    cm.appendChild(el);
+    el.className = 'act-countermeasure';
+    el.innerHTML = `<div class="countermeasure-label">対策（次のPlanに組み込む）</div><div class="countermeasure-body">${text}</div>`;
+    cmWrap.appendChild(el);
   });
 }
 
@@ -1278,6 +1654,14 @@ renderPdca();
 
 // 初期タブ
 switchTab('today');
+
+// Tab switch: PDCAタブ切り替え時にflow stepperを更新
+document.querySelectorAll('.tab-btn').forEach(btn => {
+  btn.addEventListener('click', () => {
+    const tabId = btn.dataset.tab;
+    // 既存のswitchTab + 必要に応じた追加処理
+  });
+});
 
 </script>
 </body>
