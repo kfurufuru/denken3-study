@@ -1543,10 +1543,10 @@ function initHistory() {
   document.getElementById('weak-total').textContent = WEAK_DATA.length;
 
   // カウントダウン
-  const diff = Math.ceil((EXAM_DATE - TODAY_DATE) / 86400000);
+  const diff = Math.ceil((EXAM_DATE - TODAY) / 86400000);
   document.getElementById('countdown').textContent = diff;
   const totalDays = (EXAM_DATE - STUDY_START) / 86400000;
-  const elapsed = (TODAY_DATE - STUDY_START) / 86400000;
+  const elapsed = (TODAY - STUDY_START) / 86400000;
   const progPct = Math.min(100, Math.round(elapsed / totalDays * 100));
   setTimeout(() => {
     document.getElementById('exam-prog').style.width = progPct + '%';
