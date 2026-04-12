@@ -1,12 +1,17 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-import json, os
+"""
+data/records.json を読み込み、index.html の QUIZ_MAIN / QUIZ_CHART セクションを更新する。
+quiz.html は生成しない（index.html のタブとして統合済み）。
+"""
+import json, os, re
 from datetime import date, timedelta
 from collections import defaultdict, Counter
 
 RECORDS_PATH = "data/records.json"
-OUTPUT_PATH  = "quiz.html"
-SUBJECT_ORDER = ["\u7406\u8ad6", "\u96fb\u529b", "\u6a5f\u68b0", "\u6cd5\u898f"]
+INDEX_PATH   = "index.html"
+
+SUBJECT_ORDER = ["理論", "電力", "機械", "法規"]
 REVIEW_DAYS   = {"SR1": 1, "SR2": 3, "SR3": 7, "SR4": 14, "SR5": 30, "done": 9999}
 
 WIKI_BASE = "https://kfurufuru.github.io/denken-wiki-riron/themes/"
@@ -48,44 +53,37 @@ def cell_style(result):
 def badge(result):
     labels = {"ok":"OL","risky":"Risky","ng":"NG"}
     bg, fg = cell_style(result)
-    return f'<span style="background:{bg};color:{fg};padding:2px 7px;border-radius:4px;font-size:.68rem;font-weight:700">{labels.get(result,result.upper())}</span>'
+    lbl = labels.get(result, result.upper())
+    return f'<span class="q-badge-{"ok" if result=="ok" else "risky" if result=="risky" else "ng"}">{lbl}</span>'
 
 def generate():
     records = load()
     today = date.today()
 
-    total = len(records)
-    rc = Counter(r.get("result","") for r in records)
+    total  = len(records)
+    rc     = Counter(r.get("result","") for r in records)
     ok_n, risky_n, ng_n = rc["ok"], rc["risky"], rc["ng"]
-    ok_rate = round(ok_n/total*100) if total else 0
+    ok_pct = round(ok_n / total * 100) if total else 0
 
+    # 本日レビュー対象
     due = []
     for r in records:
         d, nr = r.get("date",""), r.get("next_review","")
-        if not d or not nr or nr=="done": continue
+        if not d or not nr or nr == "done": continue
         try:
-            due_date = date.fromisoformat(d) + timedelta(days=REVIEW_DAYS.get(nr,7))
-            if due_date <= today: due.append({**r,"due_date":due_date.isoformat()})
+            due_date = date.fromisoformat(d) + timedelta(days=REVIEW_DAYS.get(nr, 7))
+            if due_date <= today: due.append({**r, "due_date": due_date.isoformat()})
         except: pass
     due.sort(key=lambda x: x.get("date",""))
 
+    # バグマップ
     bmap = defaultdict(lambda: defaultdict(list))
     subjects, themes = set(), set()
     for r in records:
-        s,t,res = r.get("subject","?"), r.get("theme","?"), r.get("result","")
+        s, t, res = r.get("subject","?"), r.get("theme","?"), r.get("result","")
         subjects.add(s); themes.add(t); bmap[t][s].append(res)
     subjects = [s for s in SUBJECT_ORDER if s in subjects] + sorted(s for s in subjects if s not in SUBJECT_ORDER)
     themes   = sorted(themes)
-
-    phase_stats = defaultdict(Counter)
-    for r in records:
-        phase_stats[r.get("phase","?")][r.get("result","")] += 1
-
-    dcounts = Counter(r.get("date","") for r in records)
-    act_labels = [(today-timedelta(days=i)).strftime("%-m/%-d") for i in range(29,-1,-1)]
-    act_data   = [dcounts.get((today-timedelta(days=i)).isoformat(),0) for i in range(29,-1,-1)]
-
-    recent = sorted(records, key=lambda x: x.get("date",""), reverse=True)[:10]
 
     th = "".join(f"<th>{s}</th>" for s in subjects)
     rows = ""
@@ -93,130 +91,215 @@ def generate():
         cells = ""
         for s in subjects:
             rs = bmap[t][s]
-            if not rs: cells += '<td style="color:#2d3f55;text-align:center">\uff0d</td>'
+            if not rs:
+                cells += '<td class="q-status-none">－</td>'
             else:
-                dom = dominant(rs); bg,fg = cell_style(dom)
+                dom = dominant(rs); bg, fg = cell_style(dom)
                 cnt = Counter(rs)
                 tip = f"OK:{cnt['ok']} Risky:{cnt['risky']} NG:{cnt['ng']}"
-                lbl = {"ok":"OK","risky":"Risky","ng":"NG"}.get(dom,dom)
+                lbl = {"ok":"OK","risky":"Risky","ng":"NG"}.get(dom, dom)
+                css = "q-status-ok" if dom=="ok" else "q-status-risky" if dom=="risky" else "q-status-ng"
                 wiki_slug = WIKI_MAP.get(t)
                 if wiki_slug:
                     wiki_url = f"{WIKI_BASE}{wiki_slug}/"
-                    cells += f'<td style="background:{bg};color:{fg};text-align:center;padding:5px 8px;border-radius:5px;font-weight:700;font-size:.7rem" title="{tip} — Wikiへ"><a href="{wiki_url}" target="_blank" style="color:{fg};text-decoration:none;display:block">{lbl} <span style="font-size:.6rem;opacity:.8">📖</span></a></td>'
+                    cells += f'<td class="{css}" title="{tip}"><a href="{wiki_url}" target="_blank" style="color:inherit;text-decoration:none;display:block">{lbl} <span style="font-size:.6rem;opacity:.8">📖</span></a></td>'
                 else:
-                    cells += f'<td style="background:{bg};color:{fg};text-align:center;padding:5px 8px;border-radius:5px;font-weight:700;font-size:.7rem;cursor:default" title="{tip}">{lbl}</td>'
-        rows += f"<tr><td style='color:#94a3b8;white-space:nowrap;font-size:.72rem;padding:5px 10px'>{t}</td>{cells}</tr>"
-    bugmap_html = f'<div style="overflow-x:auto"><table style="width:100%;border-collapse:separate;border-spacing:3px"><thead><tr><th style="text-align:left;color:#64748b;padding:6px 10px">\u30c6\u30fc\u30de\\\u79d1\u76ee</th>{th}</tr></thead><tbody>{rows}</tbody></table></div>'
+                    cells += f'<td class="{css}" title="{tip}">{lbl}</td>'
+        rows += f'<tr><td style="color:var(--muted2);font-size:.72rem;padding:5px 10px;text-align:left;white-space:nowrap">{t}</td>{cells}</tr>'
+    bugmap_html = f'<div style="overflow-x:auto"><table class="q-bug-tbl"><thead><tr><th style="text-align:left">テーマ＼科目</th>{th}</tr></thead><tbody>{rows}</tbody></table></div>'
 
+    # フェーズ別進捗
+    phase_stats = defaultdict(Counter)
+    for r in records:
+        phase_stats[r.get("phase","?")][r.get("result","")] += 1
     phase_html = ""
     for ph, cnt in sorted(phase_stats.items()):
         tot = sum(cnt.values())
         if not tot: continue
-        bars = "".join(f'<div style="width:{round(cnt.get(r,0)/tot*100)}%;background:{"#22c55e" if r=="ok" else "#f59e0b" if r=="risky" else "#ef4444"};height:100%" title="{r}:{cnt.get(r,0)}"></div>' for r in ["ok","risky","ng"])
-        phase_html += f'<div style="margin-bottom:14px"><div style="display:flex;align-items:center;gap:8px;margin-bottom:5px"><span style="color:#cbd5e1;font-weight:600;font-size:.85rem">Phase {ph}</span><span style="color:#64748b;font-size:.72rem">{tot}\u554f</span></div><div style="height:10px;background:#0a0f1e;border-radius:5px;overflow:hidden;display:flex">{bars}</div><div style="font-size:.trem;margin-top:4px;display:flex;gap:12px"><span style="color:#4ade80">\u2713 {cnt.get("ok",0)}</span><span style="color:#fbbf24">\u26a0 {cnt.get("risky",0)}</span><span style="color:#f87171">\u2717 {cnt.get("ng",0)}</span></div></div>'
+        bars = "".join(
+            f'<div style="width:{round(cnt.get(r,0)/tot*100)}%;background:{"#22c55e" if r=="ok" else "#f59e0b" if r=="risky" else "#ef4444"};height:100%"></div>'
+            for r in ["ok","risky","ng"]
+        )
+        phase_html += f'''<div class="q-phase-bar">
+          <div style="display:flex;align-items:center;gap:8px;margin-bottom:5px">
+            <span style="color:var(--text);font-weight:600;font-size:.85rem">Phase {ph}</span>
+            <span style="color:var(--muted);font-size:.72rem">{tot}問</span>
+          </div>
+          <div style="height:10px;background:var(--bg);border-radius:5px;overflow:hidden;display:flex">{bars}</div>
+          <div style="font-size:.7rem;margin-top:4px;display:flex;gap:12px">
+            <span style="color:#4ade80">✓ {cnt.get("ok",0)}</span>
+            <span style="color:#fbbf24">⚠ {cnt.get("risky",0)}</span>
+            <span style="color:#f87171">✗ {cnt.get("ng",0)}</span>
+          </div>
+        </div>'''
+    if not phase_html:
+        phase_html = '<p style="color:var(--muted)">データがありません</p>'
 
-    due_html = '<p style="color:#22c55e;padding:16px 0">\U0001f389 \u672c\u65e5\u306e\u30ec\u30d3\u30e5\u30fc\u5bfe\u8c61\u306f\u3042\u308a\u307e\u305b\u3093\uff01</p>' if not due else "".join(
-        f'<div style="display:flex;align-items:center;gap:8px;padding:9px 0;border-bottom:1px solid #1a2535;font-size:.8rem">{badge(d.get("result",""))}<span style="color:#60a5fa;font-weight:600">[{d.get("subject","")}]</span><span style="flex:1;color:#cbd5e1">{d.get("theme","")} / {d.get("subtheme","")}</span><span style="color:#64748b;font-size:.72rem">{d.get("next_review","")}</span></div>'
-        for d in due[:15]
-    )
+    # レビューリスト
+    if not due:
+        due_html = '<p style="color:#22c55e;padding:16px 0">🎉 本日のレビュー対象はありません！</p>'
+    else:
+        due_html = "".join(
+            f'<div class="q-review-item">{badge(d.get("result",""))}'
+            f'<span style="color:#60a5fa;font-weight:600">[{d.get("subject","")}]</span>'
+            f'<span style="flex:1;color:var(--text)">{d.get("theme","")} {("/ " + d.get("subtheme","")) if d.get("subtheme") else ""}</span>'
+            f'<span style="color:var(--muted);font-size:.72rem">{d.get("next_review","")}</span></div>'
+            for d in due[:15]
+        )
 
+    # 最近の記録
+    recent = sorted(records, key=lambda x: x.get("date",""), reverse=True)[:10]
     rec_rows = "".join(
-        f'<tr><td>{r.get("date","")}</td><td>{r.get("subject","")}</td><td>{r.get("theme","")}</td><td style="color:#94a3b8">{r.get("subtheme","")[:20]}</td><td>{badge(r.get("result",""))}</td><td style="color:#64748b">{r.get("next_review","")}</td><td style="color:#94a3b8;font-size:.72rem">{r.get("memo","")[:20]}</td></tr>'
+        f'<tr><td>{r.get("date","")}</td><td>{r.get("subject","")}</td>'
+        f'<td>{r.get("theme","")}</td><td>{badge(r.get("result",""))}</td>'
+        f'<td style="color:var(--muted)">{r.get("next_review","")}</td>'
+        f'<td style="color:var(--muted2);font-size:.72rem">{(r.get("memo","") or "")[:25]}</td></tr>'
         for r in recent
     )
-    rec_html = f'''<div style="overflow-x:auto"><table style="width:100%;border-collapse:collapse;font-size:.78rem">
-<thead><tr>
-<th style="text-align:left;padding:8px 12px;border-bottom:1px solid #1f2d42;color:#64748b;font-size:.7rem">\u65e5\u4ed8</th>
-<th style="text-align:left;padding:8px 12px;border-bottom:1px solid #1f2d42;color:#64748b;font-size:.7rem">\u79d1\u76ee</th>
-<th style="text-align:left;padding:8px 12px;border-bottom:1px solid #1f2d42;color:#64748b;font-size:.7rem">\u30c6\u30fc\u30de</th>
-<th style="text-align:left;padding:8px 12px;border-bottom:1px solid #1f2d42;color:#64748b;font-size:.7rem">\u30b5\u30d6\u30c6\u30fc\u30da</th>
-<th style="text-align:left;padding:8px 12px;border-bottom:1px solid #1f2d42;color:#64748b;font-size:.7rem">\u7d50\u679c</th>
-<th style="text-align:left;padding:8px 12px;border-bottom:1px solid #1f2d42;color:#64748b;font-size:.7rem">\u6b21\u56de</th>
-<th style="text-align:left;padding:8px 12px;border-bottom:1px solid #1f2d42;color:#64748b;font-size:.7rem">\u30e1\u30e2</th>
-</tr></thead><tbody>{rec_rows}</tbody></table></div>'''
 
-    _no_data_msg = '<p style="color:#64748b">\u30c7\u30fc\u30bf\u304c\u3042\u308a\u307e\u305b\u3093</p>'
+    # 活動データ（直近30日）
+    dcounts    = Counter(r.get("date","") for r in records)
+    act_labels = [(today - timedelta(days=i)).strftime("%-m/%-d") for i in range(29, -1, -1)]
+    act_data   = [dcounts.get((today - timedelta(days=i)).isoformat(), 0) for i in range(29, -1, -1)]
 
-    html = f"""<!DOCTYPE html>
-<html lang="ja">
-<head>
-<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>&#x26a1; \u30c6\u30b9\u30c8\u8a18\u9332 \u30c0\u30c3\u30b7\u30e5\u30dc\u30fc\u30c9</title>
-<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
-<style>
-*{{box-sizing:border-box;margin:0;padding:0}}
-body{{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:#0a0f1e;color:#cbd5e1;min-height:100vh}}
-.hdr{{background:linear-gradient(135deg,#0d1b3e,#0a0f1e);border-bottom:1px solid #1e3a5f;padding:20px 32px;display:flex;align-items:center;justify-content:space-between}}
-.hdr h1{{font-size:1.4rem;font-weight:700;color:#60a5fa}}
-.hdr .sub{{font-size:.78rem;color:#64748b;margin-top:2px}}
-.hdr-r{{font-size:.72rem;color:#475569;text-align:right}}
-.wrap{{max-width:1440px;margin:0 auto;padding:24px 32px}}
-.kpi-row{{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:22px}}
-.kpi{{background:#111827;border:1px solid #1f2d42;border-radius:12px;padding:18px 20px}}
-.kpi .lbl{{font-size:.7rem;text-transform:uppercase;letter-spacing:.06em;color:#64748b}}
-.kpi .val{{font-size:2.2rem;font-weight:800;line-height:1.1;margin:8px 0 4px}}
-.kpi .sub{{font-size:.75rem;color:#475569}}
-.card{{background:#111827;border:1px solid #1f2d42;border-radius:12px;padding:20px;margin-bottom:18px}}
-.card h2{{font-size:.75rem;text-transform:uppercase;letter-spacing:.07em;color:#64748b;margin-bottom:14px}}
-.g2{{display:grid;grid-template-columns:1fr 1fr;gap:18px;margin-bottom:18px}}
-.g3{{display:grid;grid-template-columns:2fr 1fr;gap:18px;margin-bottom:18px}}
-canvas{{max-height:200px!important}}
-@media(max-width:900px){{.kpi-row{{grid-template-columns:repeat(2,1fr)}}.g2,.g3{{grid-template-columns:1fr}}.wrap{{padding:16px}}}}
-</style>
-</head>
-<body>
-<header class="hdr">
-  <div><h1>&#x26a1; \u30c6\u30b9\u30c8\u8a18\u9332 \u30c0\u30c3\u30b7\u30e5\u30dc\u30fc\u30c9</h1><div class="sub">Bug Map &amp; \u7fd2\u719f\u5ea6\u8ffd\u8de1 | denken3-study</div></div>
-  <div class="hdr-r">\u6700\u7d42\u66f4\u65b0: {today.isoformat()}<br>\u7dcf\u8a18\u9332: {total} \u4ef6 &nbsp;|&nbsp; <a href="index.html" style="color:#60a5fa">\u2190 \u5b66\u7fd2\u9032\u6357\u3078</a></div>
-</header>
-<div class="wrap">
+    # ---- HTML セクション生成 ----
+    main_html = f'''
+<main class="main">
 
-  <div class="kpi-row">
-    <div class="kpi"><div class="lbl">\u7dcf\u8a18\u9332\u6570</div><div class="val" style="color:#60a5fa">{total}</div><div class="sub">\u7d2f\u8a08\u30c6\u30b9\u30c8\u554f\u984c</div></div>
-    <div class="kpi"><div class="lbl">\u7406\u89e3\u6e08 OK</div><div class="val" style="color:#22c55e">{ok_n}</div><div class="sub">\u9054\u6210\u7387 {ok_rate}%</div></div>
-    <div class="kpi"><div class="lbl">\u8981\u6ce8\u610f Risky</div><div class="val" style="color:#f59e0b">{risky_n}</div><div class="sub">\u6416\u3089\u304e\u3042\u308a</div></div>
-    <div class="kpi"><div class="lbl">\u672c\u65e5\u30ec\u30d3\u30e5\u30fc</div><div class="val" style="color:#ef4444">{len(due)}</div><div class="sub">\u30b9\u30da\u30fc\u30b7\u30f3\u30b0\u5bfe\u8c61</div></div>
+  <!-- KPI -->
+  <div class="section">
+    <div class="sec-title">📊 テスト記録サマリ</div>
+    <div class="q-kpi-row">
+      <div class="q-kpi"><div class="lbl">総記録数</div><div class="val" style="color:#60a5fa">{total}</div><div class="sub">累計テスト問題</div></div>
+      <div class="q-kpi"><div class="lbl">理解済 OK</div><div class="val" style="color:#22c55e">{ok_n}</div><div class="sub">達成率 {ok_pct}%</div></div>
+      <div class="q-kpi"><div class="lbl">要注意 Risky</div><div class="val" style="color:#f59e0b">{risky_n}</div><div class="sub">揺らぎあり</div></div>
+      <div class="q-kpi"><div class="lbl">本日レビュー</div><div class="val" style="color:#ef4444">{len(due)}</div><div class="sub">スペーシング対象</div></div>
+    </div>
   </div>
 
-  <div class="card"><h2>\U0001f4c5 \u76f4\u8fd130\u65e5\u306e\u5b66\u7fd2\u6d3b\u52d5</h2><canvas id="ac"></canvas></div>
-
-  <div class="g3">
-    <div class="card"><h2>\U0001f534 \u30d0\u30b0\u30de\u30c3\u30d7\uff08\u79d1\u76ee \xd7 \u30c6\u30fc\u30de\uff09</h2>{bugmap_html}</div>
-    <div class="card"><h2>\U0001f4ca \u30d5\u30a7\u30fc\u30ba\u5225\u9032\u6357</h2>{phase_html if phase_html else _no_data_msg}</div>
+  <!-- 活動チャート -->
+  <div class="section">
+    <div class="card"><div class="card-header">📅 直近30日の学習活動</div><canvas id="q-ac" class="q-chart"></canvas></div>
   </div>
 
-  <div class="g2">
-    <div class="card"><h2>\U0001f501 \u672c\u65e5\u306e\u30ec\u30d3\u30e5\u30fc\u5bfe\u8c61</h2>{due_html}</div>
-    <div class="card"><h2>\U0001f4c8 \u7d50\u679c\u5206\u5e03</h2><canvas id="rc"></canvas></div>
+  <!-- バグマップ + フェーズ別 -->
+  <div class="section">
+    <div class="g21">
+      <div class="card">
+        <div class="card-header">🔴 バグマップ（科目 × テーマ）</div>
+        {bugmap_html}
+      </div>
+      <div class="card">
+        <div class="card-header">📊 フェーズ別進捗</div>
+        {phase_html}
+      </div>
+    </div>
   </div>
 
-  <div class="card"><h2>\U0001f4dd \u6700\u8fd1\u306e\u8a18\u9332\uff08\u76f4\u8fd110\u4ef6\uff09</h2>{rec_html}</div>
+  <!-- レビュー対象 + 結果分布 -->
+  <div class="section">
+    <div class="g2">
+      <div class="card">
+        <div class="card-header">🔁 本日のレビュー対象</div>
+        {due_html}
+      </div>
+      <div class="card">
+        <div class="card-header">📈 結果分布</div>
+        <canvas id="q-rc" class="q-chart" style="display:block;margin:0 auto"></canvas>
+      </div>
+    </div>
+  </div>
 
-</div>
-<script>
-new Chart(document.getElementById('ac'),{{type:'bar',data:{{labels:{json.dumps(act_labels,ensure_ascii=False)},datasets:[{{label:'\u8a18\u9332\u6570',data:{json.dumps(act_data)},backgroundColor:'rgba(96,165,250,.55)',borderColor:'#60a5fa',borderWidth:1,borderRadius:4}}]}},options:{{responsive:true,plugins:{{legend:{{display:false}}}},scales:{{y:{{beginAtZero:true,ticks:{{color:'#64748b',stepSize:1}},grid:{{color:'#1a2535'}}}},x:{{ticks:{{color:'#64748b',maxRotation:45,font:{{size:10}}}},grid:{{display:false}}}}}}}}}}}});
-new Chart(document.getElementById('rc'),{{type:'doughnut',data:{{labels:['OK','Risky','NG'],datasets:[{{data:[{ok_n},{risky_n},{ng_n}],backgroundColor:['#22c55e','#f59e0b','#ef4444'],borderColor:'#111827',borderWidth:4}}]}},options:{{responsive:true,plugins:{{legend:{{labels:{{color:'#94a3b8',font:{{size:12}}}}}}}}}}}}}});
-</script>
-<button onclick="refreshDashboard()" id="refresh-btn" style="position:fixed;bottom:20px;right:20px;background:#4c72af;color:white;border:none;padding:12px 20px;border-radius:8px;font-size:1rem;cursor:pointer;z-index:999;box-shadow:0 2px 8px rgba(0,0,0,0.3)">🔄 更新</button>
-<script>
-async function refreshDashboard() {{
-  const btn = document.getElementById('refresh-btn');
-  btn.textContent = '⏳ 更新中...';
-  btn.disabled = true;
-  try {{
-    await fetch('https://hook.eu1.make.com/gxj0wkwzcw78lvbm4op71reqqa45c3y5', {{method:'POST'}});
-    btn.textContent = '✅ リクエスト送信！';
-  }} catch(e) {{
-    btn.textContent = '❌ エラー';
-  }}
-  setTimeout(() => {{ btn.textContent = '🔄 更新'; btn.disabled = false; }}, 3000);
+  <!-- 最近の記録 -->
+  <div class="section">
+    <div class="card">
+      <div class="card-header">📝 最近の記録（直近10件）</div>
+      <div style="overflow-x:auto">
+        <table class="q-rec-tbl">
+          <thead><tr><th>日付</th><th>科目</th><th>テーマ</th><th>結果</th><th>次回</th><th>メモ</th></tr></thead>
+          <tbody>{rec_rows}</tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <!-- 更新ボタン -->
+  <div class="section" style="text-align:right">
+    <button id="q-refresh-btn" onclick="quizRefresh()" style="background:linear-gradient(135deg,#065f46,#047857);color:#6ee7b7;border:1px solid #10b981;padding:10px 20px;border-radius:10px;font-size:.85rem;font-weight:700;cursor:pointer;font-family:inherit;transition:all .3s">🔄 Make.com更新トリガー</button>
+  </div>
+
+  <div class="footer">⚡ テスト記録 ダッシュボード ｜ 最終更新: {today.isoformat()}</div>
+</main>'''
+
+    # ---- チャートJS生成 ----
+    chart_js = f'''// QUIZ_CHART_START
+function initQuizCharts() {{
+  // 活動チャート
+  new Chart(document.getElementById('q-ac'), {{
+    type: 'bar',
+    data: {{
+      labels: {json.dumps(act_labels, ensure_ascii=False)},
+      datasets: [{{
+        label: '記録数',
+        data: {json.dumps(act_data)},
+        backgroundColor: 'rgba(96,165,250,.55)',
+        borderColor: '#60a5fa',
+        borderWidth: 1,
+        borderRadius: 4
+      }}]
+    }},
+    options: {{
+      responsive: true,
+      plugins: {{ legend: {{ display: false }} }},
+      scales: {{
+        y: {{ beginAtZero: true, ticks: {{ color: '#64748b', stepSize: 1 }}, grid: {{ color: '#1a2535' }} }},
+        x: {{ ticks: {{ color: '#64748b', maxRotation: 45, font: {{ size: 10 }} }}, grid: {{ display: false }} }}
+      }}
+    }}
+  }});
+
+  // 結果分布ドーナツ
+  new Chart(document.getElementById('q-rc'), {{
+    type: 'doughnut',
+    data: {{
+      labels: ['OK','Risky','NG'],
+      datasets: [{{
+        data: [{ok_n}, {risky_n}, {ng_n}],
+        backgroundColor: ['#22c55e','#f59e0b','#ef4444'],
+        borderColor: '#0d1117',
+        borderWidth: 4
+      }}]
+    }},
+    options: {{
+      responsive: true,
+      plugins: {{ legend: {{ labels: {{ color: '#94a3b8', font: {{ size: 12 }} }} }} }}
+    }}
+  }});
 }}
-</script>
-</body></html>"""
+// QUIZ_CHART_END'''
 
-    with open(OUTPUT_PATH, "w", encoding="utf-8") as f:
+    # ---- index.html を書き換え ----
+    with open(INDEX_PATH, encoding="utf-8") as f:
+        html = f.read()
+
+    # QUIZ_MAIN セクションを置換
+    html = re.sub(
+        r'<!-- QUIZ_MAIN_START -->.*?<!-- QUIZ_MAIN_END -->',
+        f'<!-- QUIZ_MAIN_START -->\n{main_html}\n<!-- QUIZ_MAIN_END -->',
+        html, flags=re.DOTALL
+    )
+
+    # QUIZ_CHART セクションを置換
+    html = re.sub(
+        r'// QUIZ_CHART_START.*?// QUIZ_CHART_END',
+        chart_js,
+        html, flags=re.DOTALL
+    )
+
+    with open(INDEX_PATH, "w", encoding="utf-8") as f:
         f.write(html)
-    print(f"Dashboard generated -> {OUTPUT_PATH} ({total} records)")
+
+    print(f"✅ index.html 更新完了 ({total} records, {len(due)} due today)")
 
 if __name__ == "__main__":
     generate()

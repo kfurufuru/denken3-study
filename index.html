@@ -1001,6 +1001,7 @@ canvas.q-chart{max-height:200px!important}
      TAB 4: テスト記録 (quiz)
      ======================================== -->
 <div id="tab-quiz" class="tab-pane">
+<!-- QUIZ_MAIN_START -->
 <main class="main">
 
   <!-- KPI -->
@@ -1152,6 +1153,7 @@ canvas.q-chart{max-height:200px!important}
 
   <div class="footer">⚡ テスト記録 ダッシュボード ｜ 最終更新: <span id="q-updated-date"></span></div>
 </main>
+<!-- QUIZ_MAIN_END -->
 </div>
 
 <!-- ========================================
@@ -1165,45 +1167,55 @@ canvas.q-chart{max-height:200px!important}
     <div class="sec-title">🔁 データフロー</div>
     <div class="card">
       <div class="card-header">データパイプライン概要</div>
-      <div class="sys-flow">
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:24px;padding:8px 0">
 
-        <div style="display:flex;gap:14px;justify-content:center">
-          <div style="display:flex;flex-direction:column;align-items:center;gap:4px">
-            <div class="sys-node" style="min-width:140px">🗂️ Notion DB<br><span style="font-size:.68rem;color:var(--muted)">過去問記録</span></div>
-          </div>
-          <div style="display:flex;flex-direction:column;align-items:center;gap:4px">
-            <div class="sys-node" style="min-width:140px">📄 records.json<br><span style="font-size:.68rem;color:var(--muted)">学習ログ</span></div>
-          </div>
-        </div>
-
-        <div class="sys-arrow">↓ 統合 ↓</div>
-
-        <div class="sys-node action">⚙️ update_dashboard.py<br><span style="font-size:.68rem">TODAY_SESSIONS / PDCA_DATA / DATA を注入</span></div>
-
-        <div class="sys-arrow">↓</div>
-
-        <div class="sys-node highlight">🤖 GitHub Actions<br><span style="font-size:.68rem">⏰ 毎朝 7:00 JST 自動実行</span></div>
-
-        <div class="sys-arrow">↓ デプロイ ↓</div>
-
-        <div style="display:flex;gap:14px;justify-content:center">
-          <div style="display:flex;flex-direction:column;align-items:center;gap:4px">
-            <div class="sys-node highlight" style="min-width:155px">🌐 GitHub Pages<br><span style="font-size:.68rem">📱 携帯アクセス</span></div>
-            <div class="sys-split-label" style="color:#93c5fd">閲覧専用</div>
-          </div>
-          <div style="display:flex;flex-direction:column;align-items:center;gap:4px">
-            <div class="sys-node action" style="min-width:155px">💻 Flask localhost:8765<br><span style="font-size:.68rem">PC アクセス</span></div>
-            <div class="sys-split-label" style="color:#6ee7b7">記録・Claude解説</div>
+        <!-- リアルタイムフロー -->
+        <div>
+          <div style="font-size:.75rem;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:#60a5fa;margin-bottom:14px">⚡ リアルタイム更新</div>
+          <div class="sys-flow">
+            <div class="sys-node" style="border-color:rgba(96,165,250,.4);background:rgba(96,165,250,.08);color:#93c5fd">
+              📱 ChatGPT<br><span style="font-size:.7rem;color:#64748b">テスト記録採取（スマホ）</span>
+            </div>
+            <div class="sys-arrow">↓ POST</div>
+            <div class="sys-node" style="border-color:rgba(249,115,22,.4);background:rgba(249,115,22,.08);color:#fdba74">
+              🔗 Make.com<br><span style="font-size:.7rem;color:#64748b">Webhook受信 → repository_dispatch</span>
+            </div>
+            <div class="sys-arrow">↓ new_record イベント</div>
+            <div class="sys-node highlight">
+              ⚙️ GitHub Actions<br><span style="font-size:.7rem;color:#64748b">build-quiz.yml</span>
+            </div>
+            <div class="sys-arrow">↓ append_record.py</div>
+            <div class="sys-node" style="border-color:rgba(16,185,129,.3);background:rgba(16,185,129,.06);color:#6ee7b7">
+              📄 data/records.json<br><span style="font-size:.7rem;color:#64748b">テスト記録追記</span>
+            </div>
+            <div class="sys-arrow">↓ generate_quiz_dashboard.py</div>
+            <div class="sys-node action">
+              🌐 GitHub Pages<br><span style="font-size:.7rem;color:#64748b">index.html テスト記録タブ更新</span>
+            </div>
           </div>
         </div>
 
-        <div style="display:flex;justify-content:flex-end;width:100%;max-width:350px">
-          <div style="display:flex;align-items:center;gap:6px;font-size:.72rem;color:var(--muted);margin-top:4px">
-            <span>↑</span>
-            <span>PC記録 → records.json 更新 → 翌朝 Actions に反映</span>
+        <!-- 毎朝スケジュールフロー -->
+        <div>
+          <div style="font-size:.75rem;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:#f59e0b;margin-bottom:14px">🕖 毎朝7:00 JST 自動更新</div>
+          <div class="sys-flow">
+            <div class="sys-node" style="border-color:rgba(245,158,11,.4);background:rgba(245,158,11,.08);color:#fde047">
+              ⏰ GitHub Actions<br><span style="font-size:.7rem;color:#64748b">update.yml（スケジュール実行）</span>
+            </div>
+            <div class="sys-arrow">↓ Notion API</div>
+            <div class="sys-node" style="border-color:rgba(139,92,246,.4);background:rgba(139,92,246,.08);color:#c4b5fd">
+              🗄️ Notion DB<br><span style="font-size:.7rem;color:#64748b">過去問管理DB</span>
+            </div>
+            <div class="sys-arrow">↓ update_dashboard.py</div>
+            <div class="sys-node action">
+              🌐 GitHub Pages<br><span style="font-size:.7rem;color:#64748b">index.html 過去問履歴タブ更新</span>
+            </div>
           </div>
         </div>
 
+      </div>
+      <div style="margin-top:16px;padding:10px 14px;border-radius:8px;background:rgba(99,102,241,.06);border:1px solid rgba(99,102,241,.2);font-size:.75rem;color:#a5b4fc">
+        💡 URL一本化済み: <code style="background:rgba(99,102,241,.1);padding:1px 6px;border-radius:4px">https://kfurufuru.github.io/denken3-study/</code> のみ。quiz.html は廃止。
       </div>
     </div>
   </div>
@@ -1933,6 +1945,7 @@ renderPdca();
 // ================================================================
 // ===== TAB-QUIZ: チャート初期化 =====
 // ================================================================
+// QUIZ_CHART_START
 function initQuizCharts() {
   // 日付表示
   document.getElementById('q-updated-date').textContent =
@@ -1982,6 +1995,8 @@ function initQuizCharts() {
     }
   });
 }
+
+// QUIZ_CHART_END
 
 async function quizRefresh() {
   const btn = document.getElementById('q-refresh-btn');
