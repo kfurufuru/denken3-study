@@ -853,7 +853,7 @@ canvas.q-chart{max-height:200px!important}
       </div>
       <div class="g2" style="align-content:start">
         <div class="card" style="text-align:center">
-          <div class="stat-val" style="color:var(--green)" id="stat-maru">92</div>
+          <div class="stat-val" style="color:var(--green)" id="stat-maru">93</div>
           <div class="stat-lbl">1回目 ○ 正解</div>
           <div class="stat-sub" id="stat-maru-sub">--</div>
         </div>
@@ -917,7 +917,7 @@ canvas.q-chart{max-height:200px!important}
         <div class="bunya-item">
           <div class="bunya-hd">
             <div class="bunya-nm"><span style="color:var(--green)">⚡</span> 電気回路</div>
-            <div class="bunya-pct" style="color:var(--green)">27% <span style="color:var(--muted);font-weight:400;font-size:.7rem">≈ 45/164問</span></div>
+            <div class="bunya-pct" style="color:var(--green)">28% <span style="color:var(--muted);font-weight:400;font-size:.7rem">≈ 44/159問</span></div>
           </div>
           <div class="bar-bg"><div class="bar-fill" id="b1" style="width:0%;background:linear-gradient(90deg,#10b981,#34d399)"></div></div>
           <div class="bunya-chips">
@@ -930,7 +930,7 @@ canvas.q-chart{max-height:200px!important}
         <div class="bunya-item">
           <div class="bunya-hd">
             <div class="bunya-nm"><span style="color:var(--accent)">📡</span> 電気・電子計測</div>
-            <div class="bunya-pct" style="color:var(--accent)">41% <span style="color:var(--muted);font-weight:400;font-size:.7rem">≈ 35/85問</span></div>
+            <div class="bunya-pct" style="color:var(--accent)">41% <span style="color:var(--muted);font-weight:400;font-size:.7rem">≈ 36/87問</span></div>
           </div>
           <div class="bar-bg"><div class="bar-fill" id="b2" style="width:0%;background:linear-gradient(90deg,#3b82f6,#818cf8)"></div></div>
           <div class="bunya-chips">
@@ -942,7 +942,7 @@ canvas.q-chart{max-height:200px!important}
         <div class="bunya-item">
           <div class="bunya-hd">
             <div class="bunya-nm"><span style="color:var(--orange)">🔮</span> 電磁気学</div>
-            <div class="bunya-pct" style="color:var(--orange)">8% <span style="color:var(--muted);font-weight:400;font-size:.7rem">≈ 9/114問</span></div>
+            <div class="bunya-pct" style="color:var(--orange)">8% <span style="color:var(--muted);font-weight:400;font-size:.7rem">≈ 10/124問</span></div>
           </div>
           <div class="bar-bg"><div class="bar-fill" id="b3" style="width:0%;background:linear-gradient(90deg,#f97316,#fbbf24)"></div></div>
           <div class="bunya-chips">
@@ -954,7 +954,7 @@ canvas.q-chart{max-height:200px!important}
         <div class="bunya-item" style="margin-bottom:0">
           <div class="bunya-hd">
             <div class="bunya-nm"><span style="color:var(--purple)">🔬</span> 電子理論</div>
-            <div class="bunya-pct" style="color:var(--purple)">2% <span style="color:var(--muted);font-weight:400;font-size:.7rem">≈ 3/123問</span></div>
+            <div class="bunya-pct" style="color:var(--purple)">3% <span style="color:var(--muted);font-weight:400;font-size:.7rem">≈ 3/116問</span></div>
           </div>
           <div class="bar-bg"><div class="bar-fill" id="b4" style="width:0%;background:linear-gradient(90deg,#8b5cf6,#c084fc)"></div></div>
           <div class="bunya-chips">
@@ -1371,14 +1371,14 @@ function triggerUpdate() {
 
 // ================================================================
 // ===== DATA =====
-const ACHIEVED = 92, TOTAL = 486;
-const FIRST_MARU = 84, FIRST_BATU = 62;
+const ACHIEVED = 93, TOTAL = 486;
+const FIRST_MARU = 85, FIRST_BATU = 63;
 const STREAK = 3;
 const EXAM_DATE = new Date('2026-08-23');
 const STUDY_START = new Date('2025-09-01');
-const TODAY = new Date(); TODAY.setHours(0,0,0,0);
+const TODAY = new Date('2026-04-13');
 
-const WEAK_DATA = [{"q":"R04下-問8","topic":"","cat":"電気回路","p":"S","date":"2026-01-11"},{"q":"R04下-問6","topic":"","cat":"電磁気","p":"S","date":"2026-01-11"},{"q":"R05上-問7","topic":"","cat":"電気回路","p":"S","date":"2026-01-12"},{"q":"H27-問4","topic":"","cat":"電気回路","p":"S","date":"2026-02-01"},{"q":"H27-問15","topic":"","cat":"電気回路","p":"S","date":"2026-02-01"},{"q":"R04-問15","topic":"","cat":"電気回路","p":"S","date":"2026-02-23"},{"q":"H30-問15","topic":"","cat":"電気回路","p":"S","date":"2026-02-23"},{"q":"H29-問16","topic":"","cat":"電気回路","p":"S","date":"2026-02-23"},{"q":"H26-問5","topic":"","cat":"電磁気","p":"S","date":"2026-03-01"},{"q":"H24-問15","topic":"","cat":"電磁気","p":"S","date":"2026-03-01"},{"q":"R02-問8","topic":"","cat":"電気回路","p":"S","date":"2026-03-08"},{"q":"H25-問10","topic":"","cat":"電気回路","p":"S","date":"2026-03-08"},{"q":"H25-問15","topic":"","cat":"電気回路","p":"S","date":"2026-03-14"},{"q":"H24-問16","topic":"","cat":"電気回路","p":"S","date":"2026-03-15"},{"q":"H23-問8","topic":"","cat":"電気回路","p":"S","date":"2026-03-20"},{"q":"R06上-問7","topic":"","cat":"電気回路","p":"S","date":"2026-03-28"},{"q":"R06上-問1","topic":"","cat":"電磁気","p":"S","date":"2026-03-28"},{"q":"H22-問8","topic":"","cat":"電気回路","p":"S","date":"2026-04-10"},{"q":"H19-問7","topic":"","cat":"電気回路","p":"S","date":"2026-04-12"},{"q":"R01-問8","topic":"","cat":"電気回路","p":"S","date":"未実施"},{"q":"H18-問2","topic":"","cat":"電磁気","p":"S","date":"未実施"},{"q":"R05上-問5","topic":"","cat":"電磁気","p":"A","date":"2026-01-12"},{"q":"R05上-問9","topic":"","cat":"電気回路","p":"A","date":"2026-01-12"},{"q":"H26-問14","topic":"","cat":"電気回路","p":"A","date":"2026-03-08"},{"q":"H23-問7","topic":"","cat":"電気回路","p":"A","date":"2026-03-20"}];
+const WEAK_DATA = [{"q": "R04下-問8", "topic": "", "cat": "電気回路", "p": "S", "date": "2026-01-11"}, {"q": "R04下-問6", "topic": "", "cat": "電磁気", "p": "S", "date": "2026-01-11"}, {"q": "R05上-問7", "topic": "", "cat": "電気回路", "p": "S", "date": "2026-01-12"}, {"q": "H27-問15", "topic": "", "cat": "電気回路", "p": "S", "date": "2026-02-01"}, {"q": "H27-問4", "topic": "", "cat": "電気回路", "p": "S", "date": "2026-02-01"}, {"q": "H30-問15", "topic": "", "cat": "電気回路", "p": "S", "date": "2026-02-23"}, {"q": "H29-問16", "topic": "", "cat": "電気回路", "p": "S", "date": "2026-02-23"}, {"q": "R04-問15", "topic": "", "cat": "電気回路", "p": "S", "date": "2026-02-23"}, {"q": "H24-問15", "topic": "", "cat": "電磁気", "p": "S", "date": "2026-03-01"}, {"q": "H26-問5", "topic": "", "cat": "電磁気", "p": "S", "date": "2026-03-01"}, {"q": "R02-問8", "topic": "", "cat": "電気回路", "p": "S", "date": "2026-03-08"}, {"q": "H25-問10", "topic": "", "cat": "電気回路", "p": "S", "date": "2026-03-08"}, {"q": "H25-問15", "topic": "", "cat": "電気回路", "p": "S", "date": "2026-03-14"}, {"q": "H24-問16", "topic": "", "cat": "電気回路", "p": "S", "date": "2026-03-15"}, {"q": "H23-問8", "topic": "", "cat": "電気回路", "p": "S", "date": "2026-03-20"}, {"q": "R04上-問9", "topic": "", "cat": "電気回路", "p": "S", "date": "2026-03-23"}, {"q": "R06上-問1", "topic": "", "cat": "電磁気", "p": "S", "date": "2026-03-28"}, {"q": "R06上-問7", "topic": "", "cat": "電気回路", "p": "S", "date": "2026-03-28"}, {"q": "H22-問8", "topic": "", "cat": "電気回路", "p": "S", "date": "2026-04-10"}, {"q": "H19-問7", "topic": "", "cat": "電気回路", "p": "S", "date": "2026-04-12"}];
 const WEAK_DATA_HOUKI = [{"q": "R03-問1", "topic": "", "cat": "電気設備技術基準", "p": "A", "date": "未実施"}, {"q": "R03-問2", "topic": "", "cat": "電気設備技術基準", "p": "A", "date": "未実施"}, {"q": "R03-問3", "topic": "", "cat": "電気設備技術基準", "p": "A", "date": "未実施"}, {"q": "H27-問3", "topic": "", "cat": "電気設備技術基準", "p": "B", "date": "未実施"}, {"q": "R03-問4", "topic": "", "cat": "電気設備技術基準", "p": "A", "date": "未実施"}, {"q": "R03-問5", "topic": "", "cat": "電気設備技術基準", "p": "A", "date": "未実施"}, {"q": "R03-問6", "topic": "", "cat": "電気設備技術基準", "p": "A", "date": "未実施"}, {"q": "R03-問7", "topic": "", "cat": "電気設備技術基準", "p": "A", "date": "未実施"}, {"q": "R03-問8", "topic": "", "cat": "電気設備技術基準", "p": "A", "date": "未実施"}, {"q": "R03-問9", "topic": "", "cat": "電気設備技術基準", "p": "A", "date": "未実施"}, {"q": "R03-問10", "topic": "", "cat": "電気事業法", "p": "A", "date": "未実施"}, {"q": "R03-問11", "topic": "", "cat": "電気事業法", "p": "A", "date": "未実施"}, {"q": "R03-問12", "topic": "", "cat": "電気設備技術基準", "p": "A", "date": "未実施"}, {"q": "H24-問11", "topic": "", "cat": "電気施設管理", "p": "B", "date": "未実施"}, {"q": "R03-問13", "topic": "", "cat": "電気施設管理", "p": "A", "date": "未実施"}, {"q": "R02-問1", "topic": "", "cat": "電気事業法", "p": "A", "date": "未実施"}, {"q": "R02-問2", "topic": "", "cat": "電気事業法", "p": "A", "date": "未実施"}];
 
 // ================================================================
@@ -1392,7 +1392,7 @@ const TODAY_SESSIONS = {"date":"2026-04-13","days_left":132,"done_count":0,"sess
 const PDCA_DATA = {"week":"W15","period":"4/7–4/13","current_phase":"C","is_update_day":true,"next_action":{"phase":"C","text":"フェインマン RL回路の位相遷移","cmd":"フェインマン RL回路の位相遷移"},"plan":{"themes":[{"name":"RL回路の位相とインピーダンス","why":"なぜ: インピーダンス🔴×4件・ANCHOR誤答2件","badge_type":"weak","done":true,"phase":"C","phase_dots":3},{"name":"RLC直列・並列共振の特性","why":"なぜ: RLC共振🔴×4件・S優先未達成","badge_type":"weak","done":false,"phase":"P","phase_dots":1},{"name":"三相回路のΔ→Y変換計算","why":"なぜ: 3/22フェインマンで穴発見・未復習","badge_type":"other","done":false,"phase":"P","phase_dots":1}]},"do_logs":[{"date":"4/10","theme":"RL回路の位相遷移（H21問8）","source":"Gemini","score":4},{"date":"3/22","theme":"Y-Δ変換","source":"フェインマン","score":4}],"check":{"rewrites":[{"date":"3/22","pattern":"Δ→Y変換は1/3倍（逆に覚えていた）","verified":null,"pending_checks":[]},{"date":"4/10","pattern":"位相はR/Xの構成比で決まる（部品単体で判断しない）","verified":null,"pending_checks":[]}]},"act_bugs":[{"code":"ANCHOR","desc":"思い込みで全体判断する","count":2},{"code":"MODEL","desc":"物理モデルの誤認識","count":2}],"act_countermeasures":["ANCHOR対策: 必ず「極端条件（R=0 or ∞）」を代入してから判断する"]};
 
 // ===== PAST_ERRORS =====
-const PAST_ERRORS = [{"question_id":"電磁誘導_2026-03-27","category":"電磁誘導_2026-03-27","subject":"理論","result":"ng","date":"2026-04-10","memo":"AIの説明が間違え。理解していた。","next_review":"SR1"},{"question_id":"不等率","category":"不等率","subject":"電力","result":"risky","date":"2026-04-03","memo":"需要率との区別で一部迷い（設備容量との関係が曖昧）","next_review":"SR3"},{"question_id":"磁界","category":"磁界","subject":"理論","result":"risky","date":"2026-04-01","memo":"磁界が1/r、点電荷の電界が1/r^2になる理由の区別がやや曖昧。式は選べたが、広がり方の説明補強が必要。","next_review":"SR2"}];
+const PAST_ERRORS = [{"question_id": "過去問演習", "category": "過去問演習", "subject": "理論", "result": "risky", "date": "2026-04-13", "memo": "API直接実行のテスト記録", "next_review": "SR2"}, {"question_id": "電磁誘導", "category": "電磁誘導", "subject": "理論", "result": "ng", "date": "2026-04-10", "memo": "AIの説明が間違え。理解していた。", "next_review": "SR1"}, {"question_id": "不等率", "category": "不等率", "subject": "電力", "result": "risky", "date": "2026-04-03", "memo": "需要率との区別で一部迷い（設備容量との関係が曖昧）", "next_review": "SR3"}, {"question_id": "磁界", "category": "磁界", "subject": "理論", "result": "risky", "date": "2026-04-01", "memo": "磁界が1/r、点電荷の電界が1/r^2になる理由の区別がやや曖昧。式は選べたが、広がり方の説明補強が必要。", "next_review": "SR2"}];
 
 // ================================================================
 // ===== CANVAS BACKGROUND (stars) =====
