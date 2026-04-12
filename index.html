@@ -1147,7 +1147,7 @@ canvas.q-chart{max-height:200px!important}
 
   <!-- 更新ボタン -->
   <div class="section" style="text-align:right">
-    <button id="q-refresh-btn" onclick="quizRefresh()" style="background:linear-gradient(135deg,#065f46,#047857);color:#6ee7b7;border:1px solid #10b981;padding:10px 20px;border-radius:10px;font-size:.85rem;font-weight:700;cursor:pointer;font-family:inherit;transition:all .3s">🔄 Notionから再取得</button>
+    <button id="q-refresh-btn" onclick="quizRefresh()" style="background:linear-gradient(135deg,#065f46,#047857);color:#6ee7b7;border:1px solid #10b981;padding:10px 20px;border-radius:10px;font-size:.85rem;font-weight:700;cursor:pointer;font-family:inherit;transition:all .3s">🔄 Make.com更新トリガー</button>
   </div>
 
   <div class="footer">⚡ テスト記録 ダッシュボード ｜ 最終更新: <span id="q-updated-date"></span></div>
@@ -1993,7 +1993,7 @@ async function quizRefresh() {
   } catch(e) {
     btn.textContent = '❌ エラー';
   }
-  setTimeout(() => { btn.textContent = '🔄 Notionから再取得'; btn.disabled = false; }, 3000);
+  setTimeout(() => { btn.textContent = '🔄 Make.com更新トリガー'; btn.disabled = false; }, 3000);
 }
 
 // 初期タブ
