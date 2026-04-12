@@ -1,0 +1,103 @@
+openapi: 3.1.0
+info:
+  title: 電験3種テスト記録API
+  description: >
+    電験3種のテスト結果をGitHub Actionsに直接送信し、
+    records.json追記 → index.htmlダッシュボード更新まで自動実行する。
+  version: 1.0.0
+
+servers:
+  - url: https://api.github.com
+
+paths:
+  /repos/kfurufuru/denken3-study/dispatches:
+    post:
+      operationId: recordTestResult
+      summary: テスト記録を送信してダッシュボードを更新
+      description: >
+        電験3種の学習セッション後に呼び出す。
+        科目・テーマ・結果・メモを送信すると GitHub Actions が起動し、
+        records.json への追記とダッシュボードHTMLの再生成を自動実行する。
+      parameters:
+        - in: header
+          name: Accept
+          required: true
+          schema:
+            type: string
+            default: application/vnd.github.v3+json
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - event_type
+                - client_payload
+              properties:
+                event_type:
+                  type: string
+                  enum: ["new_record"]
+                  description: 固定値。変更不可。
+                client_payload:
+                  type: object
+                  required:
+                    - subject
+                    - theme
+                    - result
+                    - next_review
+                  properties:
+                    subject:
+                      type: string
+                      enum: ["理論", "電力", "機械", "法規"]
+                      description: 科目名
+                    theme:
+                      type: string
+                      description: テーマ名（例：三相交流、磁界、静電容量）
+                    subtheme:
+                      type: string
+                      description: サブテーマ（省略可）
+                    result:
+                      type: string
+                      enum: ["ok", "risky", "ng"]
+                      description: >
+                        テスト結果。
+                        ok=迷いなく解けた、
+                        risky=解けたが不安定、
+                        ng=解けなかった
+                    next_review:
+                      type: string
+                      enum: ["SR1", "SR2", "SR3", "SR4", "SR5", "done"]
+                      description: >
+                        次回レビュータイミング。
+                        SR1=翌日, SR2=3日後, SR3=7日後,
+                        SR4=14日後, SR5=30日後, done=完了
+                    date:
+                      type: string
+                      format: date
+                      description: 日付（YYYY-MM-DD）。省略すると当日が自動補完される。
+                    memo:
+                      type: string
+                      description: 間違えたポイント・気づき（省略可、100文字以内推奨）
+                    phase:
+                      type: string
+                      description: 学習フェーズ（例：A, B, C）。省略可。
+            example:
+              event_type: new_record
+              client_payload:
+                subject: 理論
+                theme: 磁界
+                result: risky
+                next_review: SR2
+                date: "2026-04-13"
+                memo: 磁界が1/r、点電荷の電界が1/r²の違いで混同した
+
+      responses:
+        "204":
+          description: 送信成功。GitHub Actionsが起動しダッシュボードが更新される。
+        "401":
+          description: 認証エラー。GitHub PATが無効または期限切れ。
+        "404":
+          description: リポジトリが見つからない。
+        "422":
+          description: ペイロードのバリデーションエラー。
