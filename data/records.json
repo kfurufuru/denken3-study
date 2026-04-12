@@ -115,5 +115,15 @@
     "consecutive_ok": 1,
     "subject": "理論",
     "memo": ""
+  },
+  {
+    "date": "2026-04-13",
+    "memo": "API直接実行のテスト記録",
+    "next_review": "SR2",
+    "phase": "A",
+    "result": "risky",
+    "subject": "理論",
+    "subtheme": "理論総合",
+    "theme": "過去問演習"
   }
 ]

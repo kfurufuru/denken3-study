@@ -1002,16 +1002,17 @@ canvas.q-chart{max-height:200px!important}
      ======================================== -->
 <div id="tab-quiz" class="tab-pane">
 <!-- QUIZ_MAIN_START -->
+
 <main class="main">
 
   <!-- KPI -->
   <div class="section">
     <div class="sec-title">📊 テスト記録サマリ</div>
     <div class="q-kpi-row">
-      <div class="q-kpi"><div class="lbl">総記録数</div><div class="val" style="color:#60a5fa" id="q-total">7</div><div class="sub">累計テスト問題</div></div>
-      <div class="q-kpi"><div class="lbl">理解済 OK</div><div class="val" style="color:#22c55e" id="q-ok">1</div><div class="sub">達成率 <span id="q-ok-pct">14</span>%</div></div>
-      <div class="q-kpi"><div class="lbl">要注意 Risky</div><div class="val" style="color:#f59e0b" id="q-risky">6</div><div class="sub">揺らぎあり</div></div>
-      <div class="q-kpi"><div class="lbl">本日レビュー</div><div class="val" style="color:#ef4444" id="q-review-count">6</div><div class="sub">スペーシング対象</div></div>
+      <div class="q-kpi"><div class="lbl">総記録数</div><div class="val" style="color:#60a5fa">12</div><div class="sub">累計テスト問題</div></div>
+      <div class="q-kpi"><div class="lbl">理解済 OK</div><div class="val" style="color:#22c55e">8</div><div class="sub">達成率 67%</div></div>
+      <div class="q-kpi"><div class="lbl">要注意 Risky</div><div class="val" style="color:#f59e0b">3</div><div class="sub">揺らぎあり</div></div>
+      <div class="q-kpi"><div class="lbl">本日レビュー</div><div class="val" style="color:#ef4444">5</div><div class="sub">スペーシング対象</div></div>
     </div>
   </div>
 
@@ -1025,79 +1026,42 @@ canvas.q-chart{max-height:200px!important}
     <div class="g21">
       <div class="card">
         <div class="card-header">🔴 バグマップ（科目 × テーマ）</div>
-        <div style="overflow-x:auto">
-          <table class="q-bug-tbl">
-            <thead><tr>
-              <th style="text-align:left">テーマ＼科目</th>
-              <th>理論</th><th>電力</th>
-            </tr></thead>
-            <tbody>
-              <tr>
-                <td style="color:var(--muted2);font-size:.72rem;padding:5px 10px;text-align:left;white-space:nowrap">三相交流</td>
-                <td class="q-status-ok"><a href="https://kfurufuru.github.io/denken-wiki-riron/themes/sansou-kouryu/" target="_blank" style="color:#4ade80;text-decoration:none;display:block">OK <span style="font-size:.6rem;opacity:.8">📖</span></a></td>
-                <td class="q-status-none">－</td>
-              </tr>
-              <tr>
-                <td style="color:var(--muted2);font-size:.72rem;padding:5px 10px;text-align:left;white-space:nowrap">不等率</td>
-                <td class="q-status-none">－</td>
-                <td class="q-status-risky">Risky</td>
-              </tr>
-              <tr>
-                <td style="color:var(--muted2);font-size:.72rem;padding:5px 10px;text-align:left;white-space:nowrap">磁界</td>
-                <td class="q-status-risky">Risky</td>
-                <td class="q-status-none">－</td>
-              </tr>
-              <tr>
-                <td style="color:var(--muted2);font-size:.72rem;padding:5px 10px;text-align:left;white-space:nowrap">電位・電界・磁界</td>
-                <td class="q-status-risky">Risky</td>
-                <td class="q-status-none">－</td>
-              </tr>
-              <tr>
-                <td style="color:var(--muted2);font-size:.72rem;padding:5px 10px;text-align:left;white-space:nowrap">電界・磁界・電位</td>
-                <td class="q-status-risky">Risky</td>
-                <td class="q-status-none">－</td>
-              </tr>
-              <tr>
-                <td style="color:var(--muted2);font-size:.72rem;padding:5px 10px;text-align:left;white-space:nowrap">電磁誘導</td>
-                <td class="q-status-risky"><a href="https://kfurufuru.github.io/denken-wiki-riron/themes/denjiryoku/" target="_blank" style="color:#fbbf24;text-decoration:none;display:block">Risky <span style="font-size:.6rem;opacity:.8">📖</span></a></td>
-                <td class="q-status-none">－</td>
-              </tr>
-              <tr>
-                <td style="color:var(--muted2);font-size:.72rem;padding:5px 10px;text-align:left;white-space:nowrap">静電容量</td>
-                <td class="q-status-risky">Risky</td>
-                <td class="q-status-none">－</td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
+        <div style="overflow-x:auto"><table class="q-bug-tbl"><thead><tr><th style="text-align:left">テーマ＼科目</th><th>理論</th><th>電力</th><th>法規</th></tr></thead><tbody><tr><td style="color:var(--muted2);font-size:.72rem;padding:5px 10px;text-align:left;white-space:nowrap">R02-問8</td><td class="q-status-none">－</td><td class="q-status-none">－</td><td class="q-status-ok" title="OK:1 Risky:0 NG:0">OK</td></tr><tr><td style="color:var(--muted2);font-size:.72rem;padding:5px 10px;text-align:left;white-space:nowrap">test-Q1</td><td class="q-status-ok" title="OK:1 Risky:0 NG:0">OK</td><td class="q-status-none">－</td><td class="q-status-none">－</td></tr><tr><td style="color:var(--muted2);font-size:.72rem;padding:5px 10px;text-align:left;white-space:nowrap">三相交流</td><td class="q-status-ok" title="OK:1 Risky:0 NG:0"><a href="https://kfurufuru.github.io/denken-wiki-riron/themes/sansou-kouryu/" target="_blank" style="color:inherit;text-decoration:none;display:block">OK <span style="font-size:.6rem;opacity:.8">📖</span></a></td><td class="q-status-none">－</td><td class="q-status-none">－</td></tr><tr><td style="color:var(--muted2);font-size:.72rem;padding:5px 10px;text-align:left;white-space:nowrap">不等率</td><td class="q-status-none">－</td><td class="q-status-risky" title="OK:0 Risky:1 NG:0">Risky</td><td class="q-status-none">－</td></tr><tr><td style="color:var(--muted2);font-size:.72rem;padding:5px 10px;text-align:left;white-space:nowrap">磁界</td><td class="q-status-risky" title="OK:0 Risky:1 NG:0">Risky</td><td class="q-status-none">－</td><td class="q-status-none">－</td></tr><tr><td style="color:var(--muted2);font-size:.72rem;padding:5px 10px;text-align:left;white-space:nowrap">過去問演習</td><td class="q-status-risky" title="OK:0 Risky:1 NG:0">Risky</td><td class="q-status-none">－</td><td class="q-status-none">－</td></tr><tr><td style="color:var(--muted2);font-size:.72rem;padding:5px 10px;text-align:left;white-space:nowrap">電位・電界・磁界</td><td class="q-status-ok" title="OK:1 Risky:0 NG:0">OK</td><td class="q-status-none">－</td><td class="q-status-none">－</td></tr><tr><td style="color:var(--muted2);font-size:.72rem;padding:5px 10px;text-align:left;white-space:nowrap">電界・磁界・電位</td><td class="q-status-ok" title="OK:1 Risky:0 NG:0">OK</td><td class="q-status-none">－</td><td class="q-status-none">－</td></tr><tr><td style="color:var(--muted2);font-size:.72rem;padding:5px 10px;text-align:left;white-space:nowrap">電磁誘導</td><td class="q-status-ok" title="OK:1 Risky:0 NG:0"><a href="https://kfurufuru.github.io/denken-wiki-riron/themes/denjiryoku/" target="_blank" style="color:inherit;text-decoration:none;display:block">OK <span style="font-size:.6rem;opacity:.8">📖</span></a></td><td class="q-status-none">－</td><td class="q-status-none">－</td></tr><tr><td style="color:var(--muted2);font-size:.72rem;padding:5px 10px;text-align:left;white-space:nowrap">電磁誘導_2026-03-27</td><td class="q-status-ng" title="OK:0 Risky:0 NG:1">NG</td><td class="q-status-none">－</td><td class="q-status-none">－</td></tr><tr><td style="color:var(--muted2);font-size:.72rem;padding:5px 10px;text-align:left;white-space:nowrap">静電容量</td><td class="q-status-ok" title="OK:1 Risky:0 NG:0">OK</td><td class="q-status-none">－</td><td class="q-status-none">－</td></tr><tr><td style="color:var(--muted2);font-size:.72rem;padding:5px 10px;text-align:left;white-space:nowrap">静電容量_2026-03-28</td><td class="q-status-ok" title="OK:1 Risky:0 NG:0">OK</td><td class="q-status-none">－</td><td class="q-status-none">－</td></tr></tbody></table></div>
       </div>
-
       <div class="card">
         <div class="card-header">📊 フェーズ別進捗</div>
         <div class="q-phase-bar">
           <div style="display:flex;align-items:center;gap:8px;margin-bottom:5px">
-            <span style="color:var(--text);font-weight:600;font-size:.85rem">Phase A</span>
-            <span style="color:var(--muted);font-size:.72rem">5問</span>
+            <span style="color:var(--text);font-weight:600;font-size:.85rem">Phase ?</span>
+            <span style="color:var(--muted);font-size:.72rem">4問</span>
           </div>
-          <div style="height:10px;background:var(--bg);border-radius:5px;overflow:hidden;display:flex">
-            <div style="width:20%;background:#22c55e;height:100%"></div>
-            <div style="width:80%;background:#f59e0b;height:100%"></div>
-          </div>
+          <div style="height:10px;background:var(--bg);border-radius:5px;overflow:hidden;display:flex"><div style="width:75%;background:#22c55e;height:100%"></div><div style="width:0%;background:#f59e0b;height:100%"></div><div style="width:25%;background:#ef4444;height:100%"></div></div>
           <div style="font-size:.7rem;margin-top:4px;display:flex;gap:12px">
-            <span style="color:#4ade80">✓ 1</span><span style="color:#fbbf24">⚠ 4</span><span style="color:#f87171">✗ 0</span>
+            <span style="color:#4ade80">✓ 3</span>
+            <span style="color:#fbbf24">⚠ 0</span>
+            <span style="color:#f87171">✗ 1</span>
           </div>
-        </div>
-        <div class="q-phase-bar">
+        </div><div class="q-phase-bar">
+          <div style="display:flex;align-items:center;gap:8px;margin-bottom:5px">
+            <span style="color:var(--text);font-weight:600;font-size:.85rem">Phase A</span>
+            <span style="color:var(--muted);font-size:.72rem">6問</span>
+          </div>
+          <div style="height:10px;background:var(--bg);border-radius:5px;overflow:hidden;display:flex"><div style="width:67%;background:#22c55e;height:100%"></div><div style="width:33%;background:#f59e0b;height:100%"></div><div style="width:0%;background:#ef4444;height:100%"></div></div>
+          <div style="font-size:.7rem;margin-top:4px;display:flex;gap:12px">
+            <span style="color:#4ade80">✓ 4</span>
+            <span style="color:#fbbf24">⚠ 2</span>
+            <span style="color:#f87171">✗ 0</span>
+          </div>
+        </div><div class="q-phase-bar">
           <div style="display:flex;align-items:center;gap:8px;margin-bottom:5px">
             <span style="color:var(--text);font-weight:600;font-size:.85rem">Phase B</span>
             <span style="color:var(--muted);font-size:.72rem">2問</span>
           </div>
-          <div style="height:10px;background:var(--bg);border-radius:5px;overflow:hidden;display:flex">
-            <div style="width:0%;background:#22c55e;height:100%"></div>
-            <div style="width:100%;background:#f59e0b;height:100%"></div>
-          </div>
+          <div style="height:10px;background:var(--bg);border-radius:5px;overflow:hidden;display:flex"><div style="width:50%;background:#22c55e;height:100%"></div><div style="width:50%;background:#f59e0b;height:100%"></div><div style="width:0%;background:#ef4444;height:100%"></div></div>
           <div style="font-size:.7rem;margin-top:4px;display:flex;gap:12px">
-            <span style="color:#4ade80">✓ 0</span><span style="color:#fbbf24">⚠ 2</span><span style="color:#f87171">✗ 0</span>
+            <span style="color:#4ade80">✓ 1</span>
+            <span style="color:#fbbf24">⚠ 1</span>
+            <span style="color:#f87171">✗ 0</span>
           </div>
         </div>
       </div>
@@ -1109,12 +1073,7 @@ canvas.q-chart{max-height:200px!important}
     <div class="g2">
       <div class="card">
         <div class="card-header">🔁 本日のレビュー対象</div>
-        <div class="q-review-item"><span class="q-badge-ok">OL</span><span style="color:#60a5fa;font-weight:600">[理論]</span><span style="flex:1;color:var(--text)">三相交流</span><span style="color:var(--muted);font-size:.72rem">SR3</span></div>
-        <div class="q-review-item"><span class="q-badge-risky">Risky</span><span style="color:#60a5fa;font-weight:600">[理論]</span><span style="flex:1;color:var(--text)">電磁誘導</span><span style="color:var(--muted);font-size:.72rem">SR2</span></div>
-        <div class="q-review-item"><span class="q-badge-risky">Risky</span><span style="color:#60a5fa;font-weight:600">[理論]</span><span style="flex:1;color:var(--text)">静電容量</span><span style="color:var(--muted);font-size:.72rem">SR2</span></div>
-        <div class="q-review-item"><span class="q-badge-risky">Risky</span><span style="color:#60a5fa;font-weight:600">[理論]</span><span style="flex:1;color:var(--text)">電位・電界・磁界</span><span style="color:var(--muted);font-size:.72rem">SR2</span></div>
-        <div class="q-review-item"><span class="q-badge-risky">Risky</span><span style="color:#60a5fa;font-weight:600">[理論]</span><span style="flex:1;color:var(--text)">電界・磁界・電位</span><span style="color:var(--muted);font-size:.72rem">SR2</span></div>
-        <div class="q-review-item"><span class="q-badge-risky">Risky</span><span style="color:#60a5fa;font-weight:600">[理論]</span><span style="flex:1;color:var(--text)">磁界</span><span style="color:var(--muted);font-size:.72rem">SR2</span></div>
+        <div class="q-review-item"><span class="q-badge-ok">OL</span><span style="color:#60a5fa;font-weight:600">[理論]</span><span style="flex:1;color:var(--text)">三相交流 </span><span style="color:var(--muted);font-size:.72rem">SR3</span></div><div class="q-review-item"><span class="q-badge-risky">Risky</span><span style="color:#60a5fa;font-weight:600">[理論]</span><span style="flex:1;color:var(--text)">磁界 </span><span style="color:var(--muted);font-size:.72rem">SR2</span></div><div class="q-review-item"><span class="q-badge-risky">Risky</span><span style="color:#60a5fa;font-weight:600">[電力]</span><span style="flex:1;color:var(--text)">不等率 </span><span style="color:var(--muted);font-size:.72rem">SR3</span></div><div class="q-review-item"><span class="q-badge-ng">NG</span><span style="color:#60a5fa;font-weight:600">[理論]</span><span style="flex:1;color:var(--text)">電磁誘導_2026-03-27 </span><span style="color:var(--muted);font-size:.72rem">SR1</span></div><div class="q-review-item"><span class="q-badge-ok">OL</span><span style="color:#60a5fa;font-weight:600">[理論]</span><span style="flex:1;color:var(--text)">静電容量_2026-03-28 </span><span style="color:var(--muted);font-size:.72rem">SR2</span></div>
       </div>
       <div class="card">
         <div class="card-header">📈 結果分布</div>
@@ -1129,18 +1088,8 @@ canvas.q-chart{max-height:200px!important}
       <div class="card-header">📝 最近の記録（直近10件）</div>
       <div style="overflow-x:auto">
         <table class="q-rec-tbl">
-          <thead><tr>
-            <th>日付</th><th>科目</th><th>テーマ</th><th>結果</th><th>次回</th><th>メモ</th>
-          </tr></thead>
-          <tbody>
-            <tr><td>2026-04-03</td><td>電力</td><td>不等率</td><td><span class="q-badge-risky">Risky</span></td><td style="color:var(--muted)">SR3</td><td style="color:var(--muted2);font-size:.72rem">需要率との区別で一部迷い</td></tr>
-            <tr><td>2026-04-01</td><td>理論</td><td>磁界</td><td><span class="q-badge-risky">Risky</span></td><td style="color:var(--muted)">SR2</td><td style="color:var(--muted2);font-size:.72rem">磁界が1/r、点電荷の電界が1/r²に</td></tr>
-            <tr><td>2026-03-29</td><td>理論</td><td>電界・磁界・電位</td><td><span class="q-badge-risky">Risky</span></td><td style="color:var(--muted)">SR2</td><td style="color:var(--muted2);font-size:.72rem">電界と磁界の性質を混同</td></tr>
-            <tr><td>2026-03-28</td><td>理論</td><td>静電容量</td><td><span class="q-badge-risky">Risky</span></td><td style="color:var(--muted)">SR2</td><td style="color:var(--muted2);font-size:.72rem">導体球の静電容量 C=4πε₀a</td></tr>
-            <tr><td>2026-03-28</td><td>理論</td><td>電位・電界・磁界</td><td><span class="q-badge-risky">Risky</span></td><td style="color:var(--muted)">SR2</td><td style="color:var(--muted2);font-size:.72rem">ローレンツ力で力の向きを混同</td></tr>
-            <tr><td>2026-03-27</td><td>理論</td><td>電磁誘導</td><td><span class="q-badge-risky">Risky</span></td><td style="color:var(--muted)">SR2</td><td style="color:var(--muted2);font-size:.72rem">誘導起電力と誘導電流の因果が曖昧</td></tr>
-            <tr><td>2026-03-26</td><td>理論</td><td>三相交流</td><td><span class="q-badge-ok">OK</span></td><td style="color:var(--muted)">SR3</td><td style="color:var(--muted2);font-size:.72rem">—</td></tr>
-          </tbody>
+          <thead><tr><th>日付</th><th>科目</th><th>テーマ</th><th>結果</th><th>次回</th><th>メモ</th></tr></thead>
+          <tbody><tr><td>2026-04-13</td><td>理論</td><td>過去問演習</td><td><span class="q-badge-risky">Risky</span></td><td style="color:var(--muted)">SR2</td><td style="color:var(--muted2);font-size:.72rem">API直接実行のテスト記録</td></tr><tr><td>2026-04-10</td><td>理論</td><td>電磁誘導</td><td><span class="q-badge-ok">OL</span></td><td style="color:var(--muted)">done</td><td style="color:var(--muted2);font-size:.72rem">誘導起電力と誘導電流の因果が当初曖昧で、「電流の方</td></tr><tr><td>2026-04-10</td><td>理論</td><td>静電容量</td><td><span class="q-badge-ok">OL</span></td><td style="color:var(--muted)">done</td><td style="color:var(--muted2);font-size:.72rem">導体球の静電容量 C=4πε0a と Q=CV の</td></tr><tr><td>2026-04-10</td><td>理論</td><td>電位・電界・磁界</td><td><span class="q-badge-ok">OL</span></td><td style="color:var(--muted)">done</td><td style="color:var(--muted2);font-size:.72rem">ローレンツ力で力の向きと軌道の形を混同。停止時・平</td></tr><tr><td>2026-04-10</td><td>理論</td><td>電界・磁界・電位</td><td><span class="q-badge-ok">OL</span></td><td style="color:var(--muted)">done</td><td style="color:var(--muted2);font-size:.72rem">電界と磁界の性質を混同、電位差と仕事を助で回答</td></tr><tr><td>2026-04-10</td><td>理論</td><td>電磁誘導_2026-03-27</td><td><span class="q-badge-ng">NG</span></td><td style="color:var(--muted)">SR1</td><td style="color:var(--muted2);font-size:.72rem">AIの説明が間違え。理解していた。</td></tr><tr><td>2026-04-10</td><td>理論</td><td>静電容量_2026-03-28</td><td><span class="q-badge-ok">OL</span></td><td style="color:var(--muted)">SR2</td><td style="color:var(--muted2);font-size:.72rem"></td></tr><tr><td>2026-04-09</td><td>理論</td><td>test-Q1</td><td><span class="q-badge-ok">OL</span></td><td style="color:var(--muted)">done</td><td style="color:var(--muted2);font-size:.72rem"></td></tr><tr><td>2026-04-09</td><td>法規</td><td>R02-問8</td><td><span class="q-badge-ok">OL</span></td><td style="color:var(--muted)">done</td><td style="color:var(--muted2);font-size:.72rem"></td></tr><tr><td>2026-04-03</td><td>電力</td><td>不等率</td><td><span class="q-badge-risky">Risky</span></td><td style="color:var(--muted)">SR3</td><td style="color:var(--muted2);font-size:.72rem">需要率との区別で一部迷い（設備容量との関係が曖昧）</td></tr></tbody>
         </table>
       </div>
     </div>
@@ -1151,7 +1100,7 @@ canvas.q-chart{max-height:200px!important}
     <button id="q-refresh-btn" onclick="quizRefresh()" style="background:linear-gradient(135deg,#065f46,#047857);color:#6ee7b7;border:1px solid #10b981;padding:10px 20px;border-radius:10px;font-size:.85rem;font-weight:700;cursor:pointer;font-family:inherit;transition:all .3s">🔄 Make.com更新トリガー</button>
   </div>
 
-  <div class="footer">⚡ テスト記録 ダッシュボード ｜ 最終更新: <span id="q-updated-date"></span></div>
+  <div class="footer">⚡ テスト記録 ダッシュボード ｜ 最終更新: 2026-04-13</div>
 </main>
 <!-- QUIZ_MAIN_END -->
 </div>
@@ -1947,20 +1896,14 @@ renderPdca();
 // ================================================================
 // QUIZ_CHART_START
 function initQuizCharts() {
-  // 日付表示
-  document.getElementById('q-updated-date').textContent =
-    new Date().toLocaleDateString('ja-JP',{year:'numeric',month:'long',day:'numeric'});
-
   // 活動チャート
   new Chart(document.getElementById('q-ac'), {
     type: 'bar',
     data: {
-      labels: ["3/8","3/9","3/10","3/11","3/12","3/13","3/14","3/15","3/16","3/17",
-               "3/18","3/19","3/20","3/21","3/22","3/23","3/24","3/25","3/26","3/27",
-               "3/28","3/29","3/30","3/31","4/1","4/2","4/3","4/4","4/5","4/6"],
+      labels: ["3/15", "3/16", "3/17", "3/18", "3/19", "3/20", "3/21", "3/22", "3/23", "3/24", "3/25", "3/26", "3/27", "3/28", "3/29", "3/30", "3/31", "4/1", "4/2", "4/3", "4/4", "4/5", "4/6", "4/7", "4/8", "4/9", "4/10", "4/11", "4/12", "4/13"],
       datasets: [{
         label: '記録数',
-        data: [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,2,1,0,0,1,0,1,0,0,0],
+        data: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 1, 0, 0, 0, 0, 0, 2, 6, 0, 0, 1],
         backgroundColor: 'rgba(96,165,250,.55)',
         borderColor: '#60a5fa',
         borderWidth: 1,
@@ -1983,9 +1926,9 @@ function initQuizCharts() {
     data: {
       labels: ['OK','Risky','NG'],
       datasets: [{
-        data: [1, 6, 0],
+        data: [8, 3, 1],
         backgroundColor: ['#22c55e','#f59e0b','#ef4444'],
-        borderColor: 'var(--card)',
+        borderColor: '#0d1117',
         borderWidth: 4
       }]
     },
@@ -1995,7 +1938,6 @@ function initQuizCharts() {
     }
   });
 }
-
 // QUIZ_CHART_END
 
 async function quizRefresh() {
