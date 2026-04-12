@@ -1120,11 +1120,7 @@ canvas.q-chart{max-height:200px!important}
             <div class="sys-node" style="border-color:rgba(96,165,250,.4);background:rgba(96,165,250,.08);color:#93c5fd">
               📱 ChatGPT<br><span style="font-size:.7rem;color:#64748b">テスト記録採取（スマホ）</span>
             </div>
-            <div class="sys-arrow">↓ POST</div>
-            <div class="sys-node" style="border-color:rgba(249,115,22,.4);background:rgba(249,115,22,.08);color:#fdba74">
-              🔗 Make.com<br><span style="font-size:.7rem;color:#64748b">Webhook受信 → repository_dispatch</span>
-            </div>
-            <div class="sys-arrow">↓ new_record イベント</div>
+            <div class="sys-arrow">↓ POST repository_dispatch</div>
             <div class="sys-node highlight">
               ⚙️ GitHub Actions<br><span style="font-size:.7rem;color:#64748b">build-quiz.yml</span>
             </div>
@@ -1254,7 +1250,7 @@ canvas.q-chart{max-height:200px!important}
             <div>週次レビュー → e-log パターン分析 → 次週 Plan 素材生成</div>
           </div>
           <div class="time-slot" style="margin-top:6px">
-            <div style="font-size:.72rem;color:var(--muted2)">Make.com 経由のテスト記録は即時 GitHub Pages に反映</div>
+            <div style="font-size:.72rem;color:var(--muted2)">ChatGPT → GitHub API 直接送信でテスト記録は即時 GitHub Pages に反映</div>
           </div>
         </div>
       </div>
@@ -1283,7 +1279,7 @@ canvas.q-chart{max-height:200px!important}
             Flask (localhost:8765 — PC専用)<br>
             GitHub Actions (cron: 毎朝7:00 JST)<br>
             Notion API (記録取得)<br>
-            Make.com (テスト即時反映 Webhook)
+            ChatGPT カスタムアクション (GitHub API 直接送信)
           </div>
         </div>
       </div>
