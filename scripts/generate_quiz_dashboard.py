@@ -2,7 +2,12 @@
 # -*- coding: utf-8 -*-
 """
 data/records.json を読み込み、index.html の QUIZ_MAIN / QUIZ_CHART セクションを更新する。
-quiz.html は生成しない（index.html のタブとして統合済み）。
+
+v2: theme_id ベースの集計 + latest_state() による4状態表示
+    - 🟢 OK（一発理解）
+    - 🟡 回復OK（苦労して定着）
+    - 🟠 Risky（揺らぎ中）
+    - 🔴 NG（未定着）
 """
 import json, os, re
 from datetime import date, timedelta
@@ -41,84 +46,133 @@ def load():
     except:
         return []
 
-def dominant(results):
-    for r in ["ng", "risky", "ok"]:
-        if r in results: return r
-    return ""
 
-def cell_style(result):
-    s = {"ok": ("#166534","#4ade80"), "risky": ("#78350f","#fbbf24"), "ng": ("#7f1d1d","#f87171")}
-    return s.get(result, ("#1e293b","#64748b"))
+def latest_state(records_for_theme):
+    """同一theme_idの全レコードから現在の状態を判定する。
+    Returns: (state, label, css_class)
+        state: "ok-clean" | "ok-recovered" | "risky" | "ng"
+    """
+    if not records_for_theme:
+        return ("none", "－", "q-status-none")
+
+    sorted_recs = sorted(records_for_theme, key=lambda r: (r.get("date", ""), r.get("attempt", 0)))
+    latest = sorted_recs[-1]["result"]
+    past_results = [r["result"] for r in sorted_recs[:-1]]
+    had_struggle = any(r in ("ng", "risky") for r in past_results)
+
+    if latest == "ok":
+        if had_struggle:
+            return ("ok-recovered", "回復OK", "q-status-recovered")
+        else:
+            return ("ok-clean", "OK", "q-status-ok")
+    elif latest == "risky":
+        return ("risky", "Risky", "q-status-risky")
+    else:  # ng
+        return ("ng", "NG", "q-status-ng")
+
 
 def badge(result):
-    labels = {"ok":"OL","risky":"Risky","ng":"NG"}
-    bg, fg = cell_style(result)
+    labels = {"ok": "OK", "risky": "Risky", "ng": "NG"}
     lbl = labels.get(result, result.upper())
-    return f'<span class="q-badge-{"ok" if result=="ok" else "risky" if result=="risky" else "ng"}">{lbl}</span>'
+    css = "q-badge-ok" if result == "ok" else "q-badge-risky" if result == "risky" else "q-badge-ng"
+    return f'<span class="{css}">{lbl}</span>'
+
 
 def generate():
     records = load()
     today = date.today()
 
-    total  = len(records)
-    rc     = Counter(r.get("result","") for r in records)
+    total = len(records)
+    rc = Counter(r.get("result", "") for r in records)
     ok_n, risky_n, ng_n = rc["ok"], rc["risky"], rc["ng"]
     ok_pct = round(ok_n / total * 100) if total else 0
+
+    # --- テーマ別の最新状態を集計 ---
+    theme_groups = defaultdict(list)
+    for r in records:
+        tid = r.get("theme_id", r.get("theme", "?"))
+        subj = r.get("subject", "?")
+        theme_groups[(tid, subj)].append(r)
+
+    # 4状態カウント
+    state_counts = Counter()
+    for key, recs in theme_groups.items():
+        state, _, _ = latest_state(recs)
+        state_counts[state] += 1
+
+    unique_themes = len(theme_groups)
+    clean_ok = state_counts["ok-clean"]
+    recovered_ok = state_counts["ok-recovered"]
+    risky_count = state_counts["risky"]
+    ng_count = state_counts["ng"]
 
     # 本日レビュー対象
     due = []
     for r in records:
-        d, nr = r.get("date",""), r.get("next_review","")
-        if not d or not nr or nr == "done": continue
+        d, nr = r.get("date", ""), r.get("next_review", "")
+        if not d or not nr or nr == "done":
+            continue
         try:
             due_date = date.fromisoformat(d) + timedelta(days=REVIEW_DAYS.get(nr, 7))
-            if due_date <= today: due.append({**r, "due_date": due_date.isoformat()})
-        except: pass
-    due.sort(key=lambda x: x.get("date",""))
+            if due_date <= today:
+                due.append({**r, "due_date": due_date.isoformat()})
+        except:
+            pass
+    due.sort(key=lambda x: x.get("date", ""))
 
-    # バグマップ
+    # --- バグマップ（theme_id ベース集計）---
     bmap = defaultdict(lambda: defaultdict(list))
-    subjects, themes = set(), set()
+    theme_display = {}  # theme_id → 表示名
+    subjects = set()
     for r in records:
-        s, t, res = r.get("subject","?"), r.get("theme","?"), r.get("result","")
-        subjects.add(s); themes.add(t); bmap[t][s].append(res)
+        tid = r.get("theme_id", r.get("theme", "?"))
+        subj = r.get("subject", "?")
+        subjects.add(subj)
+        bmap[tid][subj].append(r)
+        # 表示名は最新レコードのthemeを使う
+        theme_display[tid] = r.get("theme", tid)
+
     subjects = [s for s in SUBJECT_ORDER if s in subjects] + sorted(s for s in subjects if s not in SUBJECT_ORDER)
-    themes   = sorted(themes)
+    theme_ids = sorted(bmap.keys(), key=lambda t: theme_display.get(t, t))
 
     th = "".join(f"<th>{s}</th>" for s in subjects)
     rows = ""
-    for t in themes:
+    for tid in theme_ids:
+        display_name = theme_display.get(tid, tid)
         cells = ""
         for s in subjects:
-            rs = bmap[t][s]
-            if not rs:
+            recs = bmap[tid][s]
+            if not recs:
                 cells += '<td class="q-status-none">－</td>'
             else:
-                dom = dominant(rs); bg, fg = cell_style(dom)
-                cnt = Counter(rs)
-                tip = f"OK:{cnt['ok']} Risky:{cnt['risky']} NG:{cnt['ng']}"
-                lbl = {"ok":"OK","risky":"Risky","ng":"NG"}.get(dom, dom)
-                css = "q-status-ok" if dom=="ok" else "q-status-risky" if dom=="risky" else "q-status-ng"
-                wiki_slug = WIKI_MAP.get(t)
+                state, lbl, css = latest_state(recs)
+                cnt = Counter(r.get("result", "") for r in recs)
+                attempt_count = len(recs)
+                tip = f"OK:{cnt['ok']} Risky:{cnt['risky']} NG:{cnt['ng']} ({attempt_count}回)"
+
+                wiki_slug = WIKI_MAP.get(display_name)
                 if wiki_slug:
                     wiki_url = f"{WIKI_BASE}{wiki_slug}/"
                     cells += f'<td class="{css}" title="{tip}"><a href="{wiki_url}" target="_blank" style="color:inherit;text-decoration:none;display:block">{lbl} <span style="font-size:.6rem;opacity:.8">📖</span></a></td>'
                 else:
                     cells += f'<td class="{css}" title="{tip}">{lbl}</td>'
-        rows += f'<tr><td style="color:var(--muted2);font-size:.72rem;padding:5px 10px;text-align:left;white-space:nowrap">{t}</td>{cells}</tr>'
+
+        rows += f'<tr><td style="color:var(--muted2);font-size:.72rem;padding:5px 10px;text-align:left;white-space:nowrap">{display_name}</td>{cells}</tr>'
+
     bugmap_html = f'<div style="overflow-x:auto"><table class="q-bug-tbl"><thead><tr><th style="text-align:left">テーマ＼科目</th>{th}</tr></thead><tbody>{rows}</tbody></table></div>'
 
     # フェーズ別進捗
     phase_stats = defaultdict(Counter)
     for r in records:
-        phase_stats[r.get("phase","?")][r.get("result","")] += 1
+        phase_stats[r.get("phase", "?")][r.get("result", "")] += 1
     phase_html = ""
     for ph, cnt in sorted(phase_stats.items()):
         tot = sum(cnt.values())
-        if not tot: continue
+        if not tot:
+            continue
         bars = "".join(
-            f'<div style="width:{round(cnt.get(r,0)/tot*100)}%;background:{"#22c55e" if r=="ok" else "#f59e0b" if r=="risky" else "#ef4444"};height:100%"></div>'
-            for r in ["ok","risky","ng"]
+            f'<div style="width:{round(cnt.get(r, 0) / tot * 100)}%;background:{"#22c55e" if r == "ok" else "#f59e0b" if r == "risky" else "#ef4444"};height:100%"></div>'
+            for r in ["ok", "risky", "ng"]
         )
         phase_html += f'''<div class="q-phase-bar">
           <div style="display:flex;align-items:center;gap:8px;margin-bottom:5px">
@@ -127,9 +181,9 @@ def generate():
           </div>
           <div style="height:10px;background:var(--bg);border-radius:5px;overflow:hidden;display:flex">{bars}</div>
           <div style="font-size:.7rem;margin-top:4px;display:flex;gap:12px">
-            <span style="color:#4ade80">✓ {cnt.get("ok",0)}</span>
-            <span style="color:#fbbf24">⚠ {cnt.get("risky",0)}</span>
-            <span style="color:#f87171">✗ {cnt.get("ng",0)}</span>
+            <span style="color:#4ade80">✓ {cnt.get("ok", 0)}</span>
+            <span style="color:#fbbf24">⚠ {cnt.get("risky", 0)}</span>
+            <span style="color:#f87171">✗ {cnt.get("ng", 0)}</span>
           </div>
         </div>'''
     if not phase_html:
@@ -140,27 +194,30 @@ def generate():
         due_html = '<p style="color:#22c55e;padding:16px 0">🎉 本日のレビュー対象はありません！</p>'
     else:
         due_html = "".join(
-            f'<div class="q-review-item">{badge(d.get("result",""))}'
-            f'<span style="color:#60a5fa;font-weight:600">[{d.get("subject","")}]</span>'
-            f'<span style="flex:1;color:var(--text)">{d.get("theme","")} {("/ " + d.get("subtheme","")) if d.get("subtheme") else ""}</span>'
-            f'<span style="color:var(--muted);font-size:.72rem">{d.get("next_review","")}</span></div>'
+            f'<div class="q-review-item">{badge(d.get("result", ""))}'
+            f'<span style="color:#60a5fa;font-weight:600">[{d.get("subject", "")}]</span>'
+            f'<span style="flex:1;color:var(--text)">{d.get("theme", "")} {("/ " + d.get("subtheme", "")) if d.get("subtheme") else ""}</span>'
+            f'<span style="color:var(--muted);font-size:.72rem">{d.get("next_review", "")}</span></div>'
             for d in due[:15]
         )
 
     # 最近の記録
-    recent = sorted(records, key=lambda x: x.get("date",""), reverse=True)[:10]
+    recent = sorted(records, key=lambda x: x.get("date", ""), reverse=True)[:10]
     rec_rows = "".join(
-        f'<tr><td>{r.get("date","")}</td><td>{r.get("subject","")}</td>'
-        f'<td>{r.get("theme","")}</td><td>{badge(r.get("result",""))}</td>'
-        f'<td style="color:var(--muted)">{r.get("next_review","")}</td>'
-        f'<td style="color:var(--muted2);font-size:.72rem">{(r.get("memo","") or "")[:25]}</td></tr>'
+        f'<tr><td>{r.get("date", "")}</td><td>{r.get("subject", "")}</td>'
+        f'<td>{r.get("theme", "")}</td><td>{badge(r.get("result", ""))}</td>'
+        f'<td style="color:var(--muted)">{r.get("next_review", "")}</td>'
+        f'<td style="color:var(--muted2);font-size:.72rem">{r.get("attempt", "-")}回目</td></tr>'
         for r in recent
     )
 
     # 活動データ（直近30日）
-    dcounts    = Counter(r.get("date","") for r in records)
-    act_labels = [(today - timedelta(days=i)).strftime("%-m/%-d") for i in range(29, -1, -1)]
-    act_data   = [dcounts.get((today - timedelta(days=i)).isoformat(), 0) for i in range(29, -1, -1)]
+    dcounts = Counter(r.get("date", "") for r in records)
+    try:
+        act_labels = [(today - timedelta(days=i)).strftime("%-m/%-d") for i in range(29, -1, -1)]
+    except ValueError:
+        act_labels = [(today - timedelta(days=i)).strftime("%#m/%#d") for i in range(29, -1, -1)]
+    act_data = [dcounts.get((today - timedelta(days=i)).isoformat(), 0) for i in range(29, -1, -1)]
 
     # ---- HTML セクション生成 ----
     main_html = f'''
@@ -170,10 +227,10 @@ def generate():
   <div class="section">
     <div class="sec-title">📊 テスト記録サマリ</div>
     <div class="q-kpi-row">
-      <div class="q-kpi"><div class="lbl">総記録数</div><div class="val" style="color:#60a5fa">{total}</div><div class="sub">累計テスト問題</div></div>
-      <div class="q-kpi"><div class="lbl">理解済 OK</div><div class="val" style="color:#22c55e">{ok_n}</div><div class="sub">達成率 {ok_pct}%</div></div>
-      <div class="q-kpi"><div class="lbl">要注意 Risky</div><div class="val" style="color:#f59e0b">{risky_n}</div><div class="sub">揺らぎあり</div></div>
-      <div class="q-kpi"><div class="lbl">本日レビュー</div><div class="val" style="color:#ef4444">{len(due)}</div><div class="sub">スペーシング対象</div></div>
+      <div class="q-kpi"><div class="lbl">ユニークテーマ</div><div class="val" style="color:#60a5fa">{unique_themes}</div><div class="sub">総記録 {total}件</div></div>
+      <div class="q-kpi"><div class="lbl">🟢 一発OK</div><div class="val" style="color:#22c55e">{clean_ok}</div><div class="sub">初回で理解</div></div>
+      <div class="q-kpi"><div class="lbl">🟡 回復OK</div><div class="val" style="color:#facc15">{recovered_ok}</div><div class="sub">苦労して定着</div></div>
+      <div class="q-kpi"><div class="lbl">🟠 Risky / 🔴 NG</div><div class="val" style="color:#f59e0b">{risky_count + ng_count}</div><div class="sub">要復習</div></div>
     </div>
   </div>
 
@@ -186,7 +243,13 @@ def generate():
   <div class="section">
     <div class="g21">
       <div class="card">
-        <div class="card-header">🔴 バグマップ（科目 × テーマ）</div>
+        <div class="card-header">🗺️ テーマ状態マップ（科目 × テーマ）</div>
+        <div style="display:flex;gap:12px;flex-wrap:wrap;margin-bottom:12px;font-size:.7rem">
+          <span><span class="q-legend q-legend-ok"></span> 一発OK</span>
+          <span><span class="q-legend q-legend-recovered"></span> 回復OK</span>
+          <span><span class="q-legend q-legend-risky"></span> Risky</span>
+          <span><span class="q-legend q-legend-ng"></span> NG</span>
+        </div>
         {bugmap_html}
       </div>
       <div class="card">
@@ -204,7 +267,7 @@ def generate():
         {due_html}
       </div>
       <div class="card">
-        <div class="card-header">📈 結果分布</div>
+        <div class="card-header">📈 テーマ別 定着状態</div>
         <canvas id="q-rc" class="q-chart" style="display:block;margin:0 auto"></canvas>
       </div>
     </div>
@@ -216,7 +279,7 @@ def generate():
       <div class="card-header">📝 最近の記録（直近10件）</div>
       <div style="overflow-x:auto">
         <table class="q-rec-tbl">
-          <thead><tr><th>日付</th><th>科目</th><th>テーマ</th><th>結果</th><th>次回</th><th>メモ</th></tr></thead>
+          <thead><tr><th>日付</th><th>科目</th><th>テーマ</th><th>結果</th><th>次回</th><th>試行</th></tr></thead>
           <tbody>{rec_rows}</tbody>
         </table>
       </div>
@@ -258,14 +321,14 @@ function initQuizCharts() {{
     }}
   }});
 
-  // 結果分布ドーナツ
+  // テーマ別定着状態ドーナツ
   new Chart(document.getElementById('q-rc'), {{
     type: 'doughnut',
     data: {{
-      labels: ['OK','Risky','NG'],
+      labels: ['一発OK','回復OK','Risky','NG'],
       datasets: [{{
-        data: [{ok_n}, {risky_n}, {ng_n}],
-        backgroundColor: ['#22c55e','#f59e0b','#ef4444'],
+        data: [{clean_ok}, {recovered_ok}, {risky_count}, {ng_count}],
+        backgroundColor: ['#22c55e','#facc15','#f59e0b','#ef4444'],
         borderColor: '#0d1117',
         borderWidth: 4
       }}]
@@ -299,7 +362,8 @@ function initQuizCharts() {{
     with open(INDEX_PATH, "w", encoding="utf-8") as f:
         f.write(html)
 
-    print(f"✅ index.html 更新完了 ({total} records, {len(due)} due today)")
+    print(f"✅ index.html 更新完了 ({total} records, {unique_themes} themes, {len(due)} due today)")
+    print(f"   一発OK: {clean_ok} / 回復OK: {recovered_ok} / Risky: {risky_count} / NG: {ng_count}")
 
 if __name__ == "__main__":
     generate()
