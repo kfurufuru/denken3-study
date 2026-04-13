@@ -1,0 +1,1100 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>電験3種 知識マップ</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=Noto+Sans+JP:wght@400;500;700&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script src="https://unpkg.com/lucide@latest"></script>
+<style>
+:root {
+  --font-base: 'Inter', 'Noto Sans JP', sans-serif;
+  --fs-h1: 2rem; --fs-h2: 1.5rem; --fs-h3: 1.25rem;
+  --fs-body: 0.95rem; --fs-sm: 0.85rem; --lh-body: 1.6;
+  --fw-normal: 400; --fw-bold: 700;
+  --sp-1: 4px; --sp-2: 8px; --sp-3: 12px; --sp-4: 16px;
+  --sp-6: 24px; --sp-8: 32px; --sp-12: 48px; --sp-16: 64px;
+  --transition: 0.2s ease; --hover-lift: translateY(-2px);
+  --radius-sm: 6px; --radius-md: 12px; --radius-lg: 20px;
+
+  --bg:       #0d1117;
+  --bg2:      #161b22;
+  --bg3:      #1c2230;
+  --border:   rgba(255,255,255,0.07);
+  --text:     #e2e8f0;
+  --muted:    #64748b;
+  --accent:   #2dd4bf;
+
+  --ok:       #2dd4bf;
+  --weak:     #f43f5e;
+  --risky:    #f59e0b;
+  --hub:      #38bdf8;
+  --unlearned:#64748b;
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  font-family: var(--font-base);
+  font-size: var(--fs-body);
+  background: var(--bg);
+  color: var(--text);
+  min-height: 100vh;
+  line-height: var(--lh-body);
+  background-image: radial-gradient(circle, rgba(255,255,255,0.03) 1px, transparent 1px);
+  background-size: 24px 24px;
+  overflow-x: hidden;
+}
+
+/* ─── HEADER ─── */
+header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: var(--sp-3) var(--sp-6);
+  background: rgba(22,27,34,0.92);
+  border-bottom: 1px solid var(--border);
+  backdrop-filter: blur(12px);
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  gap: var(--sp-4);
+}
+
+.header-title {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-3);
+  flex-shrink: 0;
+}
+.header-title h1 {
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: var(--text);
+  letter-spacing: -0.02em;
+}
+.header-title .brain-icon {
+  font-size: 1.3rem;
+}
+
+.header-center {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+}
+.days-remaining {
+  font-size: 1.35rem;
+  font-weight: 700;
+  color: #f43f5e;
+  letter-spacing: -0.02em;
+  line-height: 1;
+}
+.days-label {
+  font-size: 0.7rem;
+  color: var(--muted);
+  letter-spacing: 0.04em;
+}
+.mode-badge {
+  font-size: 0.7rem;
+  background: rgba(45,212,191,0.15);
+  color: var(--accent);
+  border: 1px solid rgba(45,212,191,0.3);
+  border-radius: 20px;
+  padding: 2px 10px;
+  margin-top: 4px;
+  letter-spacing: 0.02em;
+}
+
+.header-right {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-4);
+  flex-shrink: 0;
+}
+.last-update {
+  font-size: 0.75rem;
+  color: var(--muted);
+}
+.back-link {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-1);
+  font-size: 0.8rem;
+  color: var(--accent);
+  text-decoration: none;
+  border: 1px solid rgba(45,212,191,0.3);
+  border-radius: var(--radius-sm);
+  padding: 4px 10px;
+  transition: var(--transition);
+}
+.back-link:hover {
+  background: rgba(45,212,191,0.1);
+  transform: var(--hover-lift);
+}
+
+/* ─── LAYOUT ─── */
+.layout {
+  display: grid;
+  grid-template-columns: 260px 1fr 220px;
+  gap: var(--sp-4);
+  padding: var(--sp-4) var(--sp-4);
+  min-height: calc(100vh - 58px);
+}
+
+/* ─── PANEL BASE ─── */
+.panel {
+  background: rgba(22,27,34,0.7);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  padding: var(--sp-4);
+  backdrop-filter: blur(8px);
+}
+.panel-title {
+  font-size: 0.78rem;
+  font-weight: 700;
+  color: var(--muted);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  margin-bottom: var(--sp-3);
+  display: flex;
+  align-items: center;
+  gap: var(--sp-2);
+}
+.panel-title-accent {
+  width: 3px;
+  height: 12px;
+  background: var(--accent);
+  border-radius: 2px;
+  display: inline-block;
+}
+
+/* ─── LEFT PANEL ─── */
+.left-panel {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-4);
+}
+
+.radar-wrap {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 1;
+  max-width: 220px;
+  margin: 0 auto;
+}
+
+/* ─── BUG BARS ─── */
+.bug-item {
+  margin-bottom: var(--sp-2);
+}
+.bug-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 4px;
+}
+.bug-label {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-2);
+  font-size: 0.78rem;
+  color: var(--text);
+}
+.bug-code {
+  font-size: 0.68rem;
+  font-weight: 700;
+  font-family: 'Inter', monospace;
+  padding: 1px 6px;
+  border-radius: 4px;
+  background: rgba(255,255,255,0.06);
+}
+.bug-count {
+  font-size: 0.75rem;
+  color: var(--muted);
+  font-weight: 600;
+}
+.bug-bar-track {
+  height: 6px;
+  background: rgba(255,255,255,0.05);
+  border-radius: 3px;
+  overflow: hidden;
+}
+.bug-bar-fill {
+  height: 100%;
+  border-radius: 3px;
+  transition: width 0.8s cubic-bezier(0.4,0,0.2,1);
+}
+
+/* ─── CENTER: SVG MAP ─── */
+.center-panel {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-3);
+  min-width: 0;
+}
+.map-wrap {
+  flex: 1;
+  background: rgba(13,17,23,0.5);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  padding: var(--sp-3);
+  overflow: hidden;
+}
+.map-svg {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+
+/* Legend */
+.legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--sp-3);
+  padding: var(--sp-2) var(--sp-3);
+  background: rgba(22,27,34,0.5);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+}
+.legend-item {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 0.72rem;
+  color: var(--muted);
+}
+.legend-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+/* ─── RIGHT PANEL ─── */
+.right-panel {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-4);
+}
+
+.topic-list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-2);
+  max-height: 160px;
+  overflow-y: auto;
+}
+.topic-list::-webkit-scrollbar { width: 3px; }
+.topic-list::-webkit-scrollbar-track { background: transparent; }
+.topic-list::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.1); border-radius: 2px; }
+
+.topic-item {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-2);
+  padding: var(--sp-2) var(--sp-3);
+  border-radius: var(--radius-sm);
+  font-size: 0.78rem;
+  transition: var(--transition);
+}
+.topic-item.ok-item {
+  background: rgba(45,212,191,0.05);
+  border-left: 3px solid #2dd4bf;
+}
+.topic-item.weak-item {
+  background: rgba(244,63,94,0.05);
+  border-left: 3px solid #f43f5e;
+}
+.topic-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+.topic-name { flex: 1; color: var(--text); }
+.topic-badge {
+  font-size: 0.65rem;
+  font-weight: 700;
+  padding: 1px 6px;
+  border-radius: 10px;
+  flex-shrink: 0;
+}
+.badge-err {
+  background: rgba(244,63,94,0.2);
+  color: #f43f5e;
+}
+.badge-ok {
+  background: rgba(45,212,191,0.15);
+  color: #2dd4bf;
+  font-size: 0.6rem;
+}
+
+/* ─── SUMMARY CARDS ─── */
+.summary-cards {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: var(--sp-2);
+}
+.summary-card {
+  background: rgba(13,17,23,0.6);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  padding: var(--sp-2) var(--sp-3);
+  text-align: center;
+}
+.summary-num {
+  font-size: 1.5rem;
+  font-weight: 700;
+  line-height: 1;
+  margin-bottom: 3px;
+}
+.summary-label {
+  font-size: 0.62rem;
+  color: var(--muted);
+  line-height: 1.2;
+}
+
+/* ─── TOOLTIP ─── */
+#tooltip {
+  position: fixed;
+  z-index: 999;
+  pointer-events: none;
+  background: rgba(22,27,34,0.96);
+  border: 1px solid rgba(45,212,191,0.3);
+  border-radius: var(--radius-sm);
+  padding: var(--sp-3) var(--sp-4);
+  min-width: 200px;
+  max-width: 280px;
+  box-shadow: 0 8px 32px rgba(0,0,0,0.5);
+  opacity: 0;
+  transition: opacity 0.15s ease;
+}
+#tooltip.visible { opacity: 1; }
+.tt-label {
+  font-size: 0.88rem;
+  font-weight: 700;
+  color: var(--text);
+  margin-bottom: 4px;
+}
+.tt-sub {
+  font-size: 0.75rem;
+  color: var(--muted);
+  margin-bottom: 6px;
+}
+.tt-status {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 0.7rem;
+  font-weight: 600;
+  padding: 2px 8px;
+  border-radius: 10px;
+  margin-bottom: 6px;
+}
+.tt-memo {
+  font-size: 0.72rem;
+  color: #94a3b8;
+  line-height: 1.5;
+  border-top: 1px solid var(--border);
+  padding-top: 6px;
+  margin-top: 4px;
+}
+.tt-errs {
+  font-size: 0.7rem;
+  margin-top: 4px;
+}
+
+/* ─── ANIMATIONS ─── */
+@keyframes pulse-weak {
+  0%,100% { stroke-opacity: 1; stroke-width: 1.5; }
+  50%      { stroke-opacity: 0.3; stroke-width: 3; }
+}
+@keyframes glow-pulse {
+  0%,100% { opacity: 0.6; }
+  50%      { opacity: 1; }
+}
+.pulse-weak { animation: pulse-weak 2s ease-in-out infinite; }
+
+/* ─── MOBILE ─── */
+@media (max-width: 768px) {
+  .layout {
+    grid-template-columns: 1fr;
+    padding: var(--sp-3);
+  }
+  .left-panel, .right-panel {
+    display: none;
+  }
+  .left-panel.mobile-visible, .right-panel.mobile-visible {
+    display: flex;
+  }
+  header {
+    padding: var(--sp-2) var(--sp-3);
+  }
+  .header-title h1 { font-size: 0.9rem; }
+  .last-update { display: none; }
+  .mobile-toggle {
+    display: flex;
+  }
+}
+@media (min-width: 769px) {
+  .mobile-toggle { display: none; }
+}
+
+.mobile-toggle {
+  display: none;
+  gap: var(--sp-2);
+  flex-wrap: wrap;
+}
+.mobile-btn {
+  background: rgba(45,212,191,0.1);
+  border: 1px solid rgba(45,212,191,0.3);
+  color: var(--accent);
+  border-radius: var(--radius-sm);
+  padding: 4px 10px;
+  font-size: 0.75rem;
+  cursor: pointer;
+  transition: var(--transition);
+}
+.mobile-btn:hover { background: rgba(45,212,191,0.2); }
+.today-badge{background:rgba(45,212,191,0.12);color:#2dd4bf;padding:4px 12px;border-radius:20px;font-size:.78rem;font-weight:600;margin-left:12px}
+
+@media (max-width: 480px) {
+  .days-remaining { font-size: 1.1rem; }
+  .mode-badge { display: none; }
+}
+</style>
+</head>
+<body>
+
+<!-- TOOLTIP -->
+<div id="tooltip">
+  <div class="tt-label" id="tt-label"></div>
+  <div class="tt-sub" id="tt-sub"></div>
+  <div class="tt-status" id="tt-status"></div>
+  <div class="tt-errs" id="tt-errs"></div>
+  <div class="tt-memo" id="tt-memo"></div>
+</div>
+
+<!-- HEADER -->
+<header>
+  <div class="header-title">
+    <span class="brain-icon">&#129504;</span>
+    <h1>電験3種 知識マップ</h1>
+  </div>
+  <div class="header-center">
+    <div class="days-remaining" id="days-count">--</div>
+    <div class="days-label">日後に本番</div>
+    <div class="mode-badge">理論集中モード</div>
+  </div>
+  <div class="header-right">
+    <span id="today-progress" class="today-badge" style="display:none"></span>
+    <div class="last-update" id="last-update">最終更新: --</div>
+    <a href="denken-study.html" class="back-link">
+      <span>&#8592;</span> 学習画面に戻る
+    </a>
+  </div>
+</header>
+
+<div class="layout">
+
+  <!-- LEFT PANEL -->
+  <div class="left-panel" id="left-panel">
+    <!-- Radar -->
+    <div class="panel">
+      <div class="panel-title"><span class="panel-title-accent"></span>科目別レーダー</div>
+      <div class="radar-wrap">
+        <canvas id="radarChart"></canvas>
+      </div>
+    </div>
+    <!-- Bug Bars -->
+    <div class="panel">
+      <div class="panel-title"><span class="panel-title-accent"></span>認知バグ パターン</div>
+      <div id="bug-bars"></div>
+    </div>
+  </div>
+
+  <!-- CENTER PANEL -->
+  <div class="center-panel">
+    <!-- SVG Map -->
+    <div class="map-wrap">
+      <svg id="knowledge-map" class="map-svg" viewBox="0 0 720 420" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+          <!-- Glow filters -->
+          <filter id="glow-blue" x="-30%" y="-30%" width="160%" height="160%">
+            <feGaussianBlur stdDeviation="4" result="coloredBlur"/>
+            <feMerge>
+              <feMergeNode in="coloredBlur"/>
+              <feMergeNode in="SourceGraphic"/>
+            </feMerge>
+          </filter>
+          <filter id="glow-teal" x="-30%" y="-30%" width="160%" height="160%">
+            <feGaussianBlur stdDeviation="3" result="coloredBlur"/>
+            <feMerge>
+              <feMergeNode in="coloredBlur"/>
+              <feMergeNode in="SourceGraphic"/>
+            </feMerge>
+          </filter>
+          <filter id="glow-amber" x="-30%" y="-30%" width="160%" height="160%">
+            <feGaussianBlur stdDeviation="3" result="coloredBlur"/>
+            <feMerge>
+              <feMergeNode in="coloredBlur"/>
+              <feMergeNode in="SourceGraphic"/>
+            </feMerge>
+          </filter>
+          <!-- Arrow marker -->
+          <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5"
+                  markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+            <path d="M 0 0 L 10 5 L 0 10 z" fill="rgba(100,116,139,0.5)"/>
+          </marker>
+          <!-- Arrow variants by color -->
+          <marker id="arrow-teal" viewBox="0 0 10 10" refX="9" refY="5"
+                  markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+            <path d="M 0 0 L 10 5 L 0 10 z" fill="rgba(45,212,191,0.4)"/>
+          </marker>
+          <marker id="arrow-blue" viewBox="0 0 10 10" refX="9" refY="5"
+                  markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+            <path d="M 0 0 L 10 5 L 0 10 z" fill="rgba(56,189,248,0.4)"/>
+          </marker>
+        </defs>
+        <!-- Edges and Nodes rendered by JS -->
+        <g id="edges-layer"></g>
+        <g id="nodes-layer"></g>
+      </svg>
+    </div>
+    <!-- Legend -->
+    <div class="legend" id="map-legend">
+      <div class="legend-item"><div class="legend-dot" style="background:#38bdf8"></div>中心ハブ</div>
+      <div class="legend-item"><div class="legend-dot" style="background:#2dd4bf"></div>理解済み</div>
+      <div class="legend-item"><div class="legend-dot" style="background:#f43f5e"></div>要強化</div>
+      <div class="legend-item"><div class="legend-dot" style="background:#f59e0b"></div>不安定/接続発見</div>
+      <div class="legend-item"><div class="legend-dot" style="background:#334155"></div>未学習</div>
+    </div>
+  </div>
+
+  <!-- RIGHT PANEL -->
+  <div class="right-panel" id="right-panel">
+    <!-- Strong topics -->
+    <div class="panel">
+      <div class="panel-title"><span class="panel-title-accent"></span>&#x1F4AA; 得意トピック</div>
+      <div class="topic-list" id="strong-list"></div>
+    </div>
+    <!-- Weak topics -->
+    <div class="panel">
+      <div class="panel-title" style="--pa: #f43f5e">
+        <span class="panel-title-accent" style="background:#f43f5e"></span>&#x26A0;&#xFE0F; 要強化
+      </div>
+      <div class="topic-list" id="weak-list"></div>
+    </div>
+    <!-- Summary -->
+    <div class="panel">
+      <div class="panel-title"><span class="panel-title-accent"></span>&#x1F4CA; 学習サマリー</div>
+      <div class="summary-cards" id="summary-cards"></div>
+    </div>
+  </div>
+
+</div>
+
+<!-- Mobile toggle buttons -->
+<div class="mobile-toggle" style="position:fixed;bottom:16px;right:16px;z-index:200;" id="mobile-toggle">
+  <button class="mobile-btn" onclick="togglePanel('left')">レーダー</button>
+  <button class="mobile-btn" onclick="togglePanel('right')">一覧</button>
+</div>
+
+<script>
+// ─── STATIC FALLBACK DATA ───
+const STATIC_DATA = {
+  nodes: [
+    {id:'impedance',     label:'インピーダンス', sub:'Z = R + jX',     status:'hub',       subject:'riron',    error_count:3, memo:'交流回路の中心概念。ANCHOR誤答3件あり'},
+    {id:'rl-circuit',    label:'RL回路',          sub:'位相遷移',        status:'ok',        subject:'riron',    error_count:1, memo:'RL短絡でMODEL+ANCHOR誤答あり'},
+    {id:'rlc-resonance', label:'RLC共振',          sub:'共振条件',        status:'weak',      subject:'riron',    error_count:2, memo:'インピーダンスの向き誤り'},
+    {id:'three-phase',   label:'三相交流',          sub:'ベクトル合成',    status:'ok',        subject:'riron',    error_count:0, memo:'SR3 次回復習待ち'},
+    {id:'y-delta',       label:'Y-Δ変換',          sub:'等価変換',        status:'weak',      subject:'riron',    error_count:3, memo:'直並列変換でMAP+RUSH誤答3件'},
+    {id:'transient',     label:'過渡現象',           sub:'RC/RL応答',      status:'unlearned', subject:'riron',    error_count:0, memo:'未学習'},
+    {id:'power-factor',  label:'力率と電力',         sub:'P=VIcosθ',      status:'unlearned', subject:'riron',    error_count:0, memo:'未学習'},
+    {id:'em-induction',  label:'電磁誘導',           sub:'ファラデー則',   status:'ok',        subject:'riron',    error_count:0, memo:'理解済み (done)'},
+    {id:'capacitance',   label:'静電容量',           sub:'C=Q/V',          status:'ok',        subject:'riron',    error_count:0, memo:'理解済み (done)'},
+    {id:'em-field',      label:'電磁界',             sub:'電位・磁界',     status:'ok',        subject:'riron',    error_count:1, memo:'CONF誤答1件。V=Ed を混同'},
+    {id:'load-factor',   label:'不等率',             sub:'需要率・負荷率', status:'risky',     subject:'denryoku', error_count:1, memo:'需要率と混同。SR3'},
+    {id:'regulation-14', label:'電技省令14条',       sub:'接続条件',        status:'connected', subject:'hoki',     error_count:0, memo:'RL回路との接続発見'},
+  ],
+  edges: [
+    {from:'impedance',    to:'rl-circuit'},
+    {from:'impedance',    to:'rlc-resonance'},
+    {from:'impedance',    to:'three-phase'},
+    {from:'impedance',    to:'em-field'},
+    {from:'three-phase',  to:'y-delta'},
+    {from:'rl-circuit',   to:'transient'},
+    {from:'rl-circuit',   to:'power-factor'},
+    {from:'rl-circuit',   to:'regulation-14'},
+    {from:'em-induction', to:'rl-circuit'},
+    {from:'em-field',     to:'impedance'},
+    {from:'capacitance',  to:'power-factor'},
+  ],
+  bugs: [
+    {code:'ANCHOR', desc:'思い込み',       count:3},
+    {code:'MODEL',  desc:'物理モデル誤認', count:2},
+    {code:'MAP',    desc:'対応づけ誤り',   count:1},
+    {code:'RUSH',   desc:'焦りミス',       count:1},
+  ],
+  radar: {
+    labels: ['電磁気学','交流回路','静電気','電力系統','法規'],
+    scores: [82, 45, 78, 55, 60]
+  },
+  exam_date: '2026-08-23'
+};
+
+// ─── STATUS CONFIG ───
+const STATUS_CFG = {
+  hub:       {stroke:'#38bdf8', glow:'glow-blue',  accent:'#38bdf8', textSub:'#38bdf8', pulse:false, label:'中心ハブ'},
+  ok:        {stroke:'#2dd4bf', glow:'glow-teal',  accent:'#2dd4bf', textSub:'#2dd4bf', pulse:false, label:'理解済み'},
+  weak:      {stroke:'#f43f5e', glow:'',           accent:'#f43f5e', textSub:'#f43f5e', pulse:true,  label:'要強化'},
+  risky:     {stroke:'#f59e0b', glow:'glow-amber', accent:'#f59e0b', textSub:'#f59e0b', pulse:false, label:'不安定'},
+  unlearned: {stroke:'#334155', glow:'',           accent:'#334155', textSub:'#64748b', pulse:false, label:'未学習'},
+  connected: {stroke:'#f59e0b', glow:'glow-amber', accent:'#f59e0b', textSub:'#f59e0b', pulse:false, label:'接続発見'},
+};
+
+// ─── NODE POSITIONS ───
+const NODE_POS = {
+  impedance:     {x:260, y:185, w:155, h:50},
+  'rl-circuit':  {x:100, y:80,  w:120, h:44},
+  'rlc-resonance':{x:440, y:80, w:110, h:44},
+  'three-phase': {x:100, y:295, w:110, h:44},
+  'y-delta':     {x:440, y:295, w:110, h:44},
+  transient:     {x:580, y:80,  w:110, h:44},
+  'power-factor':{x:580, y:175, w:110, h:44},
+  'em-induction':{x:100, y:185, w:120, h:44},
+  capacitance:   {x:580, y:295, w:110, h:44},
+  'em-field':    {x:260, y:80,  w:120, h:44},
+  'load-factor': {x:260, y:295, w:120, h:44},
+  'regulation-14':{x:440, y:185, w:115, h:36},
+};
+
+// ─── EDGE BEZIER PATHS ───
+const EDGE_PATHS = {
+  'impedance->rl-circuit':     'M415,210 Q260,180 220,102',
+  'impedance->rlc-resonance':  'M415,210 Q440,155 440,124',
+  'impedance->three-phase':    'M415,210 Q260,240 210,295',
+  'impedance->em-field':       'M260,210 Q262,155 320,102',
+  'three-phase->y-delta':      'M210,317 Q325,340 440,317',
+  'rl-circuit->transient':     'M220,102 Q400,60 580,102',
+  'rl-circuit->power-factor':  'M220,126 Q380,155 580,197',
+  'rl-circuit->regulation-14': 'M220,102 Q330,140 440,203',
+  'em-induction->rl-circuit':  'M220,207 Q175,165 160,124',
+  'em-field->impedance':       'M380,102 Q400,150 415,185',
+  'capacitance->power-factor': 'M580,317 Q610,255 635,219',
+};
+
+// ─── BUG COLORS ───
+const BUG_COLORS = {
+  ANCHOR: '#f43f5e',
+  MODEL:  '#f97316',
+  MAP:    '#f59e0b',
+  RUSH:   '#a78bfa',
+};
+
+let radarChart = null;
+
+// ─── RENDER ───
+function render(data) {
+  updateHeader(data);
+  renderMap(data);
+  renderRadar(data);
+  renderBugBars(data);
+  renderTopicLists(data);
+  renderSummary(data);
+
+  // 今日の進捗
+  const todayEl = document.getElementById('today-progress');
+  if (todayEl && data.today) {
+    todayEl.textContent = `今日 ${data.today.done}/${data.today.total} 完了`;
+    todayEl.style.display = '';
+  }
+}
+
+// Header
+function updateHeader(data) {
+  const today = new Date();
+  const exam  = new Date(data.exam_date);
+  const diff  = Math.ceil((exam - today) / (1000 * 60 * 60 * 24));
+  document.getElementById('days-count').textContent = diff > 0 ? diff : 0;
+  document.getElementById('last-update').textContent = '最終更新: ' + today.toISOString().split('T')[0];
+}
+
+// ─── SVG MAP ───
+function renderMap(data) {
+  const edgesLayer = document.getElementById('edges-layer');
+  const nodesLayer = document.getElementById('nodes-layer');
+  edgesLayer.innerHTML = '';
+  nodesLayer.innerHTML = '';
+
+  const nodeMap = {};
+  data.nodes.forEach(n => { nodeMap[n.id] = n; });
+
+  // Edges
+  data.edges.forEach(edge => {
+    const key = `${edge.from}->${edge.to}`;
+    const pathD = EDGE_PATHS[key];
+    if (!pathD) return;
+
+    const fromNode = nodeMap[edge.from];
+    const cfg = STATUS_CFG[fromNode ? fromNode.status : 'unlearned'];
+    const strokeCol = cfg ? hexToRgba(cfg.stroke, 0.3) : 'rgba(100,116,139,0.3)';
+
+    const path = document.createElementNS('http://www.w3.org/2000/svg','path');
+    path.setAttribute('d', pathD);
+    path.setAttribute('stroke', strokeCol);
+    path.setAttribute('stroke-width', '1.2');
+    path.setAttribute('fill', 'none');
+    path.setAttribute('marker-end', 'url(#arrow)');
+    edgesLayer.appendChild(path);
+  });
+
+  // Nodes
+  data.nodes.forEach(node => {
+    const pos = NODE_POS[node.id];
+    if (!pos) return;
+    const cfg = STATUS_CFG[node.status] || STATUS_CFG.unlearned;
+    const g = document.createElementNS('http://www.w3.org/2000/svg','g');
+    g.setAttribute('class', 'node-group');
+    g.style.cursor = 'pointer';
+
+    // Hub outer ring
+    if (node.status === 'hub') {
+      const ring = document.createElementNS('http://www.w3.org/2000/svg','rect');
+      ring.setAttribute('x', pos.x - 6);
+      ring.setAttribute('y', pos.y - 6);
+      ring.setAttribute('width', pos.w + 12);
+      ring.setAttribute('height', pos.h + 12);
+      ring.setAttribute('rx', '12');
+      ring.setAttribute('fill', 'none');
+      ring.setAttribute('stroke', 'rgba(56,189,248,0.15)');
+      ring.setAttribute('stroke-width', '8');
+      g.appendChild(ring);
+    }
+
+    // Main rect
+    const rect = document.createElementNS('http://www.w3.org/2000/svg','rect');
+    rect.setAttribute('x', pos.x);
+    rect.setAttribute('y', pos.y);
+    rect.setAttribute('width', pos.w);
+    rect.setAttribute('height', pos.h);
+    rect.setAttribute('rx', '8');
+    rect.setAttribute('fill', 'rgba(15,23,42,0.9)');
+    rect.setAttribute('stroke', cfg.stroke);
+    rect.setAttribute('stroke-width', node.status === 'hub' ? '2.5' : '1.5');
+    if (cfg.glow) rect.setAttribute('filter', `url(#${cfg.glow})`);
+    if (cfg.pulse) rect.setAttribute('class', 'pulse-weak');
+    g.appendChild(rect);
+
+    // Accent bar
+    const bar = document.createElementNS('http://www.w3.org/2000/svg','rect');
+    bar.setAttribute('x', pos.x);
+    bar.setAttribute('y', pos.y);
+    bar.setAttribute('width', '4');
+    bar.setAttribute('height', pos.h);
+    bar.setAttribute('rx', '2');
+    bar.setAttribute('fill', cfg.accent);
+    g.appendChild(bar);
+
+    // Label text
+    const label = document.createElementNS('http://www.w3.org/2000/svg','text');
+    label.setAttribute('x', pos.x + pos.w / 2 + 2);
+    label.setAttribute('y', pos.y + (node.sub ? pos.h * 0.42 : pos.h * 0.57));
+    label.setAttribute('text-anchor', 'middle');
+    label.setAttribute('dominant-baseline', 'middle');
+    label.setAttribute('font-size', '11');
+    label.setAttribute('font-weight', '700');
+    label.setAttribute('fill', '#e2e8f0');
+    label.setAttribute('font-family', "'Inter','Noto Sans JP',sans-serif");
+    label.textContent = node.label;
+    g.appendChild(label);
+
+    // Sub text
+    if (node.sub) {
+      const sub = document.createElementNS('http://www.w3.org/2000/svg','text');
+      sub.setAttribute('x', pos.x + pos.w / 2 + 2);
+      sub.setAttribute('y', pos.y + pos.h * 0.72);
+      sub.setAttribute('text-anchor', 'middle');
+      sub.setAttribute('dominant-baseline', 'middle');
+      sub.setAttribute('font-size', '9');
+      sub.setAttribute('fill', cfg.textSub);
+      sub.setAttribute('font-family', "'Inter','Noto Sans JP',sans-serif");
+      sub.textContent = node.sub;
+      g.appendChild(sub);
+    }
+
+    // Error badge
+    if (node.error_count > 0) {
+      const cx = pos.x + pos.w - 6;
+      const cy = pos.y - 1;
+      const circle = document.createElementNS('http://www.w3.org/2000/svg','circle');
+      circle.setAttribute('cx', cx);
+      circle.setAttribute('cy', cy);
+      circle.setAttribute('r', '8');
+      circle.setAttribute('fill', '#f43f5e');
+      g.appendChild(circle);
+      const badge = document.createElementNS('http://www.w3.org/2000/svg','text');
+      badge.setAttribute('x', cx);
+      badge.setAttribute('y', cy);
+      badge.setAttribute('text-anchor', 'middle');
+      badge.setAttribute('dominant-baseline', 'middle');
+      badge.setAttribute('font-size', '8');
+      badge.setAttribute('font-weight', '700');
+      badge.setAttribute('fill', '#fff');
+      badge.textContent = node.error_count;
+      g.appendChild(badge);
+    }
+
+    // Tooltip events
+    g.addEventListener('mouseenter', (e) => showTooltip(e, node, cfg));
+    g.addEventListener('mousemove',  (e) => moveTooltip(e));
+    g.addEventListener('mouseleave', hideTooltip);
+
+    nodesLayer.appendChild(g);
+  });
+}
+
+// ─── TOOLTIP ───
+function showTooltip(e, node, cfg) {
+  const tt = document.getElementById('tooltip');
+  document.getElementById('tt-label').textContent = node.label;
+  document.getElementById('tt-sub').textContent   = node.sub || '';
+  const st = document.getElementById('tt-status');
+  st.textContent = cfg.label;
+  st.style.background = hexToRgba(cfg.stroke, 0.15);
+  st.style.color = cfg.stroke;
+  const errs = document.getElementById('tt-errs');
+  if (node.error_count > 0) {
+    errs.textContent = `誤答: ${node.error_count}件`;
+    errs.style.color = '#f43f5e';
+  } else {
+    errs.textContent = '';
+  }
+  document.getElementById('tt-memo').textContent = node.memo || '';
+  tt.classList.add('visible');
+  moveTooltip(e);
+}
+function moveTooltip(e) {
+  const tt = document.getElementById('tooltip');
+  const x = e.clientX + 14;
+  const y = e.clientY - 10;
+  const w = tt.offsetWidth;
+  const h = tt.offsetHeight;
+  tt.style.left = (x + w > window.innerWidth  ? e.clientX - w - 14 : x) + 'px';
+  tt.style.top  = (y + h > window.innerHeight ? e.clientY - h - 14 : y) + 'px';
+}
+function hideTooltip() {
+  document.getElementById('tooltip').classList.remove('visible');
+}
+
+// ─── RADAR ───
+function renderRadar(data) {
+  const ctx = document.getElementById('radarChart').getContext('2d');
+  if (radarChart) radarChart.destroy();
+  radarChart = new Chart(ctx, {
+    type: 'radar',
+    data: {
+      labels: data.radar.labels,
+      datasets: [{
+        data: data.radar.scores,
+        backgroundColor: 'rgba(45,212,191,0.15)',
+        borderColor: '#2dd4bf',
+        borderWidth: 2,
+        pointBackgroundColor: '#2dd4bf',
+        pointRadius: 4,
+      }]
+    },
+    options: {
+      responsive: true,
+      scales: {
+        r: {
+          min: 0, max: 100,
+          grid:       { color: 'rgba(255,255,255,0.06)' },
+          angleLines: { color: 'rgba(255,255,255,0.08)' },
+          ticks:      { display: false },
+          pointLabels:{
+            color: '#94a3b8',
+            font: { size: 10, family: "'Noto Sans JP'" }
+          }
+        }
+      },
+      plugins: { legend: { display: false } }
+    }
+  });
+}
+
+// ─── BUG BARS ───
+function renderBugBars(data) {
+  const container = document.getElementById('bug-bars');
+  const max = Math.max(...data.bugs.map(b => b.count));
+  container.innerHTML = data.bugs.map(b => {
+    const color = BUG_COLORS[b.code] || '#64748b';
+    const pct   = max > 0 ? Math.round(b.count / max * 100) : 0;
+    return `
+      <div class="bug-item">
+        <div class="bug-header">
+          <div class="bug-label">
+            <span class="bug-code" style="color:${color}">${b.code}</span>
+            <span>${b.desc}</span>
+          </div>
+          <span class="bug-count">${b.count}件</span>
+        </div>
+        <div class="bug-bar-track">
+          <div class="bug-bar-fill" style="width:${pct}%;background:${color}"></div>
+        </div>
+      </div>`;
+  }).join('');
+}
+
+// ─── TOPIC LISTS ───
+function renderTopicLists(data) {
+  const strongList = document.getElementById('strong-list');
+  const weakList   = document.getElementById('weak-list');
+
+  const strong = data.nodes.filter(n => n.status === 'ok');
+  const weak   = data.nodes.filter(n => n.status === 'weak' || n.status === 'risky');
+
+  strongList.innerHTML = strong.map(n => `
+    <div class="topic-item ok-item">
+      <div class="topic-dot" style="background:#2dd4bf"></div>
+      <span class="topic-name">${n.label}</span>
+      <span class="topic-badge badge-ok">OK</span>
+    </div>`).join('');
+
+  weakList.innerHTML = weak.map(n => `
+    <div class="topic-item weak-item">
+      <div class="topic-dot" style="background:#f43f5e"></div>
+      <span class="topic-name">${n.label}</span>
+      ${n.error_count > 0 ? `<span class="topic-badge badge-err">${n.error_count}件</span>` : ''}
+    </div>`).join('');
+}
+
+// ─── SUMMARY ───
+function renderSummary(data) {
+  const ok        = data.nodes.filter(n => n.status === 'ok').length;
+  const weak      = data.nodes.filter(n => n.status === 'weak' || n.status === 'risky').length;
+  const unlearned = data.nodes.filter(n => n.status === 'unlearned').length;
+  document.getElementById('summary-cards').innerHTML = `
+    <div class="summary-card">
+      <div class="summary-num" style="color:#2dd4bf">${ok}</div>
+      <div class="summary-label">理解済み</div>
+    </div>
+    <div class="summary-card">
+      <div class="summary-num" style="color:#f43f5e">${weak}</div>
+      <div class="summary-label">要強化</div>
+    </div>
+    <div class="summary-card">
+      <div class="summary-num" style="color:#64748b">${unlearned}</div>
+      <div class="summary-label">未学習</div>
+    </div>`;
+}
+
+// ─── UTILITY ───
+function hexToRgba(hex, alpha) {
+  const r = parseInt(hex.slice(1,3),16);
+  const g = parseInt(hex.slice(3,5),16);
+  const b = parseInt(hex.slice(5,7),16);
+  return `rgba(${r},${g},${b},${alpha})`;
+}
+
+// ─── データ取得（環境自動判別）───
+const IS_LOCAL = location.hostname === 'localhost' || location.hostname === '127.0.0.1';
+const API = IS_LOCAL ? window.location.origin : 'http://localhost:8765';
+
+// records.json から radar・ノード状態を計算する純粋関数
+function buildFromRecords(records, configNodes) {
+  const items = Array.isArray(records) ? records : (records.records || []);
+  const TOPIC_MAP = {
+    '三相交流':'three-phase','インピーダンス':'impedance','RLC共振':'rlc-resonance',
+    'RL回路':'rl-circuit','Y-Δ変換':'y-delta','過渡現象':'transient',
+    '力率と電力':'power-factor','電技省令14条':'regulation-14',
+    '電磁誘導':'em-induction','静電容量':'capacitance',
+    '電位・電界・磁界':'em-field','電界・磁界・電位':'em-field','磁界':'em-field',
+    '不等率':'load-factor'
+  };
+  const topicStatus = {}, topicErrors = {};
+  items.forEach(rec => {
+    const nid = TOPIC_MAP[rec.theme];
+    if (!nid) return;
+    if (rec.result === 'ng') topicErrors[nid] = (topicErrors[nid]||0) + 1;
+    topicStatus[nid] = {result: rec.result, next_review: rec.next_review, memo: rec.memo, date: rec.date};
+  });
+  const subjectStats = {};
+  items.forEach(rec => {
+    const s = rec.subject; if (!s) return;
+    if (!subjectStats[s]) subjectStats[s] = {ok:0, risky:0, total:0};
+    subjectStats[s].total++;
+    if (rec.result==='ok') subjectStats[s].ok++;
+    else if (rec.result==='risky') subjectStats[s].risky++;
+  });
+  const radarLabels=[], radarScores=[];
+  Object.entries(subjectStats).forEach(([s,st])=>{
+    if (st.total===0) return;
+    radarLabels.push(s);
+    radarScores.push(Math.round((st.ok*100+st.risky*50)/st.total));
+  });
+  const nodes = configNodes.map(n => {
+    if (n.hub) return {...n, status:'hub', error_count:topicErrors[n.id]||0};
+    if (n.cross_subject) return {...n, status:'connected', error_count:0};
+    const st = topicStatus[n.id];
+    if (!st) return {...n, status:'unlearned', error_count:topicErrors[n.id]||0};
+    const status = st.result==='ok' ? 'ok' : (st.result==='ng'||st.result==='risky') ? 'weak' : 'unlearned';
+    return {...n, status, error_count:topicErrors[n.id]||0, result:st.result, next_review:st.next_review, memo:st.memo, last_date:st.date};
+  });
+  return {nodes, radar:{labels:radarLabels, scores:radarScores}};
+}
+
+async function loadData() {
+  // 1. GitHub Pages: records.json を直接 fetch（API不要）
+  const RECORDS_URL = IS_LOCAL
+    ? `${API}/denken3-study-dashboard/data/records.json`
+    : 'https://raw.githubusercontent.com/kfurufuru/denken3-study/main/data/records.json';
+
+  try {
+    // records.json を fetch（ローカル・GitHub Pages 両対応）
+    const recRes = await fetch(RECORDS_URL);
+    if (!recRes.ok) throw new Error('records fetch failed');
+    const records = await recRes.json();
+    const {nodes, radar} = buildFromRecords(records, STATIC_DATA.nodes);
+
+    // ローカルのみ: API から追加データ取得
+    let bugs = STATIC_DATA.bugs;
+    let today = null;
+    if (IS_LOCAL) {
+      try {
+        const [pdcaRes, todayRes] = await Promise.all([
+          fetch(`${API}/api/pdca`),
+          fetch(`${API}/api/today`)
+        ]);
+        if (pdcaRes.ok) { const d = await pdcaRes.json(); if (d.act?.bugs) bugs = d.act.bugs; }
+        if (todayRes.ok) { const d = await todayRes.json(); today = {done: d.sessions.filter(s=>s.done).length, total: d.sessions.length, date: d.date}; }
+      } catch(e) { /* API失敗は無視 */ }
+    }
+    render({...STATIC_DATA, nodes, bugs, radar, today, edges: STATIC_DATA.edges});
+  } catch(e) {
+    console.warn('records fetch failed, using static data:', e);
+    render(STATIC_DATA);
+  }
+}
+
+// ─── MOBILE TOGGLE ───
+function togglePanel(side) {
+  const el = document.getElementById(side + '-panel');
+  el.classList.toggle('mobile-visible');
+}
+
+// ─── INIT ───
+window.addEventListener('DOMContentLoaded', () => {
+  // Show toggle on mobile
+  if (window.innerWidth <= 768) {
+    document.getElementById('mobile-toggle').style.display = 'flex';
+  }
+  loadData();
+  lucide.createIcons();
+});
+</script>
+</body>
+</html>
