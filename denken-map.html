@@ -492,9 +492,15 @@ header {
   <div class="header-right">
     <span id="today-progress" class="today-badge" style="display:none"></span>
     <div class="last-update" id="last-update">最終更新: --</div>
-    <a href="denken-study.html" class="back-link">
+    <a id="back-link" href="denken-study.html" class="back-link">
       <span>&#8592;</span> 学習画面に戻る
     </a>
+    <script>
+      // ローカル → denken-study.html、GitHub Pages → index.html
+      if (location.hostname !== 'localhost' && location.hostname !== '127.0.0.1') {
+        document.getElementById('back-link').href = 'index.html';
+      }
+    </script>
   </div>
 </header>
 
