@@ -7,6 +7,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800;900&family=Noto+Sans+JP:wght@400;600;700;800&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
 <style>
 :root {
   --bg:      #060810;
@@ -569,6 +570,38 @@ body{
 .err-days .days-num.critical{color:var(--red)}
 .err-days .days-num.warning{color:var(--yellow)}
 .err-memo{font-size:.72rem;color:var(--muted);margin-top:4px;padding-top:4px;border-top:1px solid var(--border)}
+
+/* ===== TAB-QUIZ: テスト記録 ===== */
+.q-kpi-row{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:22px}
+.q-kpi{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:18px 20px}
+.q-kpi .lbl{font-size:.7rem;text-transform:uppercase;letter-spacing:.06em;color:var(--muted)}
+.q-kpi .val{font-size:2.2rem;font-weight:800;line-height:1.1;margin:8px 0 4px}
+.q-kpi .sub{font-size:.75rem;color:var(--muted)}
+.q-bug-tbl{width:100%;border-collapse:separate;border-spacing:3px}
+.q-bug-tbl th{text-align:left;color:var(--muted);padding:6px 10px;font-size:.72rem;font-weight:600}
+.q-bug-tbl td{text-align:center;padding:5px 8px;border-radius:5px;font-weight:700;font-size:.7rem}
+.q-status-ok{background:#166534;color:#4ade80}
+.q-status-recovered{background:#854d0e;color:#facc15;position:relative}
+.q-status-recovered::after{content:'⟳';position:absolute;top:1px;right:3px;font-size:.5rem;opacity:.7}
+.q-status-risky{background:#78350f;color:#fbbf24}
+.q-status-ng{background:#7f1d1d;color:#f87171}
+.q-status-none{color:#2d3f55}
+.q-legend{display:inline-block;width:10px;height:10px;border-radius:3px;margin-right:4px;vertical-align:middle}
+.q-legend-ok{background:#166534}
+.q-legend-recovered{background:#854d0e}
+.q-legend-risky{background:#78350f}
+.q-legend-ng{background:#7f1d1d}
+.q-phase-bar{margin-bottom:14px}
+.q-phase-bar:last-child{margin-bottom:0}
+.q-review-item{display:flex;align-items:center;gap:8px;padding:9px 0;border-bottom:1px solid #1a2535;font-size:.8rem}
+.q-review-item:last-child{border-bottom:none}
+.q-badge-ok{background:#166534;color:#4ade80;padding:2px 7px;border-radius:4px;font-size:.68rem;font-weight:700;white-space:nowrap}
+.q-badge-risky{background:#78350f;color:#fbbf24;padding:2px 7px;border-radius:4px;font-size:.68rem;font-weight:700;white-space:nowrap}
+.q-rec-tbl{width:100%;border-collapse:collapse;font-size:.78rem}
+.q-rec-tbl th{text-align:left;padding:8px 12px;border-bottom:1px solid var(--border2);color:var(--muted);font-size:.7rem}
+.q-rec-tbl td{padding:7px 12px;border-bottom:1px solid rgba(255,255,255,.04);vertical-align:middle}
+canvas.q-chart{max-height:200px!important}
+@media(max-width:900px){.q-kpi-row{grid-template-columns:repeat(2,1fr)}}
 </style>
 </head>
 <body>
@@ -589,6 +622,7 @@ body{
   <button class="tab-btn active" data-tab="today">📚 今日の学習</button>
   <button class="tab-btn" data-tab="pdca">🔄 PDCA</button>
   <button class="tab-btn" data-tab="history">📊 過去問履歴</button>
+  <button class="tab-btn" data-tab="quiz">🧪 テスト記録</button>
   <button class="tab-btn" data-tab="system">⚙️ システム</button>
 </nav>
 
@@ -819,7 +853,7 @@ body{
       </div>
       <div class="g2" style="align-content:start">
         <div class="card" style="text-align:center">
-          <div class="stat-val" style="color:var(--green)" id="stat-maru">92</div>
+          <div class="stat-val" style="color:var(--green)" id="stat-maru">93</div>
           <div class="stat-lbl">1回目 ○ 正解</div>
           <div class="stat-sub" id="stat-maru-sub">--</div>
         </div>
@@ -883,7 +917,7 @@ body{
         <div class="bunya-item">
           <div class="bunya-hd">
             <div class="bunya-nm"><span style="color:var(--green)">⚡</span> 電気回路</div>
-            <div class="bunya-pct" style="color:var(--green)">27% <span style="color:var(--muted);font-weight:400;font-size:.7rem">≈ 45/164問</span></div>
+            <div class="bunya-pct" style="color:var(--green)">28% <span style="color:var(--muted);font-weight:400;font-size:.7rem">≈ 44/159問</span></div>
           </div>
           <div class="bar-bg"><div class="bar-fill" id="b1" style="width:0%;background:linear-gradient(90deg,#10b981,#34d399)"></div></div>
           <div class="bunya-chips">
@@ -896,7 +930,7 @@ body{
         <div class="bunya-item">
           <div class="bunya-hd">
             <div class="bunya-nm"><span style="color:var(--accent)">📡</span> 電気・電子計測</div>
-            <div class="bunya-pct" style="color:var(--accent)">41% <span style="color:var(--muted);font-weight:400;font-size:.7rem">≈ 35/85問</span></div>
+            <div class="bunya-pct" style="color:var(--accent)">41% <span style="color:var(--muted);font-weight:400;font-size:.7rem">≈ 36/87問</span></div>
           </div>
           <div class="bar-bg"><div class="bar-fill" id="b2" style="width:0%;background:linear-gradient(90deg,#3b82f6,#818cf8)"></div></div>
           <div class="bunya-chips">
@@ -908,7 +942,7 @@ body{
         <div class="bunya-item">
           <div class="bunya-hd">
             <div class="bunya-nm"><span style="color:var(--orange)">🔮</span> 電磁気学</div>
-            <div class="bunya-pct" style="color:var(--orange)">8% <span style="color:var(--muted);font-weight:400;font-size:.7rem">≈ 9/114問</span></div>
+            <div class="bunya-pct" style="color:var(--orange)">8% <span style="color:var(--muted);font-weight:400;font-size:.7rem">≈ 10/124問</span></div>
           </div>
           <div class="bar-bg"><div class="bar-fill" id="b3" style="width:0%;background:linear-gradient(90deg,#f97316,#fbbf24)"></div></div>
           <div class="bunya-chips">
@@ -920,7 +954,7 @@ body{
         <div class="bunya-item" style="margin-bottom:0">
           <div class="bunya-hd">
             <div class="bunya-nm"><span style="color:var(--purple)">🔬</span> 電子理論</div>
-            <div class="bunya-pct" style="color:var(--purple)">2% <span style="color:var(--muted);font-weight:400;font-size:.7rem">≈ 3/123問</span></div>
+            <div class="bunya-pct" style="color:var(--purple)">3% <span style="color:var(--muted);font-weight:400;font-size:.7rem">≈ 3/116問</span></div>
           </div>
           <div class="bar-bg"><div class="bar-fill" id="b4" style="width:0%;background:linear-gradient(90deg,#8b5cf6,#c084fc)"></div></div>
           <div class="bunya-chips">
@@ -972,7 +1006,121 @@ body{
 </div>
 
 <!-- ========================================
-     TAB 4: システム
+     TAB 4: テスト記録 (quiz)
+     ======================================== -->
+<div id="tab-quiz" class="tab-pane">
+<!-- QUIZ_MAIN_START -->
+
+<main class="main">
+
+  <!-- KPI -->
+  <div class="section">
+    <div class="sec-title">📊 テスト記録サマリ</div>
+    <div class="q-kpi-row">
+      <div class="q-kpi"><div class="lbl">ユニークテーマ</div><div class="val" style="color:#60a5fa">10</div><div class="sub">総記録 12件</div></div>
+      <div class="q-kpi"><div class="lbl">🟢 一発OK</div><div class="val" style="color:#22c55e">6</div><div class="sub">初回で理解</div></div>
+      <div class="q-kpi"><div class="lbl">🟡 回復OK</div><div class="val" style="color:#facc15">0</div><div class="sub">苦労して定着</div></div>
+      <div class="q-kpi"><div class="lbl">🟠 Risky / 🔴 NG</div><div class="val" style="color:#f59e0b">4</div><div class="sub">要復習</div></div>
+    </div>
+  </div>
+
+  <!-- 活動チャート -->
+  <div class="section">
+    <div class="card"><div class="card-header">📅 直近30日の学習活動</div><canvas id="q-ac" class="q-chart"></canvas></div>
+  </div>
+
+  <!-- バグマップ + フェーズ別 -->
+  <div class="section">
+    <div class="g21">
+      <div class="card">
+        <div class="card-header">🗺️ テーマ状態マップ（科目 × テーマ）</div>
+        <div style="display:flex;gap:12px;flex-wrap:wrap;margin-bottom:12px;font-size:.7rem">
+          <span><span class="q-legend q-legend-ok"></span> 一発OK</span>
+          <span><span class="q-legend q-legend-recovered"></span> 回復OK</span>
+          <span><span class="q-legend q-legend-risky"></span> Risky</span>
+          <span><span class="q-legend q-legend-ng"></span> NG</span>
+        </div>
+        <div style="overflow-x:auto"><table class="q-bug-tbl"><thead><tr><th style="text-align:left">テーマ＼科目</th><th>理論</th><th>電力</th><th>法規</th></tr></thead><tbody><tr><td style="color:var(--muted2);font-size:.72rem;padding:5px 10px;text-align:left;white-space:nowrap">R02-問8</td><td class="q-status-none">－</td><td class="q-status-none">－</td><td class="q-status-ok" title="OK:1 Risky:0 NG:0 (1回)">OK</td></tr><tr><td style="color:var(--muted2);font-size:.72rem;padding:5px 10px;text-align:left;white-space:nowrap">test-Q1</td><td class="q-status-ok" title="OK:1 Risky:0 NG:0 (1回)">OK</td><td class="q-status-none">－</td><td class="q-status-none">－</td></tr><tr><td style="color:var(--muted2);font-size:.72rem;padding:5px 10px;text-align:left;white-space:nowrap">三相交流</td><td class="q-status-ok" title="OK:1 Risky:0 NG:0 (1回)"><a href="https://kfurufuru.github.io/denken-wiki-riron/themes/sansou-kouryu/" target="_blank" style="color:inherit;text-decoration:none;display:block">OK <span style="font-size:.6rem;opacity:.8">📖</span></a></td><td class="q-status-none">－</td><td class="q-status-none">－</td></tr><tr><td style="color:var(--muted2);font-size:.72rem;padding:5px 10px;text-align:left;white-space:nowrap">不等率</td><td class="q-status-none">－</td><td class="q-status-risky" title="OK:0 Risky:1 NG:0 (1回)">Risky</td><td class="q-status-none">－</td></tr><tr><td style="color:var(--muted2);font-size:.72rem;padding:5px 10px;text-align:left;white-space:nowrap">磁界</td><td class="q-status-risky" title="OK:0 Risky:1 NG:0 (1回)">Risky</td><td class="q-status-none">－</td><td class="q-status-none">－</td></tr><tr><td style="color:var(--muted2);font-size:.72rem;padding:5px 10px;text-align:left;white-space:nowrap">過去問演習</td><td class="q-status-risky" title="OK:0 Risky:1 NG:0 (1回)">Risky</td><td class="q-status-none">－</td><td class="q-status-none">－</td></tr><tr><td style="color:var(--muted2);font-size:.72rem;padding:5px 10px;text-align:left;white-space:nowrap">電位・電界・磁界</td><td class="q-status-ok" title="OK:1 Risky:0 NG:0 (1回)">OK</td><td class="q-status-none">－</td><td class="q-status-none">－</td></tr><tr><td style="color:var(--muted2);font-size:.72rem;padding:5px 10px;text-align:left;white-space:nowrap">電界・磁界・電位</td><td class="q-status-ok" title="OK:1 Risky:0 NG:0 (1回)">OK</td><td class="q-status-none">－</td><td class="q-status-none">－</td></tr><tr><td style="color:var(--muted2);font-size:.72rem;padding:5px 10px;text-align:left;white-space:nowrap">電磁誘導</td><td class="q-status-ng" title="OK:1 Risky:0 NG:1 (2回)"><a href="https://kfurufuru.github.io/denken-wiki-riron/themes/denjiryoku/" target="_blank" style="color:inherit;text-decoration:none;display:block">NG <span style="font-size:.6rem;opacity:.8">📖</span></a></td><td class="q-status-none">－</td><td class="q-status-none">－</td></tr><tr><td style="color:var(--muted2);font-size:.72rem;padding:5px 10px;text-align:left;white-space:nowrap">静電容量</td><td class="q-status-ok" title="OK:2 Risky:0 NG:0 (2回)">OK</td><td class="q-status-none">－</td><td class="q-status-none">－</td></tr></tbody></table></div>
+      </div>
+      <div class="card">
+        <div class="card-header">📊 フェーズ別進捗</div>
+        <div class="q-phase-bar">
+          <div style="display:flex;align-items:center;gap:8px;margin-bottom:5px">
+            <span style="color:var(--text);font-weight:600;font-size:.85rem">Phase ?</span>
+            <span style="color:var(--muted);font-size:.72rem">4問</span>
+          </div>
+          <div style="height:10px;background:var(--bg);border-radius:5px;overflow:hidden;display:flex"><div style="width:75%;background:#22c55e;height:100%"></div><div style="width:0%;background:#f59e0b;height:100%"></div><div style="width:25%;background:#ef4444;height:100%"></div></div>
+          <div style="font-size:.7rem;margin-top:4px;display:flex;gap:12px">
+            <span style="color:#4ade80">✓ 3</span>
+            <span style="color:#fbbf24">⚠ 0</span>
+            <span style="color:#f87171">✗ 1</span>
+          </div>
+        </div><div class="q-phase-bar">
+          <div style="display:flex;align-items:center;gap:8px;margin-bottom:5px">
+            <span style="color:var(--text);font-weight:600;font-size:.85rem">Phase A</span>
+            <span style="color:var(--muted);font-size:.72rem">6問</span>
+          </div>
+          <div style="height:10px;background:var(--bg);border-radius:5px;overflow:hidden;display:flex"><div style="width:67%;background:#22c55e;height:100%"></div><div style="width:33%;background:#f59e0b;height:100%"></div><div style="width:0%;background:#ef4444;height:100%"></div></div>
+          <div style="font-size:.7rem;margin-top:4px;display:flex;gap:12px">
+            <span style="color:#4ade80">✓ 4</span>
+            <span style="color:#fbbf24">⚠ 2</span>
+            <span style="color:#f87171">✗ 0</span>
+          </div>
+        </div><div class="q-phase-bar">
+          <div style="display:flex;align-items:center;gap:8px;margin-bottom:5px">
+            <span style="color:var(--text);font-weight:600;font-size:.85rem">Phase B</span>
+            <span style="color:var(--muted);font-size:.72rem">2問</span>
+          </div>
+          <div style="height:10px;background:var(--bg);border-radius:5px;overflow:hidden;display:flex"><div style="width:50%;background:#22c55e;height:100%"></div><div style="width:50%;background:#f59e0b;height:100%"></div><div style="width:0%;background:#ef4444;height:100%"></div></div>
+          <div style="font-size:.7rem;margin-top:4px;display:flex;gap:12px">
+            <span style="color:#4ade80">✓ 1</span>
+            <span style="color:#fbbf24">⚠ 1</span>
+            <span style="color:#f87171">✗ 0</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- レビュー対象 + 結果分布 -->
+  <div class="section">
+    <div class="g2">
+      <div class="card">
+        <div class="card-header">🔁 本日のレビュー対象</div>
+        <div class="q-review-item"><span class="q-badge-ok">OK</span><span style="color:#60a5fa;font-weight:600">[理論]</span><span style="flex:1;color:var(--text)">三相交流 </span><span style="color:var(--muted);font-size:.72rem">SR3</span></div><div class="q-review-item"><span class="q-badge-risky">Risky</span><span style="color:#60a5fa;font-weight:600">[理論]</span><span style="flex:1;color:var(--text)">磁界 </span><span style="color:var(--muted);font-size:.72rem">SR2</span></div><div class="q-review-item"><span class="q-badge-risky">Risky</span><span style="color:#60a5fa;font-weight:600">[電力]</span><span style="flex:1;color:var(--text)">不等率 </span><span style="color:var(--muted);font-size:.72rem">SR3</span></div><div class="q-review-item"><span class="q-badge-ng">NG</span><span style="color:#60a5fa;font-weight:600">[理論]</span><span style="flex:1;color:var(--text)">電磁誘導 </span><span style="color:var(--muted);font-size:.72rem">SR1</span></div><div class="q-review-item"><span class="q-badge-ok">OK</span><span style="color:#60a5fa;font-weight:600">[理論]</span><span style="flex:1;color:var(--text)">静電容量 </span><span style="color:var(--muted);font-size:.72rem">SR2</span></div>
+      </div>
+      <div class="card">
+        <div class="card-header">📈 テーマ別 定着状態</div>
+        <canvas id="q-rc" class="q-chart" style="display:block;margin:0 auto"></canvas>
+      </div>
+    </div>
+  </div>
+
+  <!-- 最近の記録 -->
+  <div class="section">
+    <div class="card">
+      <div class="card-header">📝 最近の記録（直近10件）</div>
+      <div style="overflow-x:auto">
+        <table class="q-rec-tbl">
+          <thead><tr><th>日付</th><th>科目</th><th>テーマ</th><th>結果</th><th>次回</th><th>試行</th></tr></thead>
+          <tbody><tr><td>2026-04-13</td><td>理論</td><td>過去問演習</td><td><span class="q-badge-risky">Risky</span></td><td style="color:var(--muted)">SR2</td><td style="color:var(--muted2);font-size:.72rem">1回目</td></tr><tr><td>2026-04-10</td><td>理論</td><td>電磁誘導</td><td><span class="q-badge-ok">OK</span></td><td style="color:var(--muted)">done</td><td style="color:var(--muted2);font-size:.72rem">2回目</td></tr><tr><td>2026-04-10</td><td>理論</td><td>静電容量</td><td><span class="q-badge-ok">OK</span></td><td style="color:var(--muted)">done</td><td style="color:var(--muted2);font-size:.72rem">1回目</td></tr><tr><td>2026-04-10</td><td>理論</td><td>電位・電界・磁界</td><td><span class="q-badge-ok">OK</span></td><td style="color:var(--muted)">done</td><td style="color:var(--muted2);font-size:.72rem">1回目</td></tr><tr><td>2026-04-10</td><td>理論</td><td>電界・磁界・電位</td><td><span class="q-badge-ok">OK</span></td><td style="color:var(--muted)">done</td><td style="color:var(--muted2);font-size:.72rem">1回目</td></tr><tr><td>2026-04-10</td><td>理論</td><td>電磁誘導</td><td><span class="q-badge-ng">NG</span></td><td style="color:var(--muted)">SR1</td><td style="color:var(--muted2);font-size:.72rem">3回目</td></tr><tr><td>2026-04-10</td><td>理論</td><td>静電容量</td><td><span class="q-badge-ok">OK</span></td><td style="color:var(--muted)">SR2</td><td style="color:var(--muted2);font-size:.72rem">2回目</td></tr><tr><td>2026-04-09</td><td>理論</td><td>test-Q1</td><td><span class="q-badge-ok">OK</span></td><td style="color:var(--muted)">done</td><td style="color:var(--muted2);font-size:.72rem">1回目</td></tr><tr><td>2026-04-09</td><td>法規</td><td>R02-問8</td><td><span class="q-badge-ok">OK</span></td><td style="color:var(--muted)">done</td><td style="color:var(--muted2);font-size:.72rem">1回目</td></tr><tr><td>2026-04-03</td><td>電力</td><td>不等率</td><td><span class="q-badge-risky">Risky</span></td><td style="color:var(--muted)">SR3</td><td style="color:var(--muted2);font-size:.72rem">1回目</td></tr></tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <!-- 更新ボタン -->
+  <div class="section" style="text-align:right">
+    <button id="q-refresh-btn" onclick="quizRefresh()" style="background:linear-gradient(135deg,#065f46,#047857);color:#6ee7b7;border:1px solid #10b981;padding:10px 20px;border-radius:10px;font-size:.85rem;font-weight:700;cursor:pointer;font-family:inherit;transition:all .3s">🔄 Make.com更新トリガー</button>
+  </div>
+
+  <div class="footer">⚡ テスト記録 ダッシュボード ｜ 最終更新: 2026-04-13</div>
+</main>
+<!-- QUIZ_MAIN_END -->
+</div>
+
+<!-- ========================================
+     TAB 5: システム
      ======================================== -->
 <div id="tab-system" class="tab-pane">
 <main class="main">
@@ -982,45 +1130,72 @@ body{
     <div class="sec-title">🔁 データフロー</div>
     <div class="card">
       <div class="card-header">データパイプライン概要</div>
-      <div class="sys-flow">
+      <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:20px;padding:8px 0">
 
-        <div style="display:flex;gap:14px;justify-content:center">
-          <div style="display:flex;flex-direction:column;align-items:center;gap:4px">
-            <div class="sys-node" style="min-width:140px">🗂️ Notion DB<br><span style="font-size:.68rem;color:var(--muted)">過去問記録</span></div>
-          </div>
-          <div style="display:flex;flex-direction:column;align-items:center;gap:4px">
-            <div class="sys-node" style="min-width:140px">📄 records.json<br><span style="font-size:.68rem;color:var(--muted)">学習ログ</span></div>
-          </div>
-        </div>
-
-        <div class="sys-arrow">↓ 統合 ↓</div>
-
-        <div class="sys-node action">⚙️ update_dashboard.py<br><span style="font-size:.68rem">TODAY_SESSIONS / PDCA_DATA / DATA を注入</span></div>
-
-        <div class="sys-arrow">↓</div>
-
-        <div class="sys-node highlight">🤖 GitHub Actions<br><span style="font-size:.68rem">⏰ 毎朝 7:00 JST 自動実行</span></div>
-
-        <div class="sys-arrow">↓ デプロイ ↓</div>
-
-        <div style="display:flex;gap:14px;justify-content:center">
-          <div style="display:flex;flex-direction:column;align-items:center;gap:4px">
-            <div class="sys-node highlight" style="min-width:155px">🌐 GitHub Pages<br><span style="font-size:.68rem">📱 携帯アクセス</span></div>
-            <div class="sys-split-label" style="color:#93c5fd">閲覧専用</div>
-          </div>
-          <div style="display:flex;flex-direction:column;align-items:center;gap:4px">
-            <div class="sys-node action" style="min-width:155px">💻 Flask localhost:8765<br><span style="font-size:.68rem">PC アクセス</span></div>
-            <div class="sys-split-label" style="color:#6ee7b7">記録・Claude解説</div>
+        <!-- リアルタイムフロー -->
+        <div>
+          <div style="font-size:.75rem;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:#60a5fa;margin-bottom:14px">⚡ リアルタイム更新</div>
+          <div class="sys-flow">
+            <div class="sys-node" style="border-color:rgba(96,165,250,.4);background:rgba(96,165,250,.08);color:#93c5fd">
+              📱 ChatGPT<br><span style="font-size:.7rem;color:#64748b">テスト記録採取（スマホ）</span>
+            </div>
+            <div class="sys-arrow">↓ POST repository_dispatch</div>
+            <div class="sys-node highlight">
+              ⚙️ GitHub Actions<br><span style="font-size:.7rem;color:#64748b">build-quiz.yml</span>
+            </div>
+            <div class="sys-arrow">↓ append_record.py</div>
+            <div class="sys-node" style="border-color:rgba(16,185,129,.3);background:rgba(16,185,129,.06);color:#6ee7b7">
+              📄 data/records.json<br><span style="font-size:.7rem;color:#64748b">テスト記録追記</span>
+            </div>
+            <div class="sys-arrow">↓ generate_quiz_dashboard.py</div>
+            <div class="sys-node action">
+              🌐 GitHub Pages<br><span style="font-size:.7rem;color:#64748b">index.html テスト記録タブ更新</span>
+            </div>
           </div>
         </div>
 
-        <div style="display:flex;justify-content:flex-end;width:100%;max-width:350px">
-          <div style="display:flex;align-items:center;gap:6px;font-size:.72rem;color:var(--muted);margin-top:4px">
-            <span>↑</span>
-            <span>PC記録 → records.json 更新 → 翌朝 Actions に反映</span>
+        <!-- 毎朝スケジュールフロー -->
+        <div>
+          <div style="font-size:.75rem;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:#f59e0b;margin-bottom:14px">🕖 毎朝7:00 JST 自動更新</div>
+          <div class="sys-flow">
+            <div class="sys-node" style="border-color:rgba(245,158,11,.4);background:rgba(245,158,11,.08);color:#fde047">
+              ⏰ GitHub Actions<br><span style="font-size:.7rem;color:#64748b">update.yml（スケジュール実行）</span>
+            </div>
+            <div class="sys-arrow">↓ Notion API</div>
+            <div class="sys-node" style="border-color:rgba(139,92,246,.4);background:rgba(139,92,246,.08);color:#c4b5fd">
+              🗄️ Notion DB<br><span style="font-size:.7rem;color:#64748b">過去問管理DB</span>
+            </div>
+            <div class="sys-arrow">↓ update_dashboard.py</div>
+            <div class="sys-node action">
+              🌐 GitHub Pages<br><span style="font-size:.7rem;color:#64748b">index.html 過去問履歴タブ更新</span>
+            </div>
           </div>
         </div>
 
+        <!-- Geminiキャプチャフロー -->
+        <div>
+          <div style="font-size:.75rem;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:#2dd4bf;margin-bottom:14px">🤖 Gemini キャプチャ（PC）</div>
+          <div class="sys-flow">
+            <div class="sys-node" style="border-color:rgba(45,212,191,.4);background:rgba(45,212,191,.08);color:#99f6e4">
+              ✨ Gemini「記録して」<br><span style="font-size:.7rem;color:#64748b">学習セッション後に指示</span>
+            </div>
+            <div class="sys-arrow">↓ 出力 → Ctrl+A+C</div>
+            <div class="sys-node" style="border-color:rgba(45,212,191,.3);background:rgba(45,212,191,.05);color:#5eead4">
+              ⚡ 自動検出（0.8秒）<br><span style="font-size:.7rem;color:#64748b">Claude Code フック</span>
+            </div>
+            <div class="sys-arrow">↓ 同時実行</div>
+            <div class="sys-node" style="border-color:rgba(16,185,129,.3);background:rgba(16,185,129,.06);color:#6ee7b7;font-size:.78rem;line-height:1.8">
+              📝 ノート作成<br>
+              📊 e-log 追記<br>
+              🔄 PDCA Act 反映<br>
+              🗺️ 弱点マップ更新
+            </div>
+          </div>
+        </div>
+
+      </div>
+      <div style="margin-top:16px;padding:10px 14px;border-radius:8px;background:rgba(99,102,241,.06);border:1px solid rgba(99,102,241,.2);font-size:.75rem;color:#a5b4fc">
+        💡 URL一本化済み: <code style="background:rgba(99,102,241,.1);padding:1px 6px;border-radius:4px">https://kfurufuru.github.io/denken3-study/</code> のみ。quiz.html は廃止。
       </div>
     </div>
   </div>
@@ -1115,7 +1290,7 @@ body{
             <div>週次レビュー → e-log パターン分析 → 次週 Plan 素材生成</div>
           </div>
           <div class="time-slot" style="margin-top:6px">
-            <div style="font-size:.72rem;color:var(--muted2)">Make.com 経由のテスト記録は即時 GitHub Pages に反映</div>
+            <div style="font-size:.72rem;color:var(--muted2)">ChatGPT → GitHub API 直接送信でテスト記録は即時 GitHub Pages に反映</div>
           </div>
         </div>
       </div>
@@ -1144,7 +1319,7 @@ body{
             Flask (localhost:8765 — PC専用)<br>
             GitHub Actions (cron: 毎朝7:00 JST)<br>
             Notion API (記録取得)<br>
-            Make.com (テスト即時反映 Webhook)
+            ChatGPT カスタムアクション (GitHub API 直接送信)
           </div>
         </div>
       </div>
@@ -1196,28 +1371,28 @@ function triggerUpdate() {
 
 // ================================================================
 // ===== DATA =====
-const ACHIEVED = 92, TOTAL = 486;
-const FIRST_MARU = 84, FIRST_BATU = 62;
+const ACHIEVED = 93, TOTAL = 486;
+const FIRST_MARU = 85, FIRST_BATU = 63;
 const STREAK = 3;
 const EXAM_DATE = new Date('2026-08-23');
 const STUDY_START = new Date('2025-09-01');
-const TODAY = new Date('2026-04-12');
+const TODAY = new Date('2026-04-13');
 
-const WEAK_DATA = [{"q": "R04下-問8", "topic": "", "cat": "電気回路", "p": "S", "date": "2026-01-11"}, {"q": "R04下-問6", "topic": "", "cat": "電磁気", "p": "S", "date": "2026-01-11"}, {"q": "H19-問7", "topic": "", "cat": "電気回路", "p": "S", "date": "2026-02-07"}, {"q": "R04-問8", "topic": "", "cat": "電気回路", "p": "S", "date": "2026-02-28"}, {"q": "R03-問7", "topic": "", "cat": "電気回路", "p": "S", "date": "2026-02-28"}, {"q": "H24-問15", "topic": "", "cat": "電磁気", "p": "S", "date": "2026-03-01"}, {"q": "H26-問5", "topic": "", "cat": "電磁気", "p": "S", "date": "2026-03-01"}, {"q": "H25-問10", "topic": "", "cat": "電気回路", "p": "S", "date": "2026-03-08"}, {"q": "R01-問15", "topic": "", "cat": "電磁気", "p": "S", "date": "2026-03-25"}, {"q": "R01-問8", "topic": "", "cat": "電気回路", "p": "S", "date": "未実施"}, {"q": "R04上-問1", "topic": "", "cat": "電磁気", "p": "S", "date": "未実施"}, {"q": "H18-問2", "topic": "", "cat": "電磁気", "p": "S", "date": "未実施"}, {"q": "R05上-問5", "topic": "", "cat": "電磁気", "p": "A", "date": "2026-01-12"}, {"q": "R05上-問9", "topic": "", "cat": "電気回路", "p": "A", "date": "2026-01-12"}, {"q": "R04-問15", "topic": "", "cat": "電気回路", "p": "A", "date": "2026-02-23"}, {"q": "R02-問8", "topic": "", "cat": "電気回路", "p": "A", "date": "2026-03-08"}, {"q": "H26-問14", "topic": "", "cat": "電気回路", "p": "A", "date": "2026-03-08"}, {"q": "H25-問15", "topic": "", "cat": "電気回路", "p": "A", "date": "2026-03-14"}, {"q": "H24-問16", "topic": "", "cat": "電気回路", "p": "A", "date": "2026-03-15"}, {"q": "H23-問8", "topic": "", "cat": "電気回路", "p": "A", "date": "2026-03-20"}];
+const WEAK_DATA = [{"q": "R04下-問8", "topic": "", "cat": "電気回路", "p": "S", "date": "2026-01-11"}, {"q": "R04下-問6", "topic": "", "cat": "電磁気", "p": "S", "date": "2026-01-11"}, {"q": "R05上-問7", "topic": "", "cat": "電気回路", "p": "S", "date": "2026-01-12"}, {"q": "H27-問15", "topic": "", "cat": "電気回路", "p": "S", "date": "2026-02-01"}, {"q": "H27-問4", "topic": "", "cat": "電気回路", "p": "S", "date": "2026-02-01"}, {"q": "H30-問15", "topic": "", "cat": "電気回路", "p": "S", "date": "2026-02-23"}, {"q": "H29-問16", "topic": "", "cat": "電気回路", "p": "S", "date": "2026-02-23"}, {"q": "R04-問15", "topic": "", "cat": "電気回路", "p": "S", "date": "2026-02-23"}, {"q": "H24-問15", "topic": "", "cat": "電磁気", "p": "S", "date": "2026-03-01"}, {"q": "H26-問5", "topic": "", "cat": "電磁気", "p": "S", "date": "2026-03-01"}, {"q": "R02-問8", "topic": "", "cat": "電気回路", "p": "S", "date": "2026-03-08"}, {"q": "H25-問10", "topic": "", "cat": "電気回路", "p": "S", "date": "2026-03-08"}, {"q": "H25-問15", "topic": "", "cat": "電気回路", "p": "S", "date": "2026-03-14"}, {"q": "H24-問16", "topic": "", "cat": "電気回路", "p": "S", "date": "2026-03-15"}, {"q": "H23-問8", "topic": "", "cat": "電気回路", "p": "S", "date": "2026-03-20"}, {"q": "R04上-問9", "topic": "", "cat": "電気回路", "p": "S", "date": "2026-03-23"}, {"q": "R06上-問1", "topic": "", "cat": "電磁気", "p": "S", "date": "2026-03-28"}, {"q": "R06上-問7", "topic": "", "cat": "電気回路", "p": "S", "date": "2026-03-28"}, {"q": "H22-問8", "topic": "", "cat": "電気回路", "p": "S", "date": "2026-04-10"}, {"q": "H19-問7", "topic": "", "cat": "電気回路", "p": "S", "date": "2026-04-12"}];
 const WEAK_DATA_HOUKI = [{"q": "R03-問1", "topic": "", "cat": "電気設備技術基準", "p": "A", "date": "未実施"}, {"q": "R03-問2", "topic": "", "cat": "電気設備技術基準", "p": "A", "date": "未実施"}, {"q": "R03-問3", "topic": "", "cat": "電気設備技術基準", "p": "A", "date": "未実施"}, {"q": "H27-問3", "topic": "", "cat": "電気設備技術基準", "p": "B", "date": "未実施"}, {"q": "R03-問4", "topic": "", "cat": "電気設備技術基準", "p": "A", "date": "未実施"}, {"q": "R03-問5", "topic": "", "cat": "電気設備技術基準", "p": "A", "date": "未実施"}, {"q": "R03-問6", "topic": "", "cat": "電気設備技術基準", "p": "A", "date": "未実施"}, {"q": "R03-問7", "topic": "", "cat": "電気設備技術基準", "p": "A", "date": "未実施"}, {"q": "R03-問8", "topic": "", "cat": "電気設備技術基準", "p": "A", "date": "未実施"}, {"q": "R03-問9", "topic": "", "cat": "電気設備技術基準", "p": "A", "date": "未実施"}, {"q": "R03-問10", "topic": "", "cat": "電気事業法", "p": "A", "date": "未実施"}, {"q": "R03-問11", "topic": "", "cat": "電気事業法", "p": "A", "date": "未実施"}, {"q": "R03-問12", "topic": "", "cat": "電気設備技術基準", "p": "A", "date": "未実施"}, {"q": "H24-問11", "topic": "", "cat": "電気施設管理", "p": "B", "date": "未実施"}, {"q": "R03-問13", "topic": "", "cat": "電気施設管理", "p": "A", "date": "未実施"}, {"q": "R02-問1", "topic": "", "cat": "電気事業法", "p": "A", "date": "未実施"}, {"q": "R02-問2", "topic": "", "cat": "電気事業法", "p": "A", "date": "未実施"}];
 
 // ================================================================
 // ===== TODAY_SESSIONS =====
 // ================================================================
-let TODAY_SESSIONS = {"date":"2026-04-12","days_left":133,"done_count":0,"sessions":[{"slot":"morning","label":"朝","emoji":"🌅","subject_label":"理論","question_id":"R03-問7","category":"電気回路","priority":"S","type":"weak","last_result":null,"memory_retention":12,"days_since":43},{"slot":"noon","label":"昼","emoji":"☀️","subject_label":"理論","question_id":"H25-問10","category":"電気回路","priority":"S","type":"weak","last_result":null,"memory_retention":15,"days_since":35},{"slot":"evening","label":"夜","emoji":"🌙","subject_label":"理論","question_id":"H26-問14","category":"電気回路","priority":"A","type":"weak","last_result":null,"memory_retention":15,"days_since":35}]};
+const TODAY_SESSIONS = {"date":"2026-04-13","days_left":132,"done_count":0,"sessions":[{"slot":"morning","label":"朝","emoji":"🌅","subject_label":"理論","question_id":"電磁誘導_2026-03-27","category":"電磁誘導_2026-03-27","priority":"","type":"review","last_result":"ng","memory_retention":55,"days_since":3},{"slot":"noon","label":"昼","emoji":"☀️","subject_label":"非理論","question_id":"不等率","category":"不等率","priority":"MAP","type":"review","last_result":"risky","memory_retention":0,"days_since":10},{"slot":"evening","label":"夜","emoji":"🌙","subject_label":"非理論","question_id":"H24-問11","category":"電気施設管理","priority":"B","type":"weak","last_result":null,"memory_retention":50,"days_since":0}]};
 
 // ================================================================
 // ===== PDCA_DATA =====
 // ================================================================
-let PDCA_DATA = {"week":"W15","period":"4/7–4/13","current_phase":"D","is_update_day":false,"next_action":{"phase":"C","text":"フェインマン RL回路の位相遷移","cmd":"フェインマン RL回路の位相遷移"},"plan":{"themes":[{"name":"RL回路の位相とインピーダンス","why":"なぜ: インピーダンス🔴×4件・ANCHOR誤答2件","badge_type":"weak","done":true,"phase":"D","phase_dots":2},{"name":"RLC直列・並列共振の特性","why":"なぜ: RLC共振🔴×4件・S優先未達成","badge_type":"weak","done":false,"phase":"P","phase_dots":1},{"name":"三相回路のΔ→Y変換計算","why":"なぜ: 3/22フェインマンで穴発見・未復習","badge_type":"other","done":false,"phase":"P","phase_dots":1}]},"do_logs":[{"date":"4/10","theme":"RL回路の位相遷移（H21問8）","source":"Gemini","score":4},{"date":"3/22","theme":"Y-Δ変換","source":"フェインマン","score":4}],"check":{"rewrites":[{"date":"3/22","pattern":"Δ→Y変換は1/3倍（逆に覚えていた）","verified":null,"pending_checks":[]},{"date":"4/10","pattern":"位相はR/Xの構成比で決まる（部品単体で判断しない）","verified":null,"pending_checks":[]}]},"act_bugs":[{"code":"ANCHOR","desc":"思い込みで全体判断する","count":2},{"code":"MODEL","desc":"物理モデルの誤認識","count":2}],"act_countermeasures":["ANCHOR対策: 必ず「極端条件（R=0 or ∞）」を代入してから判断する"]};
+const PDCA_DATA = {"week":"W15","period":"4/7–4/13","current_phase":"C","is_update_day":true,"next_action":{"phase":"C","text":"フェインマン RL回路の位相遷移","cmd":"フェインマン RL回路の位相遷移"},"plan":{"themes":[{"name":"RL回路の位相とインピーダンス","why":"なぜ: インピーダンス🔴×4件・ANCHOR誤答2件","badge_type":"weak","done":true,"phase":"C","phase_dots":3},{"name":"RLC直列・並列共振の特性","why":"なぜ: RLC共振🔴×4件・S優先未達成","badge_type":"weak","done":false,"phase":"P","phase_dots":1},{"name":"三相回路のΔ→Y変換計算","why":"なぜ: 3/22フェインマンで穴発見・未復習","badge_type":"other","done":false,"phase":"P","phase_dots":1}]},"do_logs":[{"date":"4/10","theme":"RL回路の位相遷移（H21問8）","source":"Gemini","score":4},{"date":"3/22","theme":"Y-Δ変換","source":"フェインマン","score":4}],"check":{"rewrites":[{"date":"3/22","pattern":"Δ→Y変換は1/3倍（逆に覚えていた）","verified":null,"pending_checks":[]},{"date":"4/10","pattern":"位相はR/Xの構成比で決まる（部品単体で判断しない）","verified":null,"pending_checks":[]}]},"act_bugs":[{"code":"ANCHOR","desc":"思い込みで全体判断する","count":2},{"code":"MODEL","desc":"物理モデルの誤認識","count":2}],"act_countermeasures":["ANCHOR対策: 必ず「極端条件（R=0 or ∞）」を代入してから判断する"]};
 
 // ===== PAST_ERRORS =====
-let PAST_ERRORS = [{"question_id": "電磁誘導_2026-03-27", "category": "電磁誘導_2026-03-27", "subject": "理論", "result": "ng", "date": "2026-04-10", "memo": "AIの説明が間違え。理解していた。", "next_review": "SR1"}, {"question_id": "不等率", "category": "不等率", "subject": "電力", "result": "risky", "date": "2026-04-03", "memo": "需要率との区別で一部迷い（設備容量との関係が曖昧）", "next_review": "SR3"}, {"question_id": "磁界", "category": "磁界", "subject": "理論", "result": "risky", "date": "2026-04-01", "memo": "磁界が1/r、点電荷の電界が1/r^2になる理由の区別がやや曖昧。式は選べたが、広がり方の説明補強が必要。", "next_review": "SR2"}];
+const PAST_ERRORS = [{"question_id": "過去問演習", "category": "過去問演習", "subject": "理論", "result": "risky", "date": "2026-04-13", "memo": "API直接実行のテスト記録", "next_review": "SR2"}, {"question_id": "電磁誘導", "category": "電磁誘導", "subject": "理論", "result": "ng", "date": "2026-04-10", "memo": "AIの説明が間違え。理解していた。", "next_review": "SR1"}, {"question_id": "不等率", "category": "不等率", "subject": "電力", "result": "risky", "date": "2026-04-03", "memo": "需要率との区別で一部迷い（設備容量との関係が曖昧）", "next_review": "SR3"}, {"question_id": "磁界", "category": "磁界", "subject": "理論", "result": "risky", "date": "2026-04-01", "memo": "磁界が1/r、点電荷の電界が1/r^2になる理由の区別がやや曖昧。式は選べたが、広がり方の説明補強が必要。", "next_review": "SR2"}];
 
 // ================================================================
 // ===== CANVAS BACKGROUND (stars) =====
@@ -1260,6 +1435,10 @@ function switchTab(tabId) {
   if (tabId === 'history' && !window._historyInited) {
     window._historyInited = true;
     initHistory();
+  }
+  if (tabId === 'quiz' && !window._quizInited) {
+    window._quizInited = true;
+    initQuizCharts();
   }
 }
 document.querySelectorAll('.tab-btn').forEach(btn => {
@@ -1543,10 +1722,10 @@ function initHistory() {
   document.getElementById('weak-total').textContent = WEAK_DATA.length;
 
   // カウントダウン
-  const diff = Math.ceil((EXAM_DATE - TODAY_DATE) / 86400000);
+  const diff = Math.ceil((EXAM_DATE - TODAY) / 86400000);
   document.getElementById('countdown').textContent = diff;
   const totalDays = (EXAM_DATE - STUDY_START) / 86400000;
-  const elapsed = (TODAY_DATE - STUDY_START) / 86400000;
+  const elapsed = (TODAY - STUDY_START) / 86400000;
   const progPct = Math.min(100, Math.round(elapsed / totalDays * 100));
   setTimeout(() => {
     document.getElementById('exam-prog').style.width = progPct + '%';
@@ -1724,79 +1903,76 @@ function renderPastErrors() {
 }
 
 // ================================================================
-// ===== INITIAL RENDER (localhost: Flask API / GitHub Pages: static)
+// ===== INITIAL RENDER =====
 // ================================================================
-async function initDashboard() {
-  const isLocal = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
+// Tab1: Today sessions
+renderTodaySessions();
+renderPastErrors();
 
-  if (isLocal) {
-    try {
-      const [todayRes, pdcaRes, errorsRes] = await Promise.all([
-        fetch('/api/today'),
-        fetch('/api/pdca'),
-        fetch('/api/past-errors'),
-      ]);
-      const todayData  = await todayRes.json();
-      const pdcaRaw    = await pdcaRes.json();
-      const errorsData = await errorsRes.json();
+// Tab2: PDCA
+renderPdca();
 
-      // Transform Flask /api/today → TODAY_SESSIONS format
-      TODAY_SESSIONS = {
-        date:       todayData.date,
-        days_left:  todayData.days_left,
-        done_count: (todayData.sessions || []).filter(s => s.done).length,
-        sessions:   (todayData.sessions || []).map(s => {
-          const t = s.topic || {};
-          const lastDate = t.last_date || '';
-          const daysSince = lastDate && lastDate !== '未実施'
-            ? Math.round((new Date() - new Date(lastDate)) / 86400000)
-            : 30;
-          const retention = t.type === 'review'
-            ? Math.round(Math.exp(-daysSince / 5) * 100)
-            : Math.round(Math.exp(-daysSince / 3) * 100);
-          return {
-            slot:             s.slot,
-            label:            s.label,
-            emoji:            s.emoji,
-            subject_label:    s.subject_label,
-            question_id:      t.question_id || '',
-            category:         t.category || t.question_id || '',
-            priority:         t.priority || 'B',
-            type:             t.type || 'weak',
-            last_result:      s.result || t.last_result || null,
-            memory_retention: Math.max(1, Math.min(100, retention)),
-            days_since:       daysSince,
-          };
-        }),
-      };
+// Tab3: Historyは初回アクティブ時に initHistory() を呼ぶ（tab-today がデフォルト）
 
-      // Normalize Flask /api/pdca → PDCA_DATA format
-      // Flask uses do.logs / act.bugs / act.countermeasures; static uses do_logs / act_bugs / act_countermeasures
-      PDCA_DATA = Object.assign({}, pdcaRaw, {
-        do_logs:            (pdcaRaw.do  || {}).logs            || pdcaRaw.do_logs            || [],
-        act_bugs:           (pdcaRaw.act || {}).bugs            || pdcaRaw.act_bugs            || [],
-        act_countermeasures:(pdcaRaw.act || {}).countermeasures || pdcaRaw.act_countermeasures || [],
-      });
-
-      // Flask /api/past-errors → PAST_ERRORS
-      if (errorsData && errorsData.errors) PAST_ERRORS = errorsData.errors;
-
-    } catch (e) {
-      console.warn('[dashboard] Flask API fetch failed, using static data:', e);
-    }
-  }
-
-  renderTodaySessions();
-  renderPastErrors();
-  renderPdca();
-
+// システムタブ: 日付
+(function() {
+  const d = new Date();
+  const s = d.toLocaleDateString('ja-JP',{year:'numeric',month:'long',day:'numeric'});
   const el = document.getElementById('sys-footer-date');
-  if (el) el.textContent = new Date().toLocaleDateString('ja-JP',{year:'numeric',month:'long',day:'numeric'});
+  if (el) el.textContent = s;
+})();
 
-  switchTab('today');
+// ================================================================
+// ===== TAB-QUIZ: チャート初期化 =====
+// ================================================================
+// QUIZ_CHART_START
+function initQuizCharts() {
+  // 活動チャート
+  new Chart(document.getElementById('q-ac'), {
+    type: 'bar',
+    data: {
+      labels: ["3/15", "3/16", "3/17", "3/18", "3/19", "3/20", "3/21", "3/22", "3/23", "3/24", "3/25", "3/26", "3/27", "3/28", "3/29", "3/30", "3/31", "4/1", "4/2", "4/3", "4/4", "4/5", "4/6", "4/7", "4/8", "4/9", "4/10", "4/11", "4/12", "4/13"],
+      datasets: [{
+        label: '記録数',
+        data: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 1, 0, 0, 0, 0, 0, 2, 6, 0, 0, 1],
+        backgroundColor: 'rgba(96,165,250,.55)',
+        borderColor: '#60a5fa',
+        borderWidth: 1,
+        borderRadius: 4
+      }]
+    },
+    options: {
+      responsive: true,
+      plugins: { legend: { display: false } },
+      scales: {
+        y: { beginAtZero: true, ticks: { color: '#64748b', stepSize: 1 }, grid: { color: '#1a2535' } },
+        x: { ticks: { color: '#64748b', maxRotation: 45, font: { size: 10 } }, grid: { display: false } }
+      }
+    }
+  });
+
+  // テーマ別定着状態ドーナツ
+  new Chart(document.getElementById('q-rc'), {
+    type: 'doughnut',
+    data: {
+      labels: ['一発OK','回復OK','Risky','NG'],
+      datasets: [{
+        data: [6, 0, 3, 1],
+        backgroundColor: ['#22c55e','#facc15','#f59e0b','#ef4444'],
+        borderColor: '#0d1117',
+        borderWidth: 4
+      }]
+    },
+    options: {
+      responsive: true,
+      plugins: { legend: { labels: { color: '#94a3b8', font: { size: 12 } } } }
+    }
+  });
 }
+// QUIZ_CHART_END
 
-initDashboard();
+// 初期タブ
+switchTab('today');
 
 // Tab switch: PDCAタブ切り替え時にflow stepperを更新
 document.querySelectorAll('.tab-btn').forEach(btn => {

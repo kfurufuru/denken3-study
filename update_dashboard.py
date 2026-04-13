@@ -12,6 +12,11 @@
 
 import os, json, re, datetime, requests
 
+# GitHub Actions は UTC で動作するため JST (+9h) を使用
+_JST = datetime.timezone(datetime.timedelta(hours=9))
+def _today() -> datetime.date:
+    return datetime.datetime.now(tz=_JST).date()
+
 NOTION_TOKEN = os.environ.get("NOTION_TOKEN", "")
 DB_ID        = os.environ.get("DB_ID", "ff4fcb73cc14408caedf87c904ae2fd9")
 HEADERS = {
@@ -138,7 +143,7 @@ def compute_stats(records):
         "total": total, "achieved": achieved, "new_achieved": new_achieved,
         "maru1": maru1, "batu1": batu1,
         "by_cat": by_cat, "weak": weak[:20],
-        "updated": datetime.date.today().isoformat()
+        "updated": _today().isoformat()
     }
 
 
@@ -196,8 +201,8 @@ def compute_today_sessions(notion_records, records_list):
         1. records.json で next_review が SR1〜SR5 かつ date が今日以前のもの → type:"review"
         2. 不足分を Notion の priority 順（S→A→B→C）で補充 → type:"weak"
     """
-    today_str = datetime.date.today().isoformat()
-    days_left = (EXAM_DATE - datetime.date.today()).days
+    today_str = _today().isoformat()
+    days_left = (EXAM_DATE - _today()).days
 
     # --- SR復習候補を抽出 ---
     sr_candidates = []
@@ -307,7 +312,7 @@ def compute_pdca_data(records_list):
     - act_bugs : error_sub フィールドの集計（上位5件）
     - act_countermeasures : bug上位コードの対策文
     """
-    today = datetime.date.today()
+    today = _today()
 
     # 今週の情報
     iso_week = today.isocalendar()[1]

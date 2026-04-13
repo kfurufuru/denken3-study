@@ -42,11 +42,6 @@ jobs:
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
-          git add data/records.json
-          if [ -f quiz.html ]; then
-            git add quiz.html
-          else
-            echo "⚠️ quiz.html が存在しないためスキップ"
-          fi
+          git add data/records.json index.html
           git diff --staged --quiet || git commit -m "📝 テスト記録追加 & ダッシュボード更新 [$(date +'%Y-%m-%d %H:%M JST')]"
           git push
