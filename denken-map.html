@@ -613,7 +613,7 @@ header {
 // ─── STATIC FALLBACK DATA ───
 const STATIC_DATA = {
   nodes: [
-    {id:'impedance',     label:'インピーダンス', sub:'Z = R + jX',     status:'hub',       subject:'riron',    error_count:3, memo:'交流回路の中心概念。ANCHOR誤答3件あり'},
+    {id:'impedance',     label:'インピーダンス', sub:'Z = R + jX',     status:'hub',       hub:true,           subject:'riron',    error_count:3, memo:'交流回路の中心概念。ANCHOR誤答3件あり'},
     {id:'rl-circuit',    label:'RL回路',          sub:'位相遷移',        status:'ok',        subject:'riron',    error_count:1, memo:'RL短絡でMODEL+ANCHOR誤答あり'},
     {id:'rlc-resonance', label:'RLC共振',          sub:'共振条件',        status:'weak',      subject:'riron',    error_count:2, memo:'インピーダンスの向き誤り'},
     {id:'three-phase',   label:'三相交流',          sub:'ベクトル合成',    status:'ok',        subject:'riron',    error_count:0, memo:'SR3 次回復習待ち'},
@@ -624,7 +624,7 @@ const STATIC_DATA = {
     {id:'capacitance',   label:'静電容量',           sub:'C=Q/V',          status:'ok',        subject:'riron',    error_count:0, memo:'理解済み (done)'},
     {id:'em-field',      label:'電磁界',             sub:'電位・磁界',     status:'ok',        subject:'riron',    error_count:1, memo:'CONF誤答1件。V=Ed を混同'},
     {id:'load-factor',   label:'不等率',             sub:'需要率・負荷率', status:'risky',     subject:'denryoku', error_count:1, memo:'需要率と混同。SR3'},
-    {id:'regulation-14', label:'電技省令14条',       sub:'接続条件',        status:'connected', subject:'hoki',     error_count:0, memo:'RL回路との接続発見'},
+    {id:'regulation-14', label:'電技省令14条',       sub:'接続条件',        status:'connected', cross_subject:true, subject:'hoki',     error_count:0, memo:'RL回路との接続発見'},
   ],
   edges: [
     {from:'impedance',    to:'rl-circuit'},
@@ -1043,8 +1043,8 @@ function buildFromRecords(records, configNodes) {
     radarScores.push(Math.round((st.ok*100+st.risky*50)/st.total));
   });
   const nodes = configNodes.map(n => {
-    if (n.hub) return {...n, status:'hub', error_count:topicErrors[n.id]||0};
-    if (n.cross_subject) return {...n, status:'connected', error_count:0};
+    if (n.hub || n.status === 'hub') return {...n, status:'hub', error_count:topicErrors[n.id]||0};
+    if (n.cross_subject || n.status === 'connected') return {...n, status:'connected', error_count:0};
     const st = topicStatus[n.id];
     if (!st) return {...n, status:'unlearned', error_count:topicErrors[n.id]||0};
     const status = st.result==='ok' ? 'ok' : (st.result==='ng'||st.result==='risky') ? 'weak' : 'unlearned';
