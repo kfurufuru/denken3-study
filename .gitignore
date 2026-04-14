@@ -1,0 +1,4 @@
+pull_log.txt
+*.log
+__pycache__/
+*.pyc
