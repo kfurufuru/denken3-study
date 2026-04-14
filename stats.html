@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>電験3種 学習PDCA</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Noto+Sans+JP:wght@400;500;700&display=swap" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <style>
+    :root {
+      --bg:      #0f172a;
+      --bg2:     #1e293b;
+      --bg3:     #263347;
+      --accent:  #38bdf8;
+      --text:    #e2e8f0;
+      --muted:   #64748b;
+      --border:  rgba(255,255,255,0.08);
+      --green:   #10b981;
+      --yellow:  #f59e0b;
+      --red:     #ef4444;
+      --font:    'Inter','Noto Sans JP',sans-serif;
+      --r-sm:    6px;
+      --r-md:    12px;
+    }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body { background: var(--bg); color: var(--text); font-family: var(--font); font-size: 0.95rem; line-height: 1.6; min-height: 100vh; }
+
+    .header {
+      background: var(--bg2); border-bottom: 1px solid var(--border);
+      padding: 16px 24px; display: flex; align-items: center; gap: 12px;
+    }
+    .header h1 { font-size: 1.1rem; font-weight: 700; color: var(--accent); }
+    .header-sub { font-size: 0.8rem; color: var(--muted); margin-left: auto; }
+    .header-back { font-size: 0.82rem; color: var(--muted); text-decoration: none; padding: 4px 12px; border: 1px solid var(--border); border-radius: var(--r-sm); transition: 0.2s; }
+    .header-back:hover { color: var(--accent); border-color: var(--accent); }
+
+    .main { max-width: 1100px; margin: 0 auto; padding: 24px 20px; }
+
+    .stats { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; margin-bottom: 24px; }
+    .stat-card { background: var(--bg2); border: 1px solid var(--border); border-radius: var(--r-md); padding: 16px 20px; }
+    .stat-label { font-size: 0.78rem; color: var(--muted); margin-bottom: 4px; }
+    .stat-value { font-size: 2rem; font-weight: 700; line-height: 1; }
+    .stat-value.green  { color: var(--green); }
+    .stat-value.yellow { color: var(--yellow); }
+    .stat-value.red    { color: var(--red); }
+    .stat-value.accent { color: var(--accent); }
+    .stat-sub { font-size: 0.78rem; color: var(--muted); margin-top: 4px; }
+
+    .charts { display: grid; grid-template-columns: 2fr 1fr; gap: 16px; margin-bottom: 24px; }
+    .card { background: var(--bg2); border: 1px solid var(--border); border-radius: var(--r-md); padding: 20px; }
+    .card-title { font-size: 0.8rem; font-weight: 600; color: var(--muted); text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 16px; }
+
+    .subject-bars { display: flex; flex-direction: column; gap: 14px; }
+    .subject-header { display: flex; justify-content: space-between; margin-bottom: 4px; font-size: 0.85rem; }
+    .subject-name { font-weight: 500; }
+    .subject-count { color: var(--muted); font-size: 0.8rem; }
+    .bar-track { background: var(--bg3); border-radius: 4px; height: 8px; overflow: hidden; }
+    .bar-fill { height: 100%; border-radius: 4px; transition: width 0.6s ease; }
+
+    .alert-section { margin-bottom: 24px; }
+    .alert-title { font-size: 0.85rem; font-weight: 600; color: var(--yellow); margin-bottom: 10px; }
+    .alert-list { display: flex; flex-wrap: wrap; gap: 8px; }
+    .alert-chip { background: rgba(245,158,11,0.1); border: 1px solid rgba(245,158,11,0.25); border-radius: var(--r-sm); padding: 4px 12px; font-size: 0.82rem; color: var(--yellow); }
+    .alert-chip.ng { background: rgba(239,68,68,0.1); border-color: rgba(239,68,68,0.25); color: var(--red); }
+
+    .filter-row { display: flex; gap: 8px; margin-bottom: 16px; flex-wrap: wrap; }
+    .filter-btn { background: var(--bg3); border: 1px solid var(--border); color: var(--muted); font-size: 0.82rem; padding: 5px 14px; border-radius: 20px; cursor: pointer; transition: 0.2s; font-family: var(--font); }
+    .filter-btn:hover, .filter-btn.active { background: var(--accent); color: var(--bg); border-color: var(--accent); font-weight: 600; }
+
+    .pdca-list { display: flex; flex-direction: column; gap: 10px; }
+    .pdca-item { background: var(--bg3); border: 1px solid var(--border); border-radius: var(--r-sm); padding: 14px 16px; }
+    .pdca-meta { display: flex; align-items: center; gap: 8px; margin-bottom: 8px; flex-wrap: wrap; }
+    .badge { font-size: 0.72rem; font-weight: 700; padding: 2px 8px; border-radius: 4px; text-transform: uppercase; letter-spacing: 0.04em; }
+    .badge-ok    { background: rgba(16,185,129,0.15);  color: var(--green);  border: 1px solid rgba(16,185,129,0.3); }
+    .badge-risky { background: rgba(245,158,11,0.15);  color: var(--yellow); border: 1px solid rgba(245,158,11,0.3); }
+    .badge-ng    { background: rgba(239,68,68,0.15);   color: var(--red);    border: 1px solid rgba(239,68,68,0.3); }
+    .badge-subj  { background: rgba(56,189,248,0.1);   color: var(--accent); border: 1px solid rgba(56,189,248,0.2); }
+    .pdca-theme { font-weight: 600; }
+    .pdca-date  { font-size: 0.78rem; color: var(--muted); margin-left: auto; }
+    .pdca-section { margin-top: 6px; }
+    .pdca-label { font-size: 0.72rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 2px; }
+    .pdca-label.problem { color: var(--red); }
+    .pdca-label.patch   { color: var(--green); }
+    .pdca-text  { font-size: 0.85rem; color: #cbd5e1; line-height: 1.5; }
+
+    .loading { text-align: center; padding: 80px 20px; color: var(--muted); }
+    .spinner { width: 32px; height: 32px; border: 3px solid var(--border); border-top-color: var(--accent); border-radius: 50%; animation: spin 0.8s linear infinite; margin: 0 auto 12px; }
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    @media (max-width: 768px) {
+      .stats { grid-template-columns: repeat(2, 1fr); }
+      .charts { grid-template-columns: 1fr; }
+    }
+    @media (max-width: 480px) {
+      .main { padding: 16px 12px; }
+    }
+  </style>
+</head>
+<body>
+
+<div class="header">
+  <span>⚡</span>
+  <h1>電験3種 学習PDCA</h1>
+  <a class="header-back" href="./index.html">← ダッシュボードへ</a>
+  <span class="header-sub" id="updated-at">読み込み中…</span>
+</div>
+
+<div class="main" id="app">
+  <div class="loading"><div class="spinner"></div>データ取得中…</div>
+</div>
+
+<script>
+const DATA_URL = 'https://raw.githubusercontent.com/kfurufuru/denken3-study/main/data/records.json';
+const SUBJ_COLOR = { '理論': '#38bdf8', '電力': '#10b981', '機械': '#a78bfa', '法規': '#f59e0b' };
+
+async function load() {
+  const res = await fetch(DATA_URL);
+  if (!res.ok) throw new Error('fetch failed: ' + res.status);
+  return res.json();
+}
+
+function resultLabel(r) { return r === 'ok' ? 'OK' : r === 'risky' ? 'RISKY' : 'NG'; }
+
+function render(records) {
+  // Latest per theme for stats
+  const latestMap = {};
+  records.forEach(r => {
+    if (!latestMap[r.theme_id] || r.date > latestMap[r.theme_id].date) latestMap[r.theme_id] = r;
+  });
+  const latest = Object.values(latestMap);
+
+  const total  = latest.length;
+  const okCnt  = latest.filter(r => r.result === 'ok').length;
+  const risky  = latest.filter(r => r.result === 'risky');
+  const ng     = latest.filter(r => r.result === 'ng');
+  const okRate = total ? Math.round(okCnt / total * 100) : 0;
+
+  const subjMap = {};
+  latest.forEach(r => { const s = r.subject || '不明'; subjMap[s] = (subjMap[s] || 0) + 1; });
+  const maxSubj = Math.max(...Object.values(subjMap), 1);
+
+  const timeMap = {};
+  records.forEach(r => { timeMap[r.date] = (timeMap[r.date] || 0) + 1; });
+  const dates = Object.keys(timeMap).sort();
+  const lastDate = dates[dates.length - 1] || '–';
+
+  const hasPDCA = records
+    .filter(r => r.memo || r.patch)
+    .sort((a, b) => b.date.localeCompare(a.date))
+    .slice(0, 20);
+
+  const app = document.getElementById('app');
+  app.innerHTML = `
+    <div class="stats">
+      <div class="stat-card">
+        <div class="stat-label">学習テーマ数</div>
+        <div class="stat-value accent">${total}</div>
+        <div class="stat-sub">ユニーク</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-label">OK 率</div>
+        <div class="stat-value green">${okRate}%</div>
+        <div class="stat-sub">${okCnt} / ${total}</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-label">要復習 RISKY</div>
+        <div class="stat-value yellow">${risky.length}</div>
+        <div class="stat-sub">SR対象</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-label">NG</div>
+        <div class="stat-value red">${ng.length}</div>
+        <div class="stat-sub">再学習</div>
+      </div>
+    </div>
+
+    <div class="charts">
+      <div class="card">
+        <div class="card-title">学習アクティビティ（日別）</div>
+        <canvas id="chart-timeline" height="110"></canvas>
+      </div>
+      <div class="card">
+        <div class="card-title">科目別カバレッジ</div>
+        <div class="subject-bars" id="subj-bars"></div>
+      </div>
+    </div>
+
+    ${(risky.length + ng.length) > 0 ? `
+    <div class="alert-section">
+      <div class="alert-title">⚠️ 要フォロー</div>
+      <div class="alert-list">
+        ${ng.map(r => `<div class="alert-chip ng">NG: ${r.theme}</div>`).join('')}
+        ${risky.map(r => `<div class="alert-chip">RISKY: ${r.theme}</div>`).join('')}
+      </div>
+    </div>` : ''}
+
+    <div class="card">
+      <div class="card-title">PDCA 振り返り</div>
+      <div class="filter-row" id="filter-row">
+        <button class="filter-btn active" data-f="all">すべて</button>
+        <button class="filter-btn" data-f="ng">NG</button>
+        <button class="filter-btn" data-f="risky">RISKY</button>
+        <button class="filter-btn" data-f="ok">OK</button>
+      </div>
+      <div class="pdca-list" id="pdca-list"></div>
+    </div>`;
+
+  document.getElementById('updated-at').textContent = '最終学習: ' + lastDate;
+
+  // Timeline chart
+  new Chart(document.getElementById('chart-timeline'), {
+    type: 'bar',
+    data: {
+      labels: dates,
+      datasets: [{ data: dates.map(d => timeMap[d]), backgroundColor: 'rgba(56,189,248,0.45)', borderColor: '#38bdf8', borderWidth: 1, borderRadius: 4 }]
+    },
+    options: {
+      plugins: { legend: { display: false } },
+      scales: {
+        x: { ticks: { color: '#64748b', font: { size: 11 } }, grid: { color: 'rgba(255,255,255,0.04)' } },
+        y: { ticks: { color: '#64748b', font: { size: 11 }, stepSize: 1 }, grid: { color: 'rgba(255,255,255,0.06)' }, beginAtZero: true }
+      }
+    }
+  });
+
+  // Subject bars
+  const subjBars = document.getElementById('subj-bars');
+  ['理論','電力','機械','法規'].forEach(s => {
+    const cnt = subjMap[s] || 0;
+    const pct = Math.round(cnt / maxSubj * 100);
+    const col = SUBJ_COLOR[s];
+    subjBars.innerHTML += `
+      <div>
+        <div class="subject-header">
+          <span class="subject-name" style="color:${col}">${s}</span>
+          <span class="subject-count">${cnt} テーマ</span>
+        </div>
+        <div class="bar-track"><div class="bar-fill" style="width:${pct}%;background:${col}"></div></div>
+      </div>`;
+  });
+
+  // PDCA list
+  function renderPDCA(filter) {
+    const items = filter === 'all' ? hasPDCA : hasPDCA.filter(r => r.result === filter);
+    const list = document.getElementById('pdca-list');
+    if (!items.length) { list.innerHTML = `<div style="color:var(--muted);padding:12px 0;font-size:0.85rem">該当なし</div>`; return; }
+    list.innerHTML = items.map(r => `
+      <div class="pdca-item">
+        <div class="pdca-meta">
+          <span class="badge badge-${r.result}">${resultLabel(r.result)}</span>
+          <span class="badge badge-subj">${r.subject || '–'}</span>
+          <span class="pdca-theme">${r.theme}</span>
+          <span class="pdca-date">${r.date}  #${r.attempt}</span>
+        </div>
+        ${r.memo  ? `<div class="pdca-section"><div class="pdca-label problem">Problem</div><div class="pdca-text">${r.memo}</div></div>` : ''}
+        ${r.patch ? `<div class="pdca-section"><div class="pdca-label patch">Patch / Try</div><div class="pdca-text">${r.patch}</div></div>` : ''}
+      </div>`).join('');
+  }
+
+  renderPDCA('all');
+  document.getElementById('filter-row').addEventListener('click', e => {
+    const btn = e.target.closest('.filter-btn');
+    if (!btn) return;
+    document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    renderPDCA(btn.dataset.f);
+  });
+}
+
+load().then(render).catch(err => {
+  document.getElementById('app').innerHTML = `<div class="loading" style="color:var(--red)">データ取得失敗: ${err.message}</div>`;
+});
+</script>
+</body>
+</html>
