@@ -419,7 +419,7 @@ def inject_today_pdca(html, today_data, pdca_data, past_errors):
     # TODAY_SESSIONS 置換
     today_js = json.dumps(today_data, ensure_ascii=False, indent=2)
     html = re.sub(
-        r'// ===== TODAY_SESSIONS =====\s*\nconst TODAY_SESSIONS = \{.*?\};',
+        r'// ===== TODAY_SESSIONS =====.*?const TODAY_SESSIONS = \{.*?\};',
         f'// ===== TODAY_SESSIONS =====\nconst TODAY_SESSIONS = {today_js};',
         html,
         flags=re.DOTALL
@@ -428,7 +428,7 @@ def inject_today_pdca(html, today_data, pdca_data, past_errors):
     # PDCA_DATA 置換
     pdca_js = json.dumps(pdca_data, ensure_ascii=False, indent=2)
     html = re.sub(
-        r'// ===== PDCA_DATA =====\s*\nconst PDCA_DATA = \{.*?\};',
+        r'// ===== PDCA_DATA =====.*?const PDCA_DATA = \{.*?\};',
         f'// ===== PDCA_DATA =====\nconst PDCA_DATA = {pdca_js};',
         html,
         flags=re.DOTALL
@@ -437,7 +437,7 @@ def inject_today_pdca(html, today_data, pdca_data, past_errors):
     # PAST_ERRORS 置換
     past_js = json.dumps(past_errors, ensure_ascii=False)
     html = re.sub(
-        r'// ===== PAST_ERRORS =====\s*\nconst PAST_ERRORS = \[.*?\];',
+        r'// ===== PAST_ERRORS =====.*?const PAST_ERRORS = \[.*?\];',
         f'// ===== PAST_ERRORS =====\nconst PAST_ERRORS = {past_js};',
         html, flags=re.DOTALL
     )
