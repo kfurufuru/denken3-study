@@ -918,7 +918,7 @@ canvas.q-chart{max-height:200px!important}
         <div class="bunya-item">
           <div class="bunya-hd">
             <div class="bunya-nm"><span style="color:var(--green)">⚡</span> 電気回路</div>
-            <div class="bunya-pct" style="color:var(--green)">30% <span style="color:var(--muted);font-weight:400;font-size:.7rem">≈ 48/159問</span></div>
+            <div class="bunya-pct" style="color:var(--green)">30% <span style="color:var(--muted);font-weight:400;font-size:.7rem">≈ 48/160問</span></div>
           </div>
           <div class="bar-bg"><div class="bar-fill" id="b1" style="width:0%;background:linear-gradient(90deg,#10b981,#34d399)"></div></div>
           <div class="bunya-chips">
@@ -955,7 +955,7 @@ canvas.q-chart{max-height:200px!important}
         <div class="bunya-item" style="margin-bottom:0">
           <div class="bunya-hd">
             <div class="bunya-nm"><span style="color:var(--purple)">🔬</span> 電子理論</div>
-            <div class="bunya-pct" style="color:var(--purple)">3% <span style="color:var(--muted);font-weight:400;font-size:.7rem">≈ 3/116問</span></div>
+            <div class="bunya-pct" style="color:var(--purple)">3% <span style="color:var(--muted);font-weight:400;font-size:.7rem">≈ 3/114問</span></div>
           </div>
           <div class="bar-bg"><div class="bar-fill" id="b4" style="width:0%;background:linear-gradient(90deg,#8b5cf6,#c084fc)"></div></div>
           <div class="bunya-chips">
@@ -1372,8 +1372,8 @@ function triggerUpdate() {
 
 // ================================================================
 // ===== DATA =====
-const ACHIEVED = 97, TOTAL = 486;
-const FIRST_MARU = 85, FIRST_BATU = 63;
+const ACHIEVED = 97, TOTAL = 485;
+const FIRST_MARU = 85, FIRST_BATU = 64;
 const STREAK = 3;
 const EXAM_DATE = new Date('2026-08-23');
 const STUDY_START = new Date('2025-09-01');
@@ -1384,13 +1384,157 @@ const WEAK_DATA_HOUKI = [{"q": "R03-問1", "topic": "", "cat": "電気設備技�
 
 // ================================================================
 // ===== TODAY_SESSIONS =====
-// ================================================================
-const TODAY_SESSIONS = {"date":"2026-04-13","days_left":132,"done_count":0,"sessions":[{"slot":"morning","label":"朝","emoji":"🌅","subject_label":"理論","question_id":"電磁誘導_2026-03-27","category":"電磁誘導_2026-03-27","priority":"","type":"review","last_result":"ng","memory_retention":55,"days_since":3},{"slot":"noon","label":"昼","emoji":"☀️","subject_label":"非理論","question_id":"不等率","category":"不等率","priority":"MAP","type":"review","last_result":"risky","memory_retention":0,"days_since":10},{"slot":"evening","label":"夜","emoji":"🌙","subject_label":"非理論","question_id":"H24-問11","category":"電気施設管理","priority":"B","type":"weak","last_result":null,"memory_retention":50,"days_since":0}]};
+const TODAY_SESSIONS = {
+  "date": "2026-04-19",
+  "days_left": 126,
+  "sessions": [
+    {
+      "slot": "morning",
+      "label": "朝",
+      "emoji": "🌅",
+      "subject_label": "理論",
+      "question_id": "",
+      "category": "",
+      "priority": "B",
+      "type": "review",
+      "last_result": "ng"
+    },
+    {
+      "slot": "noon",
+      "label": "昼",
+      "emoji": "☀️",
+      "subject_label": "法規",
+      "question_id": "",
+      "category": "",
+      "priority": "B",
+      "type": "review",
+      "last_result": "ng"
+    },
+    {
+      "slot": "evening",
+      "label": "夜",
+      "emoji": "🌙",
+      "subject_label": "法規",
+      "question_id": "",
+      "category": "",
+      "priority": "C",
+      "type": "weak"
+    }
+  ]
+};
 
 // ================================================================
 // ===== PDCA_DATA =====
-// ================================================================
-const PDCA_DATA = {"week":"W15","period":"4/7–4/13","current_phase":"C","is_update_day":true,"next_action":{"phase":"C","text":"フェインマン RL回路の位相遷移","cmd":"フェインマン RL回路の位相遷移"},"plan":{"themes":[{"name":"RL回路の位相とインピーダンス","why":"なぜ: インピーダンス🔴×4件・ANCHOR誤答2件","badge_type":"weak","done":true,"phase":"C","phase_dots":3},{"name":"RLC直列・並列共振の特性","why":"なぜ: RLC共振🔴×4件・S優先未達成","badge_type":"weak","done":false,"phase":"P","phase_dots":1},{"name":"三相回路のΔ→Y変換計算","why":"なぜ: 3/22フェインマンで穴発見・未復習","badge_type":"other","done":false,"phase":"P","phase_dots":1}]},"do_logs":[{"date":"4/10","theme":"RL回路の位相遷移（H21問8）","source":"Gemini","score":4},{"date":"3/22","theme":"Y-Δ変換","source":"フェインマン","score":4}],"check":{"rewrites":[{"date":"3/22","pattern":"Δ→Y変換は1/3倍（逆に覚えていた）","verified":null,"pending_checks":[]},{"date":"4/10","pattern":"位相はR/Xの構成比で決まる（部品単体で判断しない）","verified":null,"pending_checks":[]}]},"act_bugs":[{"code":"ANCHOR","desc":"思い込みで全体判断する","count":2},{"code":"MODEL","desc":"物理モデルの誤認識","count":2}],"act_countermeasures":["ANCHOR対策: 必ず「極端条件（R=0 or ∞）」を代入してから判断する"]};
+const PDCA_DATA = {
+  "week": "W16",
+  "period": "4/13–4/19",
+  "do_logs": [
+    {
+      "date": "4/13",
+      "theme": "過去問演習",
+      "source": "問題演習",
+      "score": 0,
+      "result": "risky"
+    },
+    {
+      "date": "4/10",
+      "theme": "電磁誘導",
+      "source": "問題演習",
+      "score": 0,
+      "result": "ok"
+    },
+    {
+      "date": "4/10",
+      "theme": "静電容量",
+      "source": "問題演習",
+      "score": 0,
+      "result": "ok"
+    },
+    {
+      "date": "4/10",
+      "theme": "電位・電界・磁界",
+      "source": "問題演習",
+      "score": 0,
+      "result": "ok"
+    },
+    {
+      "date": "4/10",
+      "theme": "電界・磁界・電位",
+      "source": "問題演習",
+      "score": 0,
+      "result": "ok"
+    },
+    {
+      "date": "4/10",
+      "theme": "電磁誘導",
+      "source": "問題演習",
+      "score": 0,
+      "result": "ng"
+    },
+    {
+      "date": "4/10",
+      "theme": "静電容量",
+      "source": "問題演習",
+      "score": 0,
+      "result": "ok"
+    },
+    {
+      "date": "4/9",
+      "theme": "test-Q1",
+      "source": "問題演習",
+      "score": 0,
+      "result": "ok"
+    },
+    {
+      "date": "4/9",
+      "theme": "R02-問8",
+      "source": "問題演習",
+      "score": 0,
+      "result": "ok"
+    },
+    {
+      "date": "4/3",
+      "theme": "不等率",
+      "source": "問題演習",
+      "score": 0,
+      "result": "risky"
+    }
+  ],
+  "check_pending": [
+    {
+      "theme": "過去問演習",
+      "result": "risky",
+      "category": "",
+      "days_ago": 6
+    },
+    {
+      "theme": "静電容量",
+      "result": "ok",
+      "category": "",
+      "days_ago": 9
+    },
+    {
+      "theme": "不等率",
+      "result": "risky",
+      "category": "",
+      "days_ago": 16
+    },
+    {
+      "theme": "磁界",
+      "result": "risky",
+      "category": "",
+      "days_ago": 18
+    },
+    {
+      "theme": "三相交流",
+      "result": "ok",
+      "category": "",
+      "days_ago": 24
+    }
+  ],
+  "act_bugs": [],
+  "act_countermeasures": []
+};
 
 // ===== PAST_ERRORS =====
 const PAST_ERRORS = [{"question_id": "過去問演習", "category": "過去問演習", "subject": "理論", "result": "risky", "date": "2026-04-13", "memo": "API直接実行のテスト記録", "next_review": "SR2"}, {"question_id": "電磁誘導", "category": "電磁誘導", "subject": "理論", "result": "ng", "date": "2026-04-10", "memo": "AIの説明が間違え。理解していた。", "next_review": "SR1"}, {"question_id": "不等率", "category": "不等率", "subject": "電力", "result": "risky", "date": "2026-04-03", "memo": "需要率との区別で一部迷い（設備容量との関係が曖昧）", "next_review": "SR3"}, {"question_id": "磁界", "category": "磁界", "subject": "理論", "result": "risky", "date": "2026-04-01", "memo": "磁界が1/r、点電荷の電界が1/r^2になる理由の区別がやや曖昧。式は選べたが、広がり方の説明補強が必要。", "next_review": "SR2"}];
