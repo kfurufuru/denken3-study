@@ -1,0 +1,439 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>⚡ 電験3種 — 弱点ランキング</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&family=Noto+Sans+JP:wght@400;600;700;800&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+<style>
+:root {
+  --bg:      #060810;
+  --card:    #0d1117;
+  --card2:   #161b27;
+  --border:  #1f2937;
+  --border2: #2d3748;
+  --accent:  #3b82f6;
+  --accent2: #6366f1;
+  --green:   #10b981;
+  --yellow:  #f59e0b;
+  --red:     #ef4444;
+  --orange:  #f97316;
+  --text:    #e5e7eb;
+  --muted:   #6b7280;
+  --fs-body: 0.9rem;
+  --fs-sm:   0.8rem;
+  --radius:  12px;
+  line-break: strict; overflow-wrap: break-word; word-break: normal;
+}
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: 'Inter', 'Noto Sans JP', sans-serif;
+  font-size: var(--fs-body);
+  padding: 16px;
+  min-height: 100vh;
+}
+header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 24px;
+  padding: 16px 20px;
+  background: linear-gradient(135deg, #0d1117 0%, #161b27 100%);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+}
+header h1 { font-size: 1.2rem; font-weight: 800; letter-spacing: 0.03em; }
+header .badge {
+  margin-left: auto;
+  font-size: var(--fs-sm);
+  color: var(--muted);
+}
+.grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 16px; margin-bottom: 24px; }
+.card {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 20px;
+}
+.card h2 {
+  font-size: 0.85rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--muted);
+  margin-bottom: 16px;
+}
+.card h2 span { color: var(--accent); }
+
+/* ランキングバー */
+.rank-list { display: flex; flex-direction: column; gap: 10px; }
+.rank-item { display: flex; align-items: center; gap: 10px; }
+.rank-num {
+  width: 22px; height: 22px;
+  border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 0.7rem; font-weight: 700;
+  flex-shrink: 0;
+}
+.rank-num.r1 { background: #f59e0b33; color: #f59e0b; border: 1px solid #f59e0b55; }
+.rank-num.r2 { background: #9ca3af33; color: #9ca3af; border: 1px solid #9ca3af55; }
+.rank-num.r3 { background: #b45309aa; color: #d97706; border: 1px solid #b4530966; }
+.rank-num.rn { background: var(--card2); color: var(--muted); border: 1px solid var(--border2); }
+.rank-label { flex: 1; min-width: 0; }
+.rank-name { font-weight: 600; font-size: 0.88rem; line-height: 1.3; }
+.rank-sub  { font-size: 0.75rem; color: var(--muted); margin-top: 2px; }
+.rank-bar-wrap { flex: 0 0 90px; }
+.rank-bar-bg {
+  height: 6px; background: var(--border2); border-radius: 3px; overflow: hidden;
+}
+.rank-bar-fill {
+  height: 100%; border-radius: 3px;
+  background: linear-gradient(90deg, var(--accent), var(--accent2));
+  transition: width 0.6s ease;
+}
+.rank-count {
+  font-size: 0.75rem; font-weight: 700; color: var(--text);
+  min-width: 28px; text-align: right;
+}
+
+/* テーブル */
+.table-wrap { overflow-x: auto; }
+table { width: 100%; border-collapse: collapse; font-size: var(--fs-sm); }
+th {
+  text-align: left; padding: 8px 12px;
+  background: var(--card2); color: var(--muted);
+  font-weight: 600; font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.05em;
+  border-bottom: 1px solid var(--border);
+  white-space: nowrap;
+}
+td {
+  padding: 10px 12px;
+  border-bottom: 1px solid var(--border);
+  vertical-align: top;
+  line-height: 1.5;
+}
+tr:last-child td { border-bottom: none; }
+tr:hover td { background: var(--card2); }
+
+/* バッジ */
+.badge-tag {
+  display: inline-block;
+  padding: 2px 8px;
+  border-radius: 4px;
+  font-size: 0.7rem;
+  font-weight: 700;
+  white-space: nowrap;
+}
+.badge-risky  { background: #f59e0b22; color: #f59e0b; border: 1px solid #f59e0b44; }
+.badge-ng     { background: #ef444422; color: #ef4444; border: 1px solid #ef444444; }
+.badge-ok     { background: #10b98122; color: #10b981; border: 1px solid #10b98144; }
+.badge-l1     { background: #3b82f622; color: #60a5fa; border: 1px solid #3b82f644; }
+.badge-l2     { background: #6366f122; color: #818cf8; border: 1px solid #6366f144; }
+.badge-model  { background: #ef444422; color: #f87171; border: 1px solid #ef444444; }
+.badge-map    { background: #f59e0b22; color: #fbbf24; border: 1px solid #f59e0b44; }
+.badge-anchor { background: #8b5cf622; color: #a78bfa; border: 1px solid #8b5cf644; }
+
+/* サマリカウンター */
+.summary-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-bottom: 16px; }
+.summary-item { text-align: center; padding: 12px 8px; background: var(--card2); border-radius: 8px; border: 1px solid var(--border); }
+.summary-val { font-size: 1.6rem; font-weight: 800; line-height: 1; }
+.summary-key { font-size: 0.7rem; color: var(--muted); margin-top: 4px; }
+.val-red    { color: var(--red); }
+.val-yellow { color: var(--yellow); }
+.val-green  { color: var(--green); }
+
+/* チャートコンテナ */
+.chart-wrap { height: 200px; position: relative; }
+
+/* フッター */
+footer { margin-top: 24px; text-align: center; font-size: 0.75rem; color: var(--muted); }
+
+@media (max-width: 640px) {
+  .grid { grid-template-columns: 1fr; }
+  .summary-grid { grid-template-columns: repeat(3, 1fr); }
+}
+</style>
+</head>
+<body>
+
+<header>
+  <span style="font-size:1.4rem">⚡</span>
+  <h1>弱点ランキング — E-LOG分析</h1>
+  <span class="badge">最終更新: <span id="updated"></span></span>
+</header>
+
+<!-- サマリ -->
+<div class="card" style="margin-bottom:16px">
+  <h2>総合サマリ</h2>
+  <div class="summary-grid">
+    <div class="summary-item">
+      <div class="summary-val val-red" id="cnt-ng">—</div>
+      <div class="summary-key">NG（再学習必要）</div>
+    </div>
+    <div class="summary-item">
+      <div class="summary-val val-yellow" id="cnt-risky">—</div>
+      <div class="summary-key">RISKY（注意）</div>
+    </div>
+    <div class="summary-item">
+      <div class="summary-val val-green" id="cnt-ok">—</div>
+      <div class="summary-key">OK（習得済）</div>
+    </div>
+  </div>
+  <div class="summary-grid">
+    <div class="summary-item">
+      <div class="summary-val" style="color:var(--accent)" id="cnt-elog">—</div>
+      <div class="summary-key">E-LOG件数</div>
+    </div>
+    <div class="summary-item">
+      <div class="summary-val val-red" id="top-l1">—</div>
+      <div class="summary-key">最多L1エラー</div>
+    </div>
+    <div class="summary-item">
+      <div class="summary-val val-yellow" id="top-l2">—</div>
+      <div class="summary-key">最多L2バグ</div>
+    </div>
+  </div>
+</div>
+
+<div class="grid">
+  <!-- L1エラーランキング -->
+  <div class="card">
+    <h2>L1 エラーランキング <span>知識エラー種別</span></h2>
+    <div class="rank-list" id="l1-rank"></div>
+  </div>
+
+  <!-- L2バグランキング -->
+  <div class="card">
+    <h2>L2 バグランキング <span>認知バグ種別</span></h2>
+    <div class="rank-list" id="l2-rank"></div>
+  </div>
+</div>
+
+<div class="grid">
+  <!-- カテゴリ別ランキング -->
+  <div class="card">
+    <h2>カテゴリ別 <span>エラー頻度</span></h2>
+    <div class="rank-list" id="cat-rank"></div>
+  </div>
+
+  <!-- 科目別チャート -->
+  <div class="card">
+    <h2>科目別 <span>ステータス分布</span></h2>
+    <div class="chart-wrap">
+      <canvas id="subjectChart"></canvas>
+    </div>
+  </div>
+</div>
+
+<!-- リスクテーマ一覧 -->
+<div class="card" style="margin-bottom:16px">
+  <h2>リスクテーマ一覧 <span>ng / risky</span></h2>
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th>テーマ</th>
+          <th>科目</th>
+          <th>ステータス</th>
+          <th>試行</th>
+          <th>次回</th>
+          <th>メモ</th>
+        </tr>
+      </thead>
+      <tbody id="risk-table"></tbody>
+    </table>
+  </div>
+</div>
+
+<!-- E-LOG履歴 -->
+<div class="card">
+  <h2>E-LOG 最近の誤答記録</h2>
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th>日付</th>
+          <th>カテゴリ</th>
+          <th>L1</th>
+          <th>L2</th>
+          <th>要点</th>
+        </tr>
+      </thead>
+      <tbody id="elog-table"></tbody>
+    </table>
+  </div>
+</div>
+
+<footer id="footer-text"></footer>
+
+<script>
+// ─────────────────────────────────────────────────────────
+// データ定義（records.json + e-log.md 統合）
+// ─────────────────────────────────────────────────────────
+
+const RECORDS = [
+  { theme: '三相交流', subject: '理論', result: 'ok',    attempt: 1, next_review: 'SR3',  L1: 'VEC',   L2: 'CALC',  memo: '' },
+  { theme: '電磁誘導', subject: '理論', result: 'ok',    attempt: 2, next_review: 'done', L1: 'MAP',   L2: 'VEC',   memo: '誘導起電力と誘導電流の区別' },
+  { theme: '静電容量', subject: '理論', result: 'ok',    attempt: 1, next_review: 'done', L1: 'MAP',   L2: 'CALC',  memo: '電荷・電圧の起点切り替え' },
+  { theme: '電位・電界・磁界', subject: '理論', result: 'ok', attempt: 1, next_review: 'done', L1: 'VEC', L2: 'TRACK', memo: '' },
+  { theme: '電界・磁界・電荷', subject: '理論', result: 'ok', attempt: 1, next_review: 'done', L1: 'MAP', L2: 'CONF',  memo: '電界と磁界の性質混同' },
+  { theme: '磁界',    subject: '理論', result: 'risky', attempt: 1, next_review: 'SR2',  L1: 'MAP',   L2: 'VEC',   memo: '距離依存則(1/r vs 1/r²)' },
+  { theme: '不等率',  subject: '電力', result: 'risky', attempt: 1, next_review: 'SR3',  L1: 'MAP',   L2: 'REL',   memo: '需要率との関係式' },
+  { theme: '電磁誘導(再)', subject: '理論', result: 'ng', attempt: 3, next_review: 'SR1', L1: '',    L2: '',      memo: '3回目でNG' },
+  { theme: '法規 R02-Q8', subject: '法規', result: 'ok', attempt: 1, next_review: 'done', L1: '',    L2: '',      memo: '' },
+  { theme: '静電容量(再)', subject: '理論', result: 'ok', attempt: 2, next_review: 'SR2', L1: '',    L2: '',      memo: '' },
+  { theme: '過去問演習', subject: '理論', result: 'risky', attempt: 1, next_review: 'SR2', L1: '',   L2: '',      memo: 'APIテスト記録' },
+];
+
+const ELOG = [
+  { date: '2026-03-23', category: '交流回路',         L1: 'MODEL', L2: 'ANCHOR', memo: 'インピーダンスの向きを勘違い' },
+  { date: '2026-04-10', category: '交流回路(RL短絡)', L1: 'MODEL', L2: 'ANCHOR', memo: '「両方Lがある→位相差0」→誤。位相はR/X比で決まる' },
+  { date: '2026-04-12', category: '等価変換(直並列)', L1: 'MODEL', L2: 'RUSH',   memo: '有理化前にr=0近似→計算破綻' },
+  { date: '2026-04-12', category: '等価変換(直並列)', L1: 'UNIT',  L2: 'MAP',    memo: 'Ω[インピーダンス]とS[アドミタンス]の実部虚部混同' },
+  { date: '2026-04-12', category: '等価変換(直並列)', L1: 'CAUSE', L2: 'ANCHOR', memo: '直列r増→電流減（直流回路の錯覚）。交流ではωL支配で不変' },
+  { date: '2026-04-19', category: '交流回路(RL位相)', L1: 'MODEL', L2: 'ANCHOR', memo: '「Lがある=位相遅れ一定」→誤。遅れ角はarctan(XL/R)' },
+];
+
+const L1_LABELS = {
+  MODEL: '物理モデル誤り', MAP: '対応づけ誤り', VEC: 'ベクトル/方向誤り',
+  UNIT: '単位誤り', CAUSE: '因果逆転', DEF: '定義誤解',
+  COND: '条件見落とし', SIGN: '符号間違い', SCALE: '桁感覚なし',
+};
+const L2_LABELS = {
+  ANCHOR: '思い込み固定', RUSH: '焦りミス', MAP: '対応づけ誤り',
+  CALC: '計算追跡ミス', VEC: '方向感覚ミス', CONF: '自信過剰',
+  REL: '関係式混同', TRACK: '計算追跡ミス', READ: '読み違い',
+  ASSUME: '勝手な前提',
+};
+
+// ─────────────────────────────────────────────────────────
+// 集計
+// ─────────────────────────────────────────────────────────
+
+function count(arr, key) {
+  const m = {};
+  arr.forEach(r => { const v = r[key]; if (v) m[v] = (m[v] || 0) + 1; });
+  return Object.entries(m).sort((a,b) => b[1]-a[1]);
+}
+
+function countBoth(records, elog, key) {
+  const all = [...records.filter(r => r[key]), ...elog.filter(r => r[key])];
+  return count(all, key);
+}
+
+// L1/L2 カウント（records + elog 統合）
+const l1Counts = countBoth(RECORDS, ELOG, 'L1');
+const l2Counts = countBoth(RECORDS, ELOG, 'L2');
+
+// カテゴリ別（elogのcategory + recordsのtheme）
+const catMap = {};
+ELOG.forEach(r => { catMap[r.category] = (catMap[r.category] || 0) + 1; });
+RECORDS.filter(r => r.result !== 'ok').forEach(r => {
+  catMap[r.theme] = (catMap[r.theme] || 0) + 1;
+});
+const catCounts = Object.entries(catMap).sort((a,b) => b[1]-a[1]).slice(0, 8);
+
+// 科目別ステータス集計
+const subjectMap = {};
+RECORDS.forEach(r => {
+  if (!subjectMap[r.subject]) subjectMap[r.subject] = { ok: 0, risky: 0, ng: 0 };
+  subjectMap[r.subject][r.result] = (subjectMap[r.subject][r.result] || 0) + 1;
+});
+
+// ─────────────────────────────────────────────────────────
+// レンダリング
+// ─────────────────────────────────────────────────────────
+
+document.getElementById('updated').textContent = new Date().toLocaleDateString('ja-JP');
+
+// サマリ
+const ng    = RECORDS.filter(r => r.result === 'ng').length;
+const risky = RECORDS.filter(r => r.result === 'risky').length;
+const ok    = RECORDS.filter(r => r.result === 'ok').length;
+document.getElementById('cnt-ng').textContent    = ng;
+document.getElementById('cnt-risky').textContent = risky;
+document.getElementById('cnt-ok').textContent    = ok;
+document.getElementById('cnt-elog').textContent  = ELOG.length;
+document.getElementById('top-l1').textContent    = l1Counts[0]?.[0] || '—';
+document.getElementById('top-l2').textContent    = l2Counts[0]?.[0] || '—';
+
+// ランクリスト描画
+function renderRank(elId, data, labelMap) {
+  const el = document.getElementById(elId);
+  const max = data[0]?.[1] || 1;
+  el.innerHTML = data.slice(0, 7).map(([code, cnt], i) => {
+    const cls = i === 0 ? 'r1' : i === 1 ? 'r2' : i === 2 ? 'r3' : 'rn';
+    const label = labelMap[code] || code;
+    const pct = Math.round(cnt / max * 100);
+    return `
+      <div class="rank-item">
+        <div class="rank-num ${cls}">${i+1}</div>
+        <div class="rank-label">
+          <div class="rank-name">${code}</div>
+          <div class="rank-sub">${label}</div>
+        </div>
+        <div class="rank-bar-wrap">
+          <div class="rank-bar-bg"><div class="rank-bar-fill" style="width:${pct}%"></div></div>
+        </div>
+        <div class="rank-count">${cnt}</div>
+      </div>`;
+  }).join('');
+}
+
+renderRank('l1-rank', l1Counts, L1_LABELS);
+renderRank('l2-rank', l2Counts, L2_LABELS);
+renderRank('cat-rank', catCounts, {});
+
+// リスクテーブル
+const riskRows = RECORDS.filter(r => r.result === 'ng' || r.result === 'risky');
+document.getElementById('risk-table').innerHTML = riskRows.map(r => `
+  <tr>
+    <td><strong>${r.theme}</strong></td>
+    <td>${r.subject}</td>
+    <td><span class="badge-tag badge-${r.result}">${r.result.toUpperCase()}</span></td>
+    <td style="text-align:center">${r.attempt}</td>
+    <td><code style="font-size:0.75rem;color:var(--accent)">${r.next_review}</code></td>
+    <td style="color:var(--muted)">${r.memo}</td>
+  </tr>`).join('');
+
+// E-LOGテーブル
+document.getElementById('elog-table').innerHTML = [...ELOG].reverse().map(r => `
+  <tr>
+    <td style="white-space:nowrap;color:var(--muted)">${r.date}</td>
+    <td>${r.category}</td>
+    <td><span class="badge-tag badge-l1">${r.L1}</span></td>
+    <td><span class="badge-tag badge-l2">${r.L2}</span></td>
+    <td style="color:var(--muted);font-size:0.8rem">${r.memo}</td>
+  </tr>`).join('');
+
+// 科目別チャート
+const subjects = Object.keys(subjectMap);
+new Chart(document.getElementById('subjectChart'), {
+  type: 'bar',
+  data: {
+    labels: subjects,
+    datasets: [
+      { label: 'OK',    data: subjects.map(s => subjectMap[s].ok    || 0), backgroundColor: '#10b98155', borderColor: '#10b981', borderWidth: 1 },
+      { label: 'RISKY', data: subjects.map(s => subjectMap[s].risky || 0), backgroundColor: '#f59e0b55', borderColor: '#f59e0b', borderWidth: 1 },
+      { label: 'NG',    data: subjects.map(s => subjectMap[s].ng    || 0), backgroundColor: '#ef444455', borderColor: '#ef4444', borderWidth: 1 },
+    ]
+  },
+  options: {
+    responsive: true, maintainAspectRatio: false,
+    plugins: { legend: { labels: { color: '#9ca3af', font: { size: 11 } } } },
+    scales: {
+      x: { stacked: true, ticks: { color: '#9ca3af', font: { size: 11 } }, grid: { color: '#1f2937' } },
+      y: { stacked: true, ticks: { color: '#9ca3af', font: { size: 11 } }, grid: { color: '#1f2937' } }
+    }
+  }
+});
+
+document.getElementById('footer-text').textContent =
+  `E-LOG ${ELOG.length}件 + 学習記録 ${RECORDS.length}件 統合分析 — 電験3種 弱点ランキング`;
+</script>
+</body>
+</html>
