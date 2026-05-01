@@ -1,4 +1,4 @@
-successfully downloaded text file (SHA: d97106d4ceb0b513cf0b650a81dd25dd743d5152)[Resource from github at repo://kfurufuru/denken3-study/sha/87ca079931fa41ff6127956d6bf8f3aed9e68857/contents/index.html] <!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="ja">
 <head>
 <meta charset="UTF-8">
@@ -10,25 +10,25 @@ successfully downloaded text file (SHA: d97106d4ceb0b513cf0b650a81dd25dd743d5152
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
 <style>
 :root {
-  --bg:      #060810;
-  --card:    #0d1117;
-  --card2:   #161b27;
-  --border:  #1f2937;
-  --border2: #2d3748;
-  --accent:  #3b82f6;
-  --accent2: #6366f1;
-  --green:   #10b981;
-  --red:     #ef4444;
-  --yellow:  #f59e0b;
-  --orange:  #f97316;
-  --purple:  #8b5cf6;
-  --cyan:    #06b6d4;
-  --text:    #f1f5f9;
+  --bg:      #f1f5f9;
+  --card:    #ffffff;
+  --card2:   #f8fafc;
+  --border:  #e2e8f0;
+  --border2: #cbd5e1;
+  --accent:  #2563eb;
+  --accent2: #4f46e5;
+  --green:   #059669;
+  --red:     #dc2626;
+  --yellow:  #d97706;
+  --orange:  #ea580c;
+  --purple:  #7c3aed;
+  --cyan:    #0891b2;
+  --text:    #1e293b;
   --muted:   #64748b;
-  --muted2:  #94a3b8;
-  --ok-color:    #22c55e;
-  --risky-color: #f59e0b;
-  --ng-color:    #ef4444;
+  --muted2:  #475569;
+  --ok-color:    #16a34a;
+  --risky-color: #d97706;
+  --ng-color:    #dc2626;
   /* spacing */
   --sp-1:4px; --sp-2:8px; --sp-3:12px; --sp-4:16px;
   --sp-6:24px; --sp-8:32px; --sp-12:48px; --sp-16:64px;
@@ -52,7 +52,7 @@ body{
 /* ===== PORTAL LINK ===== */
 .portal-link{
   position:fixed;top:14px;left:14px;z-index:9999;
-  background:rgba(10,14,26,0.85);border:1px solid rgba(99,102,241,0.35);
+  background:rgba(241,245,249,0.92);border:1px solid rgba(99,102,241,0.35);
   color:#a5b4fc;padding:6px 14px;border-radius:20px;
   font-size:0.75rem;font-weight:600;text-decoration:none;
   backdrop-filter:blur(10px);letter-spacing:-.01em;
@@ -66,7 +66,7 @@ body{
   display:flex;align-items:center;justify-content:space-between;
   padding:18px 20px 14px;
   border-bottom:1px solid var(--border);
-  background:rgba(6,8,16,0.9);backdrop-filter:blur(12px);
+  background:rgba(241,245,249,0.95);backdrop-filter:blur(12px);
 }
 .header-left{display:flex;align-items:center;gap:10px}
 .header-title{font-size:1.15rem;font-weight:900;background:linear-gradient(135deg,#60a5fa,#818cf8,#c084fc);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
@@ -82,7 +82,7 @@ body{
 .tab-nav{
   position:sticky;top:0;z-index:100;
   display:flex;gap:0;
-  background:rgba(6,8,16,0.95);backdrop-filter:blur(12px);
+  background:rgba(241,245,249,0.98);backdrop-filter:blur(12px);
   border-bottom:1px solid var(--border);
   overflow-x:auto;-webkit-overflow-scrolling:touch;
 }
@@ -580,17 +580,17 @@ body{
 .q-bug-tbl{width:100%;border-collapse:separate;border-spacing:3px}
 .q-bug-tbl th{text-align:left;color:var(--muted);padding:6px 10px;font-size:.72rem;font-weight:600}
 .q-bug-tbl td{text-align:center;padding:5px 8px;border-radius:5px;font-weight:700;font-size:.7rem}
-.q-status-ok{background:#166534;color:#4ade80}
-.q-status-recovered{background:#854d0e;color:#facc15;position:relative}
+.q-status-ok{background:#dcfce7;color:#166534}
+.q-status-recovered{background:#fef9c3;color:#854d0e;position:relative}
 .q-status-recovered::after{content:'⟳';position:absolute;top:1px;right:3px;font-size:.5rem;opacity:.7}
-.q-status-risky{background:#78350f;color:#fbbf24}
-.q-status-ng{background:#7f1d1d;color:#f87171}
-.q-status-none{color:#2d3f55}
+.q-status-risky{background:#fef3c7;color:#92400e}
+.q-status-ng{background:#fee2e2;color:#991b1b}
+.q-status-none{color:#64748b}
 .q-legend{display:inline-block;width:10px;height:10px;border-radius:3px;margin-right:4px;vertical-align:middle}
-.q-legend-ok{background:#166534}
-.q-legend-recovered{background:#854d0e}
-.q-legend-risky{background:#78350f}
-.q-legend-ng{background:#7f1d1d}
+.q-legend-ok{background:#16a34a}
+.q-legend-recovered{background:#d97706}
+.q-legend-risky{background:#f59e0b}
+.q-legend-ng{background:#dc2626}
 .q-phase-bar{margin-bottom:14px}
 .q-phase-bar:last-child{margin-bottom:0}
 .q-review-item{display:flex;align-items:center;gap:8px;padding:9px 0;border-bottom:1px solid #1a2535;font-size:.8rem}
@@ -607,10 +607,10 @@ canvas.q-chart{max-height:200px!important}
 <body>
 <a href="../portal-v2.html" class="portal-link">← ポータル</a>
 <nav style="position:fixed;top:14px;right:14px;z-index:9999;display:flex;gap:8px;font-size:0.72rem;">
-  <a href="../denken-news/index.html" style="background:rgba(10,14,26,0.85);border:1px solid rgba(99,102,241,0.35);color:#a5b4fc;padding:6px 12px;border-radius:20px;text-decoration:none;backdrop-filter:blur(10px);">📰 ニュース</a>
-  <a href="https://kfurufuru.github.io/denken-wiki-riron/" target="_blank" style="background:rgba(10,14,26,0.85);border:1px solid rgba(99,102,241,0.35);color:#a5b4fc;padding:6px 12px;border-radius:20px;text-decoration:none;backdrop-filter:blur(10px);">📖 理論</a>
-  <a href="https://kfurufuru.github.io/denken-wiki-denryoku/" target="_blank" style="background:rgba(10,14,26,0.85);border:1px solid rgba(99,102,241,0.35);color:#a5b4fc;padding:6px 12px;border-radius:20px;text-decoration:none;backdrop-filter:blur(10px);">📖 電力</a>
-  <a href="https://kfurufuru.github.io/denken-wiki/" target="_blank" style="background:rgba(10,14,26,0.85);border:1px solid rgba(99,102,241,0.35);color:#a5b4fc;padding:6px 12px;border-radius:20px;text-decoration:none;backdrop-filter:blur(10px);">📖 法規</a>
+  <a href="../denken-news/index.html" style="background:rgba(241,245,249,0.92);border:1px solid rgba(99,102,241,0.35);color:#4f46e5;padding:6px 12px;border-radius:20px;text-decoration:none;backdrop-filter:blur(10px);">📰 ニュース</a>
+  <a href="https://kfurufuru.github.io/denken-wiki-riron/" target="_blank" style="background:rgba(241,245,249,0.92);border:1px solid rgba(99,102,241,0.35);color:#4f46e5;padding:6px 12px;border-radius:20px;text-decoration:none;backdrop-filter:blur(10px);">📖 理論</a>
+  <a href="https://kfurufuru.github.io/denken-wiki-denryoku/" target="_blank" style="background:rgba(241,245,249,0.92);border:1px solid rgba(99,102,241,0.35);color:#4f46e5;padding:6px 12px;border-radius:20px;text-decoration:none;backdrop-filter:blur(10px);">📖 電力</a>
+  <a href="https://kfurufuru.github.io/denken-wiki/articles/" target="_blank" rel="noopener" style="background:rgba(241,245,249,0.92);border:1px solid rgba(99,102,241,0.35);color:#4f46e5;padding:6px 12px;border-radius:20px;text-decoration:none;backdrop-filter:blur(10px);">📖 法規Wiki</a>
 </nav>
 <canvas id="bg-canvas"></canvas>
 
@@ -630,6 +630,7 @@ canvas.q-chart{max-height:200px!important}
   <button class="tab-btn" data-tab="history">📊 過去問履歴</button>
   <button class="tab-btn" data-tab="quiz">🧪 テスト記録</button>
   <button class="tab-btn" data-tab="system">⚙️ システム</button>
+  <button class="tab-btn" data-tab="map">🗺️ 知識マップ</button>
   <a class="tab-btn" href="./stats.html" style="text-decoration:none;display:inline-flex;align-items:center">📈 統計</a>
 </nav>
 
@@ -860,19 +861,19 @@ canvas.q-chart{max-height:200px!important}
       </div>
       <div class="g2" style="align-content:start">
         <div class="card" style="text-align:center">
-          <div class="stat-val" style="color:var(--green)" id="stat-maru">97</div>
-          <div class="stat-lbl">1回目 ○ 正解</div>
+          <div class="stat-val" style="color:var(--green)" id="stat-maru">128</div>
+          <div class="stat-lbl">○扱い（1〜3回目）</div>
           <div class="stat-sub" id="stat-maru-sub">--</div>
         </div>
         <div class="card" style="text-align:center">
           <div class="stat-val" style="color:var(--red)" id="stat-batu">--</div>
-          <div class="stat-lbl">1回目 × 不正解</div>
-          <div class="stat-sub">要再学習</div>
+          <div class="stat-lbl">×扱い</div>
+          <div class="stat-sub">○なし・×あり</div>
         </div>
         <div class="card" style="text-align:center">
           <div class="stat-val" style="color:var(--accent)" id="stat-rate">--%</div>
-          <div class="stat-lbl">1回目 正解率</div>
-          <div class="stat-sub">○÷(○+×)</div>
+          <div class="stat-lbl">正答率</div>
+          <div class="stat-sub">○扱い÷(○+×扱い)</div>
         </div>
         <div class="card" style="text-align:center">
           <div class="stat-val" style="color:var(--yellow)" id="stat-tried">--</div>
@@ -886,7 +887,7 @@ canvas.q-chart{max-height:200px!important}
   <!-- RANK S/A ALERT -->
   <div class="section">
     <div class="sec-title">🚨 最重要問題（ランクS/A）間違いアラート</div>
-    <div class="card" style="background:linear-gradient(135deg,#1a0a0a,#2d1111);border:1px solid rgba(239,68,68,.4)">
+    <div class="card" style="background:linear-gradient(135deg,#fef2f2,#fee2e2);border:1px solid rgba(220,38,38,.4)">
       <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:14px">
         <div style="font-size:.95rem;font-weight:800;color:#fca5a5">⚠️ ランクS/A で間違えた問題</div>
         <div style="font-size:.8rem;color:#ef4444;font-weight:700" id="ranksa-count"></div>
@@ -924,7 +925,7 @@ canvas.q-chart{max-height:200px!important}
         <div class="bunya-item">
           <div class="bunya-hd">
             <div class="bunya-nm"><span style="color:var(--green)">⚡</span> 電気回路</div>
-            <div class="bunya-pct" style="color:var(--green)">30% <span style="color:var(--muted);font-weight:400;font-size:.7rem">≈ 48/160問</span></div>
+            <div class="bunya-pct" style="color:var(--green)">35% <span style="color:var(--muted);font-weight:400;font-size:.7rem">≈ 65/187問</span></div>
           </div>
           <div class="bar-bg"><div class="bar-fill" id="b1" style="width:0%;background:linear-gradient(90deg,#10b981,#34d399)"></div></div>
           <div class="bunya-chips">
@@ -937,7 +938,7 @@ canvas.q-chart{max-height:200px!important}
         <div class="bunya-item">
           <div class="bunya-hd">
             <div class="bunya-nm"><span style="color:var(--accent)">📡</span> 電気・電子計測</div>
-            <div class="bunya-pct" style="color:var(--accent)">41% <span style="color:var(--muted);font-weight:400;font-size:.7rem">≈ 36/87問</span></div>
+            <div class="bunya-pct" style="color:var(--accent)">38% <span style="color:var(--muted);font-weight:400;font-size:.7rem">≈ 38/100問</span></div>
           </div>
           <div class="bar-bg"><div class="bar-fill" id="b2" style="width:0%;background:linear-gradient(90deg,#3b82f6,#818cf8)"></div></div>
           <div class="bunya-chips">
@@ -949,7 +950,7 @@ canvas.q-chart{max-height:200px!important}
         <div class="bunya-item">
           <div class="bunya-hd">
             <div class="bunya-nm"><span style="color:var(--orange)">🔮</span> 電磁気学</div>
-            <div class="bunya-pct" style="color:var(--orange)">8% <span style="color:var(--muted);font-weight:400;font-size:.7rem">≈ 10/124問</span></div>
+            <div class="bunya-pct" style="color:var(--orange)">15% <span style="color:var(--muted);font-weight:400;font-size:.7rem">≈ 22/149問</span></div>
           </div>
           <div class="bar-bg"><div class="bar-fill" id="b3" style="width:0%;background:linear-gradient(90deg,#f97316,#fbbf24)"></div></div>
           <div class="bunya-chips">
@@ -961,7 +962,7 @@ canvas.q-chart{max-height:200px!important}
         <div class="bunya-item" style="margin-bottom:0">
           <div class="bunya-hd">
             <div class="bunya-nm"><span style="color:var(--purple)">🔬</span> 電子理論</div>
-            <div class="bunya-pct" style="color:var(--purple)">3% <span style="color:var(--muted);font-weight:400;font-size:.7rem">≈ 3/114問</span></div>
+            <div class="bunya-pct" style="color:var(--purple)">3% <span style="color:var(--muted);font-weight:400;font-size:.7rem">≈ 3/104問</span></div>
           </div>
           <div class="bar-bg"><div class="bar-fill" id="b4" style="width:0%;background:linear-gradient(90deg,#8b5cf6,#c084fc)"></div></div>
           <div class="bunya-chips">
@@ -974,20 +975,45 @@ canvas.q-chart{max-height:200px!important}
 
       <div style="display:flex;flex-direction:column;gap:14px">
         <div class="card" style="text-align:center">
-          <div style="font-size:.82rem;font-weight:700;margin-bottom:10px;color:#93c5fd">1回目 結果の内訳</div>
+          <div style="font-size:.82rem;font-weight:700;margin-bottom:10px;color:#93c5fd">○/×扱い 内訳</div>
           <canvas id="donut" width="160" height="160" style="display:block;margin:0 auto"></canvas>
           <div style="display:flex;gap:10px;justify-content:center;margin-top:10px;flex-wrap:wrap">
-            <div style="display:flex;align-items:center;gap:4px;font-size:.72rem"><div style="width:8px;height:8px;border-radius:50%;background:#10b981"></div>○ <span id="donut-maru">81</span>問</div>
-            <div style="display:flex;align-items:center;gap:4px;font-size:.72rem"><div style="width:8px;height:8px;border-radius:50%;background:#ef4444"></div>× <span id="donut-batu">57</span>問</div>
+            <div style="display:flex;align-items:center;gap:4px;font-size:.72rem"><div style="width:8px;height:8px;border-radius:50%;background:#10b981"></div>○扱い <span id="donut-maru">81</span>問</div>
+            <div style="display:flex;align-items:center;gap:4px;font-size:.72rem"><div style="width:8px;height:8px;border-radius:50%;background:#ef4444"></div>×扱い <span id="donut-batu">57</span>問</div>
             <div style="display:flex;align-items:center;gap:4px;font-size:.72rem"><div style="width:8px;height:8px;border-radius:50%;background:#1f2937"></div>未 <span id="donut-未">348</span>問</div>
           </div>
         </div>
         <div class="card">
-          <div style="font-size:.85rem;font-weight:700;margin-bottom:4px">1回目× 未解決 (<span id="weak-total">--</span>問) — 重要度順</div>
+          <div style="font-size:.85rem;font-weight:700;margin-bottom:4px">×扱い 未解決 (<span id="weak-total">--</span>問) — 重要度順</div>
           <div style="font-size:.68rem;color:var(--muted);margin-bottom:12px">2回目で挽回できた問題は自動で達成となります</div>
           <div id="weak-list"></div>
         </div>
       </div>
+    </div>
+  </div>
+
+  <!-- 誤答原因ランキング -->
+  <div class="section">
+    <div class="sec-title">🔍 誤答原因ランキング</div>
+    <div class="g21">
+      <div class="card">
+        <div style="font-size:.72rem;color:var(--muted);margin-bottom:12px">取組問題に記録された誤答原因の集計（複数回取組も各1件）</div>
+        <div id="error-cause-list"></div>
+      </div>
+      <div class="card">
+        <div class="card-header">📌 分類項目別 弱点マップ</div>
+        <div style="font-size:.72rem;color:var(--muted);margin-bottom:10px">🔴 弱点 / バー＝達成率</div>
+        <div id="topic-stats-list" style="max-height:400px;overflow-y:auto"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 年度別過去問分析 -->
+  <div class="section">
+    <div class="sec-title">📅 年度別 過去問 達成状況</div>
+    <div class="card">
+      <div style="font-size:.72rem;color:var(--muted);margin-bottom:10px">🟢 達成済み &nbsp;🟡 取組済(未達成) &nbsp;⬛ 未取組 ｜ 新→旧順</div>
+      <div id="year-stats-list"></div>
     </div>
   </div>
 
@@ -1344,6 +1370,17 @@ canvas.q-chart{max-height:200px!important}
 </main>
 </div>
 
+<!-- ========================================
+     TAB 7: 知識マップ
+     ======================================== -->
+<div id="tab-map" class="tab-pane">
+  <iframe
+    src="denken-map.html"
+    style="width:100%;height:calc(100vh - 160px);border:none;border-radius:12px;display:block;"
+    title="知識マップ"
+  ></iframe>
+</div>
+
 </div><!-- /tab-content -->
 
 <script>
@@ -1382,21 +1419,30 @@ function triggerUpdate() {
 
 // ================================================================
 // ===== DATA =====
-const ACHIEVED = 97, TOTAL = 485;
-const FIRST_MARU = 85, FIRST_BATU = 64;
+const ACHIEVED = 128, TOTAL = 541;
+const FIRST_MARU = 116, FIRST_BATU = 89;
 const STREAK = 3;
 const EXAM_DATE = new Date('2026-08-23');
 const STUDY_START = new Date('2025-09-01');
-const TODAY = new Date('2026-04-23');
+const TODAY = new Date('2026-05-02');
 
-const WEAK_DATA = [{"q": "R04下-問8", "topic": "", "cat": "電気回路", "p": "S", "date": "2026-01-11"}, {"q": "R04下-問6", "topic": "", "cat": "電磁気", "p": "S", "date": "2026-01-11"}, {"q": "R05上-問7", "topic": "", "cat": "電気回路", "p": "S", "date": "2026-01-12"}, {"q": "H27-問15", "topic": "", "cat": "電気回路", "p": "S", "date": "2026-02-01"}, {"q": "H27-問4", "topic": "", "cat": "電気回路", "p": "S", "date": "2026-02-01"}, {"q": "H30-問15", "topic": "", "cat": "電気回路", "p": "S", "date": "2026-02-23"}, {"q": "H29-問16", "topic": "", "cat": "電気回路", "p": "S", "date": "2026-02-23"}, {"q": "R04-問15", "topic": "", "cat": "電気回路", "p": "S", "date": "2026-02-23"}, {"q": "H24-問15", "topic": "", "cat": "電磁気", "p": "S", "date": "2026-03-01"}, {"q": "H26-問5", "topic": "", "cat": "電磁気", "p": "S", "date": "2026-03-01"}, {"q": "R02-問8", "topic": "", "cat": "電気回路", "p": "S", "date": "2026-03-08"}, {"q": "H25-問10", "topic": "", "cat": "電気回路", "p": "S", "date": "2026-03-08"}, {"q": "H25-問15", "topic": "", "cat": "電気回路", "p": "S", "date": "2026-03-14"}, {"q": "H24-問16", "topic": "", "cat": "電気回路", "p": "S", "date": "2026-03-15"}, {"q": "H23-問8", "topic": "", "cat": "電気回路", "p": "S", "date": "2026-03-20"}, {"q": "R04上-問9", "topic": "", "cat": "電気回路", "p": "S", "date": "2026-03-23"}, {"q": "R06上-問1", "topic": "", "cat": "電磁気", "p": "S", "date": "2026-03-28"}, {"q": "R06上-問7", "topic": "", "cat": "電気回路", "p": "S", "date": "2026-03-28"}, {"q": "H22-問8", "topic": "", "cat": "電気回路", "p": "S", "date": "2026-04-10"}, {"q": "H19-問7", "topic": "", "cat": "電気回路", "p": "S", "date": "2026-04-12"}];
+const WEAK_DATA = [{"q": "R04下-問8", "topic": "", "cat": "電気回路", "p": "S", "date": "2026-01-11"}, {"q": "H27-問15(a)", "topic": "", "cat": "電気回路", "p": "S", "date": "2026-02-01"}, {"q": "H27-問4", "topic": "", "cat": "電気回路", "p": "S", "date": "2026-02-01"}, {"q": "H30-問15(a)", "topic": "", "cat": "電気回路", "p": "S", "date": "2026-02-23"}, {"q": "H29-問16(a)", "topic": "", "cat": "電気回路", "p": "S", "date": "2026-02-23"}, {"q": "R04-問15(a)", "topic": "", "cat": "電気回路", "p": "S", "date": "2026-02-23"}, {"q": "H26-問5", "topic": "", "cat": "電気回路", "p": "S", "date": "2026-03-01"}, {"q": "R02-問8", "topic": "", "cat": "電気回路", "p": "S", "date": "2026-03-08"}, {"q": "H25-問10", "topic": "", "cat": "電気回路", "p": "S", "date": "2026-03-08"}, {"q": "H24-問16(a)", "topic": "", "cat": "電気回路", "p": "S", "date": "2026-03-15"}, {"q": "H23-問8", "topic": "", "cat": "電気回路", "p": "S", "date": "2026-03-20"}, {"q": "R04上-問9", "topic": "", "cat": "電気回路", "p": "S", "date": "2026-03-23"}, {"q": "R06上-問1", "topic": "", "cat": "電磁気", "p": "S", "date": "2026-03-28"}, {"q": "R06上-問7", "topic": "", "cat": "電気回路", "p": "S", "date": "2026-03-28"}, {"q": "H22-問8", "topic": "", "cat": "電気回路", "p": "S", "date": "2026-04-10"}, {"q": "H19-問7", "topic": "", "cat": "電気回路", "p": "S", "date": "2026-04-12"}, {"q": "R05上-問7", "topic": "", "cat": "電気回路", "p": "S", "date": "2026-04-27"}, {"q": "R01-問8", "topic": "", "cat": "電気回路", "p": "S", "date": "未実施"}, {"q": "R04上-問1", "topic": "", "cat": "電磁気", "p": "S", "date": "未実施"}, {"q": "H24-問15(b)", "topic": "", "cat": "電磁気", "p": "S", "date": "未実施"}];
 const WEAK_DATA_HOUKI = [{"q": "R03-問1", "topic": "", "cat": "電気設備技術基準", "p": "A", "date": "未実施"}, {"q": "R03-問2", "topic": "", "cat": "電気設備技術基準", "p": "A", "date": "未実施"}, {"q": "R03-問3", "topic": "", "cat": "電気設備技術基準", "p": "A", "date": "未実施"}, {"q": "H27-問3", "topic": "", "cat": "電気設備技術基準", "p": "B", "date": "未実施"}, {"q": "R03-問4", "topic": "", "cat": "電気設備技術基準", "p": "A", "date": "未実施"}, {"q": "R03-問5", "topic": "", "cat": "電気設備技術基準", "p": "A", "date": "未実施"}, {"q": "R03-問6", "topic": "", "cat": "電気設備技術基準", "p": "A", "date": "未実施"}, {"q": "R03-問7", "topic": "", "cat": "電気設備技術基準", "p": "A", "date": "未実施"}, {"q": "R03-問8", "topic": "", "cat": "電気設備技術基準", "p": "A", "date": "未実施"}, {"q": "R03-問9", "topic": "", "cat": "電気設備技術基準", "p": "A", "date": "未実施"}, {"q": "R03-問10", "topic": "", "cat": "電気事業法", "p": "A", "date": "未実施"}, {"q": "R03-問11", "topic": "", "cat": "電気事業法", "p": "A", "date": "未実施"}, {"q": "R03-問12", "topic": "", "cat": "電気設備技術基準", "p": "A", "date": "未実施"}, {"q": "H24-問11", "topic": "", "cat": "電気施設管理", "p": "B", "date": "未実施"}, {"q": "R03-問13", "topic": "", "cat": "電気施設管理", "p": "A", "date": "未実施"}, {"q": "R02-問1", "topic": "", "cat": "電気事業法", "p": "A", "date": "未実施"}, {"q": "R02-問2", "topic": "", "cat": "電気事業法", "p": "A", "date": "未実施"}];
+
+// ===== YEAR_STATS =====
+const YEAR_STATS = [{"year": "R07上", "total": 27, "achieved": 5, "tried": 6, "weak": 2, "pct": 19, "tried_pct": 22}, {"year": "R06下", "total": 23, "achieved": 13, "tried": 21, "weak": 8, "pct": 57, "tried_pct": 91}, {"year": "R06上", "total": 22, "achieved": 11, "tried": 17, "weak": 7, "pct": 50, "tried_pct": 77}, {"year": "R05下", "total": 24, "achieved": 6, "tried": 11, "weak": 5, "pct": 25, "tried_pct": 46}, {"year": "R05上", "total": 21, "achieved": 11, "tried": 18, "weak": 6, "pct": 52, "tried_pct": 86}, {"year": "R04下", "total": 33, "achieved": 14, "tried": 25, "weak": 9, "pct": 42, "tried_pct": 76}, {"year": "R04上", "total": 27, "achieved": 4, "tried": 6, "weak": 2, "pct": 15, "tried_pct": 22}, {"year": "R03", "total": 26, "achieved": 6, "tried": 9, "weak": 3, "pct": 23, "tried_pct": 35}, {"year": "R02", "total": 27, "achieved": 5, "tried": 7, "weak": 2, "pct": 19, "tried_pct": 26}, {"year": "R01", "total": 23, "achieved": 5, "tried": 10, "weak": 5, "pct": 22, "tried_pct": 43}, {"year": "H30", "total": 21, "achieved": 3, "tried": 4, "weak": 1, "pct": 14, "tried_pct": 19}, {"year": "H29", "total": 21, "achieved": 2, "tried": 4, "weak": 2, "pct": 10, "tried_pct": 19}, {"year": "H28", "total": 21, "achieved": 2, "tried": 5, "weak": 2, "pct": 10, "tried_pct": 24}, {"year": "H27", "total": 21, "achieved": 4, "tried": 7, "weak": 3, "pct": 19, "tried_pct": 33}, {"year": "H26", "total": 21, "achieved": 4, "tried": 6, "weak": 2, "pct": 19, "tried_pct": 29}, {"year": "H25", "total": 21, "achieved": 6, "tried": 9, "weak": 3, "pct": 29, "tried_pct": 43}, {"year": "H24", "total": 21, "achieved": 5, "tried": 7, "weak": 3, "pct": 24, "tried_pct": 33}, {"year": "H23", "total": 21, "achieved": 4, "tried": 6, "weak": 3, "pct": 19, "tried_pct": 29}, {"year": "H22", "total": 21, "achieved": 3, "tried": 7, "weak": 3, "pct": 14, "tried_pct": 33}, {"year": "H21", "total": 21, "achieved": 5, "tried": 5, "weak": 0, "pct": 24, "tried_pct": 24}, {"year": "H20", "total": 22, "achieved": 4, "tried": 5, "weak": 0, "pct": 18, "tried_pct": 23}, {"year": "H19", "total": 21, "achieved": 4, "tried": 7, "weak": 2, "pct": 19, "tried_pct": 33}, {"year": "H18", "total": 21, "achieved": 1, "tried": 2, "weak": 1, "pct": 5, "tried_pct": 10}];
+
+// ===== ERROR_CAUSE_STATS =====
+const ERROR_CAUSE_STATS = {"ranking": [{"cause": "考え方", "count": 12, "pct": 46}, {"cause": "勘違い", "count": 5, "pct": 19}, {"cause": "計算ミス", "count": 4, "pct": 15}, {"cause": "立式", "count": 2, "pct": 8}, {"cause": "時間（捨て問/時間切れ）", "count": 1, "pct": 4}, {"cause": "時間かかりすぎ", "count": 1, "pct": 4}, {"cause": "読解", "count": 1, "pct": 4}], "total": 26};
+
+// ===== TOPIC_STATS =====
+const TOPIC_STATS = [{"topic": "三相交流回路", "cat": "電気回路", "total": 32, "achieved": 7, "tried": 18, "weak": 8, "pct": 22, "tried_pct": 56}, {"topic": "RLC回路・共振", "cat": "電気回路", "total": 24, "achieved": 8, "tried": 16, "weak": 6, "pct": 33, "tried_pct": 67}, {"topic": "直流回路", "cat": "電気回路", "total": 59, "achieved": 29, "tried": 35, "weak": 5, "pct": 49, "tried_pct": 59}, {"topic": "インピーダンス・アドミタンス", "cat": "電気回路", "total": 21, "achieved": 8, "tried": 14, "weak": 5, "pct": 38, "tried_pct": 67}, {"topic": "過渡現象（RLC回路）", "cat": "電気回路", "total": 14, "achieved": 2, "tried": 8, "weak": 5, "pct": 14, "tried_pct": 57}, {"topic": "過渡現象（RL回路）", "cat": "電気回路", "total": 9, "achieved": 1, "tried": 5, "weak": 4, "pct": 11, "tried_pct": 56}, {"topic": "交流電力", "cat": "電気回路", "total": 16, "achieved": 5, "tried": 7, "weak": 2, "pct": 31, "tried_pct": 44}, {"topic": "二端子対回路", "cat": "電気回路", "total": 1, "achieved": 0, "tried": 0, "weak": 0, "pct": 0, "tried_pct": 0}, {"topic": "静電容量／コンデンサのエネルギー", "cat": "電磁気", "total": 52, "achieved": 11, "tried": 22, "weak": 9, "pct": 21, "tried_pct": 42}, {"topic": "クーロンの法則・ガウスの法則", "cat": "電磁気", "total": 22, "achieved": 3, "tried": 6, "weak": 2, "pct": 14, "tried_pct": 27}, {"topic": "磁界・磁束", "cat": "電磁気", "total": 29, "achieved": 4, "tried": 8, "weak": 2, "pct": 14, "tried_pct": 28}, {"topic": "電磁力", "cat": "電磁気", "total": 9, "achieved": 1, "tried": 2, "weak": 1, "pct": 11, "tried_pct": 22}, {"topic": "電磁誘導", "cat": "電磁気", "total": 17, "achieved": 0, "tried": 3, "weak": 1, "pct": 0, "tried_pct": 18}, {"topic": "電界と電荷の運動（静電界）", "cat": "電磁気", "total": 16, "achieved": 1, "tried": 3, "weak": 1, "pct": 6, "tried_pct": 19}, {"topic": "電界・電位", "cat": "電磁気", "total": 22, "achieved": 5, "tried": 5, "weak": 0, "pct": 23, "tried_pct": 23}, {"topic": "A-D変換・ディジタル計測", "cat": "電気及び電子計測", "total": 5, "achieved": 0, "tried": 4, "weak": 3, "pct": 0, "tried_pct": 80}, {"topic": "測定誤差・精度", "cat": "電気及び電子計測", "total": 12, "achieved": 5, "tried": 5, "weak": 0, "pct": 42, "tried_pct": 42}, {"topic": "電力計", "cat": "電気及び電子計測", "total": 11, "achieved": 1, "tried": 1, "weak": 0, "pct": 9, "tried_pct": 9}, {"topic": "電圧計・電流計", "cat": "電気及び電子計測", "total": 27, "achieved": 11, "tried": 14, "weak": 0, "pct": 41, "tried_pct": 52}, {"topic": "ブリッジ回路", "cat": "電気及び電子計測", "total": 12, "achieved": 3, "tried": 3, "weak": 0, "pct": 25, "tried_pct": 25}, {"topic": "オシロスコープ", "cat": "電気及び電子計測", "total": 6, "achieved": 2, "tried": 2, "weak": 0, "pct": 33, "tried_pct": 33}, {"topic": "半導体素子総論", "cat": "電子理論", "total": 22, "achieved": 2, "tried": 5, "weak": 3, "pct": 9, "tried_pct": 23}, {"topic": "集積回路（IC）", "cat": "電子理論", "total": 14, "achieved": 1, "tried": 4, "weak": 1, "pct": 7, "tried_pct": 29}, {"topic": "pn接合ダイオード", "cat": "電子理論", "total": 6, "achieved": 0, "tried": 2, "weak": 1, "pct": 0, "tried_pct": 33}, {"topic": "pn接合応用素子", "cat": "電子理論", "total": 8, "achieved": 0, "tried": 1, "weak": 0, "pct": 0, "tried_pct": 12}, {"topic": "FET（動作原理）", "cat": "電子理論", "total": 4, "achieved": 0, "tried": 0, "weak": 0, "pct": 0, "tried_pct": 0}, {"topic": "ホール素子", "cat": "電子理論", "total": 2, "achieved": 0, "tried": 0, "weak": 0, "pct": 0, "tried_pct": 0}, {"topic": "半導体物性（真性・不純物）", "cat": "電子理論", "total": 3, "achieved": 0, "tried": 0, "weak": 0, "pct": 0, "tried_pct": 0}, {"topic": "FET（特徴・比較）", "cat": "電子理論", "total": 2, "achieved": 0, "tried": 0, "weak": 0, "pct": 0, "tried_pct": 0}, {"topic": "ホール効果", "cat": "電子理論", "total": 4, "achieved": 0, "tried": 0, "weak": 0, "pct": 0, "tried_pct": 0}, {"topic": "半導体物性（不純物半導体）", "cat": "電子理論", "total": 3, "achieved": 0, "tried": 0, "weak": 0, "pct": 0, "tried_pct": 0}, {"topic": "太陽電池（pn接合）", "cat": "電子理論", "total": 1, "achieved": 0, "tried": 0, "weak": 0, "pct": 0, "tried_pct": 0}, {"topic": "pn接合の原理", "cat": "電子理論", "total": 1, "achieved": 0, "tried": 0, "weak": 0, "pct": 0, "tried_pct": 0}, {"topic": "FET（MOSFET）", "cat": "電子理論", "total": 1, "achieved": 0, "tried": 0, "weak": 0, "pct": 0, "tried_pct": 0}, {"topic": "太陽電池", "cat": "電子理論", "total": 1, "achieved": 0, "tried": 0, "weak": 0, "pct": 0, "tried_pct": 0}];
 
 // ================================================================
 // ===== TODAY_SESSIONS =====
 const TODAY_SESSIONS = {
-  "date": "2026-04-23",
-  "days_left": 122,
+  "date": "2026-05-02",
+  "days_left": 113,
   "sessions": [
     {
       "slot": "morning",
@@ -1436,8 +1482,8 @@ const TODAY_SESSIONS = {
 // ================================================================
 // ===== PDCA_DATA =====
 const PDCA_DATA = {
-  "week": "W17",
-  "period": "4/20–4/26",
+  "week": "W18",
+  "period": "4/27–5/3",
   "do_logs": [
     {
       "date": "4/13",
@@ -1515,31 +1561,31 @@ const PDCA_DATA = {
       "theme": "過去問演習",
       "result": "risky",
       "category": "",
-      "days_ago": 10
+      "days_ago": 19
     },
     {
       "theme": "静電容量",
       "result": "ok",
       "category": "",
-      "days_ago": 13
+      "days_ago": 22
     },
     {
       "theme": "不等率",
       "result": "risky",
       "category": "",
-      "days_ago": 20
+      "days_ago": 29
     },
     {
       "theme": "磁界",
       "result": "risky",
       "category": "",
-      "days_ago": 22
+      "days_ago": 31
     },
     {
       "theme": "三相交流",
       "result": "ok",
       "category": "",
-      "days_ago": 28
+      "days_ago": 37
     }
   ],
   "act_bugs": [],
@@ -1866,7 +1912,7 @@ function initHistory() {
   document.getElementById('ov-total').textContent = TOTAL + ' 問';
   document.getElementById('ov-weak').textContent = WEAK_DATA.length + ' 問';
   document.getElementById('stat-maru').textContent = FIRST_MARU;
-  document.getElementById('stat-maru-sub').textContent = '取組中 ' + Math.round(FIRST_MARU/TOTAL*100) + '%';
+  document.getElementById('stat-maru-sub').textContent = '全体 ' + Math.round(FIRST_MARU/TOTAL*100) + '%';
   document.getElementById('stat-batu').textContent = FIRST_BATU;
   document.getElementById('stat-rate').textContent = rate + '%';
   document.getElementById('stat-tried').textContent = tried;
@@ -1916,7 +1962,7 @@ function initHistory() {
       ctx.closePath(); ctx.fillStyle=d.c; ctx.fill(); start+=slice;
     });
     ctx.beginPath(); ctx.arc(cx,cy,40,0,Math.PI*2);
-    ctx.fillStyle='#0d1117'; ctx.fill();
+    ctx.fillStyle='#ffffff'; ctx.fill();
     ctx.fillStyle='#f1f5f9'; ctx.font='bold 16px sans-serif';
     ctx.textAlign='center'; ctx.textBaseline='middle';
     ctx.fillText(rate+'%',cx,cy-7);
@@ -1926,10 +1972,10 @@ function initHistory() {
 
   // バーアニメ
   setTimeout(() => {
-    document.getElementById('b1').style.width = '27%';
-    document.getElementById('b2').style.width = '41%';
-    document.getElementById('b3').style.width = '8%';
-    document.getElementById('b4').style.width = '2%';
+    document.getElementById('b1').style.width='35%';
+    document.getElementById('b2').style.width='38%';
+    document.getElementById('b3').style.width='15%';
+    document.getElementById('b4').style.width='3%';
   }, 400);
 
   // 弱点リスト
@@ -1987,6 +2033,134 @@ function initHistory() {
   const dateStr = now.toLocaleDateString('ja-JP',{year:'numeric',month:'long',day:'numeric'});
   const el = document.getElementById('updated-date');
   if (el) el.textContent = dateStr;
+
+  // ===== 誤答原因ランキング =====
+  (function() {
+    const cont = document.getElementById('error-cause-list');
+    if (!cont || !window.ERROR_CAUSE_STATS) return;
+    const { ranking, total } = ERROR_CAUSE_STATS;
+    if (!ranking || !ranking.length) {
+      cont.innerHTML = '<div style="color:var(--muted);font-size:.8rem">データなし（誤答原因フィールドが未入力）</div>';
+      return;
+    }
+    // 色マップ
+    const causeColor = {
+      '考え方':            '#ef4444',
+      '立式':              '#f97316',
+      '計算ミス':          '#f59e0b',
+      '読解（条件見落とし）': '#eab308',
+      '読解':              '#84cc16',
+      '交流（位相/ベクトル）': '#06b6d4',
+      '電磁気（方向/磁束）':  '#8b5cf6',
+      '勘違い':            '#ec4899',
+      '単位':              '#14b8a6',
+      '時間（捨て問/時間切れ）': '#64748b',
+      '時間かかりすぎ':     '#94a3b8',
+    };
+    const maxCount = ranking[0]?.count || 1;
+    ranking.forEach((item, i) => {
+      const barW = Math.round(item.count / maxCount * 100);
+      const color = causeColor[item.cause] || '#60a5fa';
+      const row = document.createElement('div');
+      row.style.cssText = 'display:grid;grid-template-columns:18px 120px 1fr 42px 36px;gap:6px;align-items:center;padding:5px 4px;border-radius:6px;transition:background .15s;';
+      row.onmouseenter = () => row.style.background = 'rgba(255,255,255,.04)';
+      row.onmouseleave = () => row.style.background = '';
+      row.innerHTML = `
+        <span style="font-size:.7rem;color:var(--muted);font-weight:700">${i+1}</span>
+        <span style="font-size:.8rem;font-weight:600;color:${color}">${item.cause}</span>
+        <div style="height:12px;background:rgba(31,41,55,.8);border-radius:3px;overflow:hidden">
+          <div style="height:100%;width:${barW}%;background:${color};opacity:.75;border-radius:3px;transition:width .6s"></div>
+        </div>
+        <span style="font-size:.75rem;font-weight:700;color:var(--muted2);text-align:right">${item.count}件</span>
+        <span style="font-size:.68rem;color:var(--muted);text-align:right">${item.pct}%</span>
+      `;
+      cont.appendChild(row);
+    });
+    const footer = document.createElement('div');
+    footer.style.cssText = 'font-size:.68rem;color:var(--muted);margin-top:10px;padding-top:8px;border-top:1px solid var(--border)';
+    footer.textContent = `合計 ${total} 件の誤答原因が記録されています`;
+    cont.appendChild(footer);
+  })();
+
+  // ===== 分類項目別 弱点マップ =====
+  (function() {
+    const cont = document.getElementById('topic-stats-list');
+    if (!cont || !window.TOPIC_STATS || !TOPIC_STATS.length) return;
+    const catColor = {'電気回路':'#10b981','電磁気':'#f97316','電気及び電子計測':'#3b82f6','電子理論':'#8b5cf6'};
+    let lastCat = '';
+    TOPIC_STATS.forEach(t => {
+      if (t.cat !== lastCat) {
+        lastCat = t.cat;
+        const hdr = document.createElement('div');
+        hdr.style.cssText = `font-size:.7rem;font-weight:700;color:${catColor[t.cat]||'#94a3b8'};margin:10px 0 4px;padding-bottom:3px;border-bottom:1px solid var(--border)`;
+        hdr.textContent = '▸ ' + t.cat;
+        cont.appendChild(hdr);
+      }
+      const color = catColor[t.cat] || '#60a5fa';
+      const weakStr = t.weak > 0
+        ? `<span style="color:#f87171;font-size:.68rem;font-weight:700">弱${t.weak}</span>`
+        : '';
+      const row = document.createElement('div');
+      row.style.cssText = 'display:grid;grid-template-columns:1fr 70px 56px 32px;gap:6px;align-items:center;padding:4px 4px;border-radius:5px;font-size:.75rem;transition:background .15s;';
+      row.onmouseenter = () => row.style.background = 'rgba(255,255,255,.04)';
+      row.onmouseleave = () => row.style.background = '';
+      row.innerHTML = `
+        <span style="color:var(--muted2);font-size:.72rem">${t.topic}</span>
+        <div style="position:relative;height:10px;background:rgba(31,41,55,.8);border-radius:3px;overflow:hidden" title="${t.topic}: ${t.achieved}/${t.total} (${t.pct}%)">
+          <div style="position:absolute;left:0;top:0;height:100%;width:${t.pct}%;background:${color};opacity:.8"></div>
+        </div>
+        <span style="color:var(--muted);font-size:.68rem;text-align:right">${t.achieved}/${t.total}(${t.pct}%)</span>
+        <span style="text-align:right">${weakStr}</span>
+      `;
+      cont.appendChild(row);
+    });
+  })();
+
+  // ===== 年度別分析 =====
+  (function() {
+    const cont = document.getElementById('year-stats-list');
+    if (!cont || !window.YEAR_STATS || !YEAR_STATS.length) return;
+
+    // ヘッダー行
+    const hdr = document.createElement('div');
+    hdr.style.cssText = 'display:grid;grid-template-columns:68px 1fr 108px 52px;gap:6px;align-items:center;padding:4px 6px;font-size:.68rem;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.04em;border-bottom:1px solid var(--border);margin-bottom:6px;';
+    hdr.innerHTML = '<span>年度</span><span>進捗バー</span><span style="text-align:right">達成/総数</span><span style="text-align:right">弱点</span>';
+    cont.appendChild(hdr);
+
+    YEAR_STATS.forEach(y => {
+      const achPct  = y.pct;
+      const failPct = Math.max(0, y.tried_pct - achPct);
+      const untrPct = Math.max(0, 100 - y.tried_pct);
+
+      // 年度ラベルの色分け: Reiwa=青系, Heisei=グレー系
+      const isReiwa = y.year.startsWith('R');
+      const yrColor = isReiwa ? '#60a5fa' : '#94a3b8';
+
+      const row = document.createElement('div');
+      row.style.cssText = 'display:grid;grid-template-columns:68px 1fr 108px 52px;gap:6px;align-items:center;padding:5px 6px;border-radius:6px;transition:background .15s;';
+      row.onmouseenter = () => row.style.background = 'rgba(255,255,255,.04)';
+      row.onmouseleave = () => row.style.background = '';
+
+      const weakStr = y.weak > 0
+        ? `<span style="color:#f87171;font-weight:700">${y.weak}</span>`
+        : '<span style="color:var(--muted)">—</span>';
+
+      row.innerHTML = `
+        <span style="font-size:.82rem;font-weight:700;color:${yrColor};font-family:'Inter',monospace">${y.year}</span>
+        <div style="position:relative;height:14px;background:rgba(31,41,55,.8);border-radius:4px;overflow:hidden" title="${y.year}: ${y.achieved}達成 / ${y.tried}取組 / ${y.total}問">
+          <div style="position:absolute;left:0;top:0;height:100%;width:${achPct}%;background:linear-gradient(90deg,#10b981,#34d399);border-radius:4px 0 0 4px"></div>
+          <div style="position:absolute;left:${achPct}%;top:0;height:100%;width:${failPct}%;background:#f59e0b;opacity:.55"></div>
+          <div style="position:absolute;right:0;top:0;height:100%;width:${untrPct}%;background:transparent"></div>
+        </div>
+        <div style="text-align:right;font-size:.75rem;color:var(--muted2)">
+          <span style="color:#34d399;font-weight:700">${y.achieved}</span><span style="color:var(--muted)">/</span>${y.total}
+          <span style="font-size:.65rem;color:var(--muted)">(${y.pct}%)</span>
+        </div>
+        <div style="text-align:right;font-size:.75rem">${weakStr}</div>
+      `;
+      cont.appendChild(row);
+    });
+  })();
 }
 
 // ================================================================
@@ -2114,7 +2288,7 @@ function initQuizCharts() {
       datasets: [{
         data: [6, 0, 3, 1],
         backgroundColor: ['#22c55e','#facc15','#f59e0b','#ef4444'],
-        borderColor: '#0d1117',
+        borderColor: '#f1f5f9',
         borderWidth: 4
       }]
     },
