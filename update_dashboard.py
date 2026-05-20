@@ -468,9 +468,10 @@ def inject_data(stats, today_data, pdca_data, past_errors):
 const ACHIEVED = {achieved}, TOTAL = {total};
 const FIRST_MARU = {stats['maru1']}, FIRST_BATU = {stats['batu1']};
 const STREAK = 3;
-const EXAM_DATE = new Date('2026-08-23');
+const EXAM_DATE = new Date('2026-08-30');
 const STUDY_START = new Date('2025-09-01');
-const TODAY = new Date('{stats['updated']}');
+const TODAY = new Date();
+const GENERATED_DATE = '{stats['updated']}';
 
 const WEAK_DATA = {weak_js};"""
 
@@ -486,13 +487,6 @@ const WEAK_DATA = {weak_js};"""
     # stat values
     html = re.sub(r'(<div[^>]*class="stat-val"[^>]*style="color:var\(--green\)"[^>]*>)[^<]*(</div>)',
                   f'\\g<1>{achieved}\\g<2>', html, count=1)
-
-    # ===== DATE display (footer) =====
-    html = re.sub(
-        r"new Date\('[^']*'\)\.toLocaleDateString\('ja-JP'",
-        f"new Date('{stats['updated']}').toLocaleDateString('ja-JP'",
-        html
-    )
 
     # ===== Category progress (bunya-pct) =====
     # Notion category names → HTML display order: 電気回路, 電気・電子計測, 電磁気学, 電子理論
