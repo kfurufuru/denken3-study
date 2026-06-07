@@ -346,16 +346,18 @@ function initQuizCharts() {{
         html = f.read()
 
     # QUIZ_MAIN セクションを置換
+    # repl は関数で渡す。文字列 repl だと埋め込みデータ（テーマ名・記録テキスト）中の
+    # \ を re.sub が escape 解釈し HTML を破壊する（\U 等は bad escape 例外）。
     html = re.sub(
         r'<!-- QUIZ_MAIN_START -->.*?<!-- QUIZ_MAIN_END -->',
-        f'<!-- QUIZ_MAIN_START -->\n{main_html}\n<!-- QUIZ_MAIN_END -->',
+        lambda _m: f'<!-- QUIZ_MAIN_START -->\n{main_html}\n<!-- QUIZ_MAIN_END -->',
         html, flags=re.DOTALL
     )
 
-    # QUIZ_CHART セクションを置換
+    # QUIZ_CHART セクションを置換（chart_js は json.dumps 出力を含むため関数 repl 必須）
     html = re.sub(
         r'// QUIZ_CHART_START.*?// QUIZ_CHART_END',
-        chart_js,
+        lambda _m: chart_js,
         html, flags=re.DOTALL
     )
 
