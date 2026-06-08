@@ -418,9 +418,12 @@ def inject_today_pdca(html, today_data, pdca_data, past_errors):
 
     # TODAY_SESSIONS 置換
     today_js = json.dumps(today_data, ensure_ascii=False, indent=2)
+    # repl は関数で渡す。文字列 repl だと json.dumps が出力する \n / \t や
+    # データ中の C:\ 等を re.sub が escape 解釈し、埋め込み JS 文字列を破壊する
+    # （\U 等では bad escape 例外で全体クラッシュ）。関数 repl の戻り値は literal 採用。
     html = re.sub(
         r'// ===== TODAY_SESSIONS =====.*?const TODAY_SESSIONS = \{.*?\};',
-        f'// ===== TODAY_SESSIONS =====\nconst TODAY_SESSIONS = {today_js};',
+        lambda _m: f'// ===== TODAY_SESSIONS =====\nconst TODAY_SESSIONS = {today_js};',
         html,
         flags=re.DOTALL
     )
@@ -429,7 +432,7 @@ def inject_today_pdca(html, today_data, pdca_data, past_errors):
     pdca_js = json.dumps(pdca_data, ensure_ascii=False, indent=2)
     html = re.sub(
         r'// ===== PDCA_DATA =====.*?const PDCA_DATA = \{.*?\};',
-        f'// ===== PDCA_DATA =====\nconst PDCA_DATA = {pdca_js};',
+        lambda _m: f'// ===== PDCA_DATA =====\nconst PDCA_DATA = {pdca_js};',
         html,
         flags=re.DOTALL
     )
@@ -438,7 +441,7 @@ def inject_today_pdca(html, today_data, pdca_data, past_errors):
     past_js = json.dumps(past_errors, ensure_ascii=False)
     html = re.sub(
         r'// ===== PAST_ERRORS =====.*?const PAST_ERRORS = \[.*?\];',
-        f'// ===== PAST_ERRORS =====\nconst PAST_ERRORS = {past_js};',
+        lambda _m: f'// ===== PAST_ERRORS =====\nconst PAST_ERRORS = {past_js};',
         html, flags=re.DOTALL
     )
 
@@ -476,7 +479,7 @@ const GENERATED_DATE = '{stats['updated']}';
 const WEAK_DATA = {weak_js};"""
 
     html = re.sub(r"// ===== DATA =====.*?const WEAK_DATA = \[.*?\];",
-                  new_block, html, flags=re.DOTALL)
+                  lambda _m: new_block, html, flags=re.DOTALL)
 
     # overall pct in ring label
     html = re.sub(r'<div class="ring-pct">[^<]*</div>',
