@@ -11,6 +11,14 @@
 """
 
 import os, json, re, datetime, requests
+import sys
+
+# Windows cp932 コンソールで 📡/📄/✅ 等の非ASCII print が UnicodeEncodeError で
+# 落ちないように（file書込みは utf-8 明示済だが print が cp932 で死ぬ位置依存バグ予防）
+try:
+    sys.stdout.reconfigure(encoding="utf-8")
+except Exception:
+    pass
 
 # GitHub Actions は UTC で動作するため JST (+9h) を使用
 _JST = datetime.timezone(datetime.timedelta(hours=9))
