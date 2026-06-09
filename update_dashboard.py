@@ -779,9 +779,10 @@ const WEAK_DATA = {weak_js};"""
 
     # ===== YEAR_STATS 注入 =====
     year_js = json.dumps(stats.get("year_stats", []), ensure_ascii=False)
+    # repl は関数で渡す（文字列replだと json.dumps 内の \n や C:\ を re が escape 解釈し JS を破壊する）
     html = re.sub(
         r'// ===== YEAR_STATS =====\s*\nconst YEAR_STATS = \[.*?\];',
-        f'// ===== YEAR_STATS =====\nconst YEAR_STATS = {year_js};',
+        lambda _m: f'// ===== YEAR_STATS =====\nconst YEAR_STATS = {year_js};',
         html,
         flags=re.DOTALL
     )
@@ -790,7 +791,7 @@ const WEAK_DATA = {weak_js};"""
     ec_js = json.dumps(stats.get("error_cause_stats", {"ranking": [], "total": 0}), ensure_ascii=False)
     html = re.sub(
         r'// ===== ERROR_CAUSE_STATS =====\s*\nconst ERROR_CAUSE_STATS = \{.*?\};',
-        f'// ===== ERROR_CAUSE_STATS =====\nconst ERROR_CAUSE_STATS = {ec_js};',
+        lambda _m: f'// ===== ERROR_CAUSE_STATS =====\nconst ERROR_CAUSE_STATS = {ec_js};',
         html,
         flags=re.DOTALL
     )
@@ -799,7 +800,7 @@ const WEAK_DATA = {weak_js};"""
     topic_js = json.dumps(stats.get("topic_stats", []), ensure_ascii=False)
     html = re.sub(
         r'// ===== TOPIC_STATS =====\s*\nconst TOPIC_STATS = \[.*?\];',
-        f'// ===== TOPIC_STATS =====\nconst TOPIC_STATS = {topic_js};',
+        lambda _m: f'// ===== TOPIC_STATS =====\nconst TOPIC_STATS = {topic_js};',
         html,
         flags=re.DOTALL
     )
