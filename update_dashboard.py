@@ -139,12 +139,151 @@ def compute_stats(records):
     rank = {"S":0,"A":1,"B":2,"C":3,"D":4}
     weak.sort(key=lambda x: (rank.get(x["p"],9), x["date"] == "未実施", x["date"]))
 
+    year_stats        = compute_year_stats(records)
+    error_cause_stats = compute_error_cause_stats(records)
+    topic_stats       = compute_topic_stats(records)
+
     return {
         "total": total, "achieved": achieved, "new_achieved": new_achieved,
         "maru1": maru1, "batu1": batu1,
         "by_cat": by_cat, "weak": weak[:20],
-        "updated": _today().isoformat()
+        "updated": _today().isoformat(),
+        "year_stats":        year_stats,
+        "error_cause_stats": error_cause_stats,
+        "topic_stats":       topic_stats,
     }
+
+
+# ===== 年度別統計 =====
+
+def _year_key(yr):
+    """年度文字列のソートキー（新→旧）"""
+    m = re.match(r'^([RH])(\d+)(上|下)?$', yr)
+    if not m:
+        return (0, 0, 0)
+    era = 1 if m.group(1) == 'R' else 0
+    num = int(m.group(2))
+    suf = {"下": 1, "上": -1}.get(m.group(3), 0)
+    return (era, num, suf)
+
+
+def compute_year_stats(records):
+    """「年度・試験」フィールドを直接使用して年度別集計（新→旧順）"""
+    year_data = {}
+
+    for r in records:
+        year = get_prop(r, "年度・試験")
+        if not year:
+            continue
+
+        done  = get_prop(r, "達成") or (get_prop(r, "1回目") == "×" and get_prop(r, "2回目") == "〇")
+        maru1 = get_prop(r, "1回目") == "〇"
+        batu1 = get_prop(r, "1回目") == "×"
+        tried = maru1 or batu1
+        is_weak = batu1 and not done
+
+        if year not in year_data:
+            year_data[year] = {"total": 0, "achieved": 0, "tried": 0, "weak": 0}
+
+        year_data[year]["total"]    += 1
+        if done:    year_data[year]["achieved"] += 1
+        if tried:   year_data[year]["tried"]    += 1
+        if is_weak: year_data[year]["weak"]     += 1
+
+    sorted_years = sorted(year_data.keys(), key=_year_key, reverse=True)
+
+    result = []
+    for yr in sorted_years:
+        d = year_data[yr]
+        pct = round(d["achieved"] / d["total"] * 100) if d["total"] else 0
+        tried_pct = round(d["tried"] / d["total"] * 100) if d["total"] else 0
+        result.append({
+            "year":      yr,
+            "total":     d["total"],
+            "achieved":  d["achieved"],
+            "tried":     d["tried"],
+            "weak":      d["weak"],
+            "pct":       pct,
+            "tried_pct": tried_pct,
+        })
+
+    return result
+
+
+def compute_error_cause_stats(records):
+    """誤答原因フィールドを集計してランキングを返す"""
+    counter = {}
+    total_with_cause = 0
+
+    for r in records:
+        cause = get_prop(r, "誤答原因")
+        if not cause:
+            continue
+        counter[cause] = counter.get(cause, 0) + 1
+        total_with_cause += 1
+
+    sorted_causes = sorted(counter.items(), key=lambda x: x[1], reverse=True)
+
+    result = []
+    for cause, count in sorted_causes:
+        pct = round(count / total_with_cause * 100) if total_with_cause else 0
+        result.append({"cause": cause, "count": count, "pct": pct})
+
+    return {"ranking": result, "total": total_with_cause}
+
+
+def compute_topic_stats(records):
+    """分類項目フィールドを集計（分野ごとに達成率・弱点数）"""
+    # 分類項目 → {total, achieved, tried, weak, cat}
+    topic_data = {}
+
+    # 分野の表示順（ダッシュボードと同じ順序）
+    CAT_ORDER = {"電気回路": 0, "電磁気": 1, "電気及び電子計測": 2, "電子理論": 3}
+
+    for r in records:
+        topic = get_prop(r, "分類項目")
+        if not topic:
+            continue
+        cat = get_prop(r, "分野") or ""
+
+        done  = get_prop(r, "達成") or (get_prop(r, "1回目") == "×" and get_prop(r, "2回目") == "〇")
+        batu1 = get_prop(r, "1回目") == "×"
+        tried = get_prop(r, "1回目") in ("〇", "×", "△")
+        is_weak = batu1 and not done
+
+        if topic not in topic_data:
+            topic_data[topic] = {"total": 0, "achieved": 0, "tried": 0, "weak": 0, "cat": cat}
+
+        topic_data[topic]["total"]    += 1
+        if done:    topic_data[topic]["achieved"] += 1
+        if tried:   topic_data[topic]["tried"]    += 1
+        if is_weak: topic_data[topic]["weak"]     += 1
+
+    # 分野順 → 弱点数降順 でソート
+    def topic_sort(item):
+        name, d = item
+        cat_order = CAT_ORDER.get(d["cat"], 9)
+        return (cat_order, -(d["weak"]))
+
+    result = []
+    for topic, d in sorted(topic_data.items(), key=topic_sort):
+        total = d["total"]
+        pct = round(d["achieved"] / total * 100) if total else 0
+        tried_pct = round(d["tried"] / total * 100) if total else 0
+        if total == 0:
+            continue
+        result.append({
+            "topic":      topic,
+            "cat":        d["cat"],
+            "total":      total,
+            "achieved":   d["achieved"],
+            "tried":      d["tried"],
+            "weak":       d["weak"],
+            "pct":        pct,
+            "tried_pct":  tried_pct,
+        })
+
+    return result
 
 
 # ===== records.json 読み込み =====
@@ -411,6 +550,115 @@ def compute_pdca_data(records_list):
     }
 
 
+# ===== portal-v2.html 用サマリー =====
+
+def compute_portal_summary(notion_records, records_list):
+    """
+    portal-v2.html のトップカード（連続学習・科目別・heatmap）用サマリーを生成。
+    過去28日の学習有無は Notion「最終実施日」と records.json の date を統合してカウント。
+
+    返り値:
+      {
+        "lastUpdate":  "YYYY-MM-DD",
+        "subjects": {
+          "理論": {"pct": int, "achieved": int, "total": int},
+          "電力": None, "機械": None, "法規": None
+        },
+        "heatmap":     [int×28]   # 旧→新（28日前→今日）
+        "streakDays":  int        # 今日（または直近）から遡って学習が連続した日数
+        "activeDays":  int        # 直近28日のうち学習日数
+        "totalDays":   28
+      }
+    """
+    today = _today()
+
+    # 日付 → 学習件数 のマップを作る
+    daily_count = {}
+    for r in notion_records:
+        d = get_prop(r, "最終実施日")
+        if d:
+            daily_count[d] = daily_count.get(d, 0) + 1
+    for r in records_list:
+        d = r.get("date", "")
+        if d:
+            daily_count[d] = daily_count.get(d, 0) + 1
+
+    # 28日 heatmap（旧→新の順）
+    heatmap = []
+    active_days = 0
+    for i in range(27, -1, -1):
+        ds = (today - datetime.timedelta(days=i)).isoformat()
+        cnt = daily_count.get(ds, 0)
+        if cnt == 0:    lvl = 0
+        elif cnt <= 2:  lvl = 1
+        elif cnt <= 4:  lvl = 2
+        elif cnt <= 7:  lvl = 3
+        else:           lvl = 4
+        heatmap.append(lvl)
+        if cnt > 0:
+            active_days += 1
+
+    # 連続学習日数: 今日から遡る。今日が0でも昨日から数える（明日リセットは避けたいため）
+    streak = 0
+    started = False
+    for i in range(60):  # 最大60日まで遡る
+        ds = (today - datetime.timedelta(days=i)).isoformat()
+        cnt = daily_count.get(ds, 0)
+        if cnt > 0:
+            streak += 1
+            started = True
+        else:
+            if started:
+                break
+            # 今日がまだ0なら次の日(昨日)を見る。学習が始まっていない期間はスキップ
+            if i == 0:
+                continue
+            break
+
+    # 科目別: 理論のみ Notion DB から集計
+    by_cat = {}
+    for r in notion_records:
+        cat = get_prop(r, "分野")
+        if not cat:
+            continue
+        if cat not in by_cat:
+            by_cat[cat] = {"total": 0, "achieved": 0}
+        by_cat[cat]["total"] += 1
+        done = get_prop(r, "達成") or (
+            get_prop(r, "1回目") == "×" and get_prop(r, "2回目") == "〇"
+        )
+        if done:
+            by_cat[cat]["achieved"] += 1
+
+    theory_total = sum(d["total"] for d in by_cat.values())
+    theory_done  = sum(d["achieved"] for d in by_cat.values())
+    theory_pct   = round(theory_done / theory_total * 100) if theory_total else 0
+
+    return {
+        "lastUpdate": today.isoformat(),
+        "subjects": {
+            "理論": {"pct": theory_pct, "achieved": theory_done, "total": theory_total},
+            "電力": None,
+            "機械": None,
+            "法規": None,
+        },
+        "heatmap":    heatmap,
+        "streakDays": streak,
+        "activeDays": active_days,
+        "totalDays":  28,
+    }
+
+
+def write_portal_summary(summary):
+    """data/portal-summary.json を書き出す"""
+    path = os.path.join(os.path.dirname(__file__), "data", "portal-summary.json")
+    os.makedirs(os.path.dirname(path), exist_ok=True)
+    with open(path, "w", encoding="utf-8") as f:
+        json.dump(summary, f, ensure_ascii=False, indent=2)
+    print(f"📄 portal-summary.json: 理論 {summary['subjects']['理論']['pct']}% / "
+          f"streak {summary['streakDays']}d / active {summary['activeDays']}/28d")
+
+
 # ===== HTML注入（TODAY_SESSIONS / PDCA_DATA / PAST_ERRORS）=====
 
 def inject_today_pdca(html, today_data, pdca_data, past_errors):
@@ -518,16 +766,44 @@ const WEAK_DATA = {weak_js};"""
             html
         )
 
-    # ===== Bar widths (JS animation) =====
+    # ===== Bar widths (JS animation) — スペースの有無に対応 =====
     for i, (bid, bp) in enumerate(zip(bar_ids, bar_pcts)):
         html = re.sub(
-            rf"document\.getElementById\('{bid}'\)\.style\.width='[^']*'",
+            rf"document\.getElementById\('{bid}'\)\.style\.width\s*=\s*'[^']*'",
             f"document.getElementById('{bid}').style.width='{bp}%'",
             html
         )
 
     # ===== TODAY_SESSIONS / PDCA_DATA / PAST_ERRORS 注入 =====
     html = inject_today_pdca(html, today_data, pdca_data, past_errors)
+
+    # ===== YEAR_STATS 注入 =====
+    year_js = json.dumps(stats.get("year_stats", []), ensure_ascii=False)
+    # repl は関数で渡す（文字列replだと json.dumps 内の \n や C:\ を re が escape 解釈し JS を破壊する）
+    html = re.sub(
+        r'// ===== YEAR_STATS =====\s*\nconst YEAR_STATS = \[.*?\];',
+        lambda _m: f'// ===== YEAR_STATS =====\nconst YEAR_STATS = {year_js};',
+        html,
+        flags=re.DOTALL
+    )
+
+    # ===== ERROR_CAUSE_STATS 注入 =====
+    ec_js = json.dumps(stats.get("error_cause_stats", {"ranking": [], "total": 0}), ensure_ascii=False)
+    html = re.sub(
+        r'// ===== ERROR_CAUSE_STATS =====\s*\nconst ERROR_CAUSE_STATS = \{.*?\};',
+        lambda _m: f'// ===== ERROR_CAUSE_STATS =====\nconst ERROR_CAUSE_STATS = {ec_js};',
+        html,
+        flags=re.DOTALL
+    )
+
+    # ===== TOPIC_STATS 注入 =====
+    topic_js = json.dumps(stats.get("topic_stats", []), ensure_ascii=False)
+    html = re.sub(
+        r'// ===== TOPIC_STATS =====\s*\nconst TOPIC_STATS = \[.*?\];',
+        lambda _m: f'// ===== TOPIC_STATS =====\nconst TOPIC_STATS = {topic_js};',
+        html,
+        flags=re.DOTALL
+    )
 
     with open("index.html","w",encoding="utf-8") as f:
         f.write(html)
@@ -563,3 +839,7 @@ if __name__ == "__main__":
     past_errors = compute_past_errors(records)
 
     inject_data(stats, today_data, pdca_data, past_errors)
+
+    # portal-v2.html 用サマリー出力
+    portal_summary = compute_portal_summary(notion_records, records)
+    write_portal_summary(portal_summary)
