@@ -148,5 +148,156 @@
     "memo": "API直接実行のテスト記録",
     "phase": "A",
     "subtheme": "理論総合"
+  },
+  {
+    "subject": "法規",
+    "theme": "過去問演習",
+    "result": "risky",
+    "memo": "2026-05-24 学習復帰（41日空白）・PDCA Wiki整備からの切替・記録動線テスト",
+    "phase": "A",
+    "subtheme": "法規過去問",
+    "next_review": "SR1",
+    "date": "2026-05-24",
+    "theme_id": "kakomon-enshu",
+    "attempt": 1
+  },
+  {
+    "theme_id": "denji-yudou",
+    "theme": "電磁誘導",
+    "subject": "理論",
+    "date": "2026-05-27",
+    "result": "risky",
+    "attempt": 4,
+    "next_review": "SR2",
+    "memo": "3日空白後のSR即解き直し1問。(1)e=-LdΦ/dt と回答→自己誘導(L di/dt)と混同・基本形は e=-dΦ/dt または -NdΦ/dt。(2)レンツの法則名抜け・方向は正解。(3)右手左手の用途OK。(4)右手の親指=力と回答→正は親=動(v)。古舘自身のpatchメモ(2026-04-10)『右手は親=動、人=磁、中=電』を再確認要。",
+    "patch": "ファラデー基本形 e = -dΦ/dt（N巻き e = -NdΦ/dt）/ 自己誘導 e = -L di/dt（別概念）/ 左手 親=力F・人=磁B・中=電I（モーター）/ 右手 親=動v・人=磁B・中=電I（発電機）。親指は左=力/右=動で固定。レンツの法則は向きを決める法則として言葉で強く紐付け。",
+    "L1": "MAP",
+    "L2": "VEC",
+    "phase": "B"
+  },
+  {
+    "theme_id": "inductance",
+    "theme": "電磁誘導・インダクタンス",
+    "subject": "理論",
+    "date": "2026-05-27",
+    "result": "ng",
+    "attempt": 2,
+    "next_review": "SR1",
+    "memo": "概念4問テスト。Q1レンツ符号=risky(方向OK・本質エネルギー保存則未到達)/Q2双対=ng(電圧↔電流の急変嫌う混同・最重要)/Q3N²比例=risky(2段階分解未到達・鎖交概念欠落)/Q4結合係数=ng(k=1の意味未理解・正直告白)",
+    "patch": "Q2: C=電圧の慣性、L=電流の慣性で一語固定/Q3: 磁束N倍×鎖交N倍=N² 2段階で書く/Q4: k=磁束漏れの逆指標、k=1は一次磁束100%が二次を通る理想変圧器、現実は漏れ磁束で必ずk<1",
+    "L1": "MAP",
+    "L2": "CONF",
+    "phase": "B"
+  },
+  {
+    "theme_id": "inductance",
+    "theme": "電磁誘導・インダクタンス",
+    "subject": "理論",
+    "date": "2026-05-27",
+    "result": "ng",
+    "attempt": 3,
+    "next_review": "SR2",
+    "memo": "SR1即解き直し。Q1(C-L双対)=ok(C=電圧の慣性/L=電流の慣性 正解、typoあり)。Q2(N²比例)=ng未回答。Q3(結合係数k)=ng未回答。本命3点中1点のみ言及・2点空白でng。",
+    "patch": "Q2-N²: 巻数N倍→磁束N倍×鎖交巻数N倍=N²の2段階分解で記憶。Q3-k: k=1は漏れ磁束ゼロ=理想変圧器、現実は鉄心外漏れでk<1。Q1のC-L双対は定着。",
+    "L1": "MAP",
+    "L2": "CONF",
+    "phase": "B"
+  },
+  {
+    "theme_id": "denji-yudou",
+    "theme": "電磁誘導",
+    "subject": "理論",
+    "date": "2026-05-31",
+    "result": "risky",
+    "attempt": 5,
+    "next_review": "SR1",
+    "memo": "4日空白後のSR即解き直し（D案修正後の書き出し形式・1回目）。(1)『電流を流すと磁束変化』→自己誘導視点になっており一般形のファラデー（dΦ/dt 比例）が抜け、レンツの『向きだけ』も抜けた。(2)フレミング左手＝モーターはok。(3)『金属が動くと右手の方向に電流』→指の対応（親=動・人=磁・中=電）と起電力／電流の区別が前回patchから定着せず。前回2026-05-27もrisky・連続でMAP/VEC弱点持ち越し。",
+    "patch": "ファラデー基本形 e = -dΦ/dt（N巻き e = -NdΦ/dt）/ 自己誘導 e = -L di/dt（別概念・「電流変化」のときのみ）/ レンツは「向きを示すのみ」と必ず添える / 右手の3指 親=動v・人=磁B・中=電I を反復暗唱 / 起電力は直接発生・電流は閉回路条件で結果として流れる、を区別。",
+    "L1": "MAP",
+    "L2": "VEC",
+    "phase": "B",
+    "wiki_refs": [
+      {
+        "page": "electromagnetic-force",
+        "tab": "formulas",
+        "section_hint": "§1 基本公式（ファラデー e=-NdΦ/dt + 自己誘導との区別）＋ §3 フレミング指の対応表（親=動/力・人=磁・中=電/起電力）",
+        "label": "1.3 電磁力 - 公式タブ"
+      },
+      {
+        "page": "electromagnetic-force",
+        "tab": "explain",
+        "section_hint": "§4 引っかけポイント・フレミング左右の使い分け4視点・レンツ「向きのみ」の役割",
+        "label": "1.3 電磁力 - 解説タブ"
+      }
+    ]
+  },
+  {
+    "theme_id": "seiden-youryou",
+    "theme": "静電容量",
+    "subject": "理論",
+    "date": "2026-05-31",
+    "result": "risky",
+    "attempt": 3,
+    "next_review": "SR2",
+    "memo": "4日空白後のSR即解き直し（D案修正後の書き出し形式・1回目）。(1)『距離反比例・面積比例』→誘電率 ε が抜けて3変数のうち2変数しか書けず。(2)『並列で増・直列で減（距離が増えたのと同じ）』のアナロジー秀逸だが計算式（並列=和、直列=逆数和）が欠落。(3)空欄→Q=CV や使い分け次元の認識不足。基礎理解はあるが深さ不足。",
+    "patch": "公式 C = ε₀ε_r × S/d の3変数全部覚える / 並列は単純和 C_total = C1+C2 / 直列は逆数和 1/C_total = 1/C1+1/C2 / Q=CV の関係式と W=(1/2)CV² のエネルギー貯蔵 / 日常語アナロジー: 大きい瓶（S大）/ 薄い蓋（d小）/ 濃い中身（ε大）でたくさん貯まる。",
+    "L1": "MAP",
+    "L2": "CALC",
+    "phase": "A",
+    "wiki_refs": [
+      {
+        "page": "capacitor",
+        "tab": "formulas",
+        "section_hint": "§1 基本公式（C=ε₀ε_r·S/d、Q=CV、W=CV²/2/Q²(2C)/QV/2）＋ §2 直列(逆数和)・並列(和) ＋ §5 抵抗との逆転表",
+        "label": "1.2 コンデンサ - 公式タブ"
+      },
+      {
+        "page": "capacitor",
+        "tab": "explain",
+        "section_hint": "§2 症状→誤モデル→正モデル 6項目（特に直列/並列の物理イメージ）＋ §3 定電圧vs定電荷",
+        "label": "1.2 コンデンサ - 解説タブ"
+      }
+    ]
+  },
+  {
+    "theme_id": "sansou-kouryu",
+    "theme": "三相交流",
+    "subject": "理論",
+    "date": "2026-06-03",
+    "result": "risky",
+    "attempt": 2,
+    "next_review": "SR1",
+    "memo": "3日空白後のSR再エントリ(reentry本命)。定義の核心「120度位相差で送る」は出たが要点1/3。公式(Y:線間=√3相電圧/Δ:線電流=√3相電流, P=√3 V_l I_l cosθ)と使い分け(√3が電圧側Yか電流側Δか)が両方欠落。120度→ベクトル合成→√3 の展開で止まる(最頻弱点MAP/VEC再発)。",
+    "patch": "√3の出方を結線で固定: Y=電圧側が√3倍(線間=√3×相電圧,線電流=相電流) / Δ=電流側が√3倍(線間=相電圧,線電流=√3×相電流) / 三相電力 P=√3 V_line I_line cosθ / まず相か線か判別。混同源=相電圧と線間電圧。日常語=Yは電圧を√3持ち上げ、Δは電流を√3に分ける。",
+    "L1": "VEC",
+    "L2": "CALC",
+    "phase": "A",
+    "wiki_refs": [
+      {
+        "page": "three-phase",
+        "tab": "formulas",
+        "section": "結線と√3"
+      }
+    ]
+  },
+  {
+    "theme_id": "deni-denkai-jikai",
+    "theme": "電位・電界・磁界",
+    "subject": "理論",
+    "date": "2026-06-06",
+    "result": "ng",
+    "attempt": 2,
+    "next_review": "SR1",
+    "memo": "ローレンツ力でフレミング右手と左手を取り違え（力なのに右手を使用）。電子は電流と逆向きという符号も未考慮。",
+    "patch": "力を受けるのは左手（FBI: 親F・人B・中I）。右手は発電（起電力）。電子は電流と逆向き。『押されるなら左・生み出すなら右』。",
+    "L1": "VEC",
+    "L2": "TRACK",
+    "phase": "A",
+    "ease_factor": 2.3,
+    "interval_days": 1,
+    "recall_test_due": null,
+    "confidence_pre": null,
+    "error_tag": "概念不理解",
+    "self_summary": ""
   }
 ]
