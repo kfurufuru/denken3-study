@@ -1425,7 +1425,7 @@ const STREAK = 3;
 const EXAM_DATE = new Date('2026-08-30');
 const STUDY_START = new Date('2025-09-01');
 const TODAY = new Date();
-const GENERATED_DATE = '2026-07-15';
+const GENERATED_DATE = '2026-07-16';
 
 const WEAK_DATA = [{"q": "R04下-問8", "topic": "", "cat": "電気回路", "p": "S", "date": "2026-01-11"}, {"q": "H27-問4", "topic": "", "cat": "電気回路", "p": "S", "date": "2026-02-01"}, {"q": "H27-問15(a)", "topic": "", "cat": "電気回路", "p": "S", "date": "2026-02-01"}, {"q": "R04-問15(a)", "topic": "", "cat": "電気回路", "p": "S", "date": "2026-02-23"}, {"q": "H30-問15(a)", "topic": "", "cat": "電気回路", "p": "S", "date": "2026-02-23"}, {"q": "H29-問16(a)", "topic": "", "cat": "電気回路", "p": "S", "date": "2026-02-23"}, {"q": "H26-問5", "topic": "", "cat": "電気回路", "p": "S", "date": "2026-03-01"}, {"q": "R02-問8", "topic": "", "cat": "電気回路", "p": "S", "date": "2026-03-08"}, {"q": "H25-問10", "topic": "", "cat": "電気回路", "p": "S", "date": "2026-03-08"}, {"q": "H24-問16(a)", "topic": "", "cat": "電気回路", "p": "S", "date": "2026-03-15"}, {"q": "H23-問8", "topic": "", "cat": "電気回路", "p": "S", "date": "2026-03-20"}, {"q": "R04上-問9", "topic": "", "cat": "電気回路", "p": "S", "date": "2026-03-23"}, {"q": "R06上-問7", "topic": "", "cat": "電気回路", "p": "S", "date": "2026-03-28"}, {"q": "R06上-問1", "topic": "", "cat": "電磁気", "p": "S", "date": "2026-03-28"}, {"q": "H22-問8", "topic": "", "cat": "電気回路", "p": "S", "date": "2026-04-10"}, {"q": "H19-問7", "topic": "", "cat": "電気回路", "p": "S", "date": "2026-04-12"}, {"q": "R05上-問7", "topic": "", "cat": "電気回路", "p": "S", "date": "2026-04-27"}, {"q": "H25-問15(b)", "topic": "", "cat": "電気回路", "p": "S", "date": "未実施"}, {"q": "H29-問15(b)", "topic": "", "cat": "電磁気", "p": "S", "date": "未実施"}, {"q": "H24-問15(b)", "topic": "", "cat": "電磁気", "p": "S", "date": "未実施"}];
 const WEAK_DATA_HOUKI = [{"q": "R03-問1", "topic": "", "cat": "電気設備技術基準", "p": "A", "date": "未実施"}, {"q": "R03-問2", "topic": "", "cat": "電気設備技術基準", "p": "A", "date": "未実施"}, {"q": "R03-問3", "topic": "", "cat": "電気設備技術基準", "p": "A", "date": "未実施"}, {"q": "H27-問3", "topic": "", "cat": "電気設備技術基準", "p": "B", "date": "未実施"}, {"q": "R03-問4", "topic": "", "cat": "電気設備技術基準", "p": "A", "date": "未実施"}, {"q": "R03-問5", "topic": "", "cat": "電気設備技術基準", "p": "A", "date": "未実施"}, {"q": "R03-問6", "topic": "", "cat": "電気設備技術基準", "p": "A", "date": "未実施"}, {"q": "R03-問7", "topic": "", "cat": "電気設備技術基準", "p": "A", "date": "未実施"}, {"q": "R03-問8", "topic": "", "cat": "電気設備技術基準", "p": "A", "date": "未実施"}, {"q": "R03-問9", "topic": "", "cat": "電気設備技術基準", "p": "A", "date": "未実施"}, {"q": "R03-問10", "topic": "", "cat": "電気事業法", "p": "A", "date": "未実施"}, {"q": "R03-問11", "topic": "", "cat": "電気事業法", "p": "A", "date": "未実施"}, {"q": "R03-問12", "topic": "", "cat": "電気設備技術基準", "p": "A", "date": "未実施"}, {"q": "H24-問11", "topic": "", "cat": "電気施設管理", "p": "B", "date": "未実施"}, {"q": "R03-問13", "topic": "", "cat": "電気施設管理", "p": "A", "date": "未実施"}, {"q": "R02-問1", "topic": "", "cat": "電気事業法", "p": "A", "date": "未実施"}, {"q": "R02-問2", "topic": "", "cat": "電気事業法", "p": "A", "date": "未実施"}];
@@ -1442,8 +1442,8 @@ const TOPIC_STATS = [{"topic": "三相交流回路", "cat": "電気回路", "tot
 // ================================================================
 // ===== TODAY_SESSIONS =====
 const TODAY_SESSIONS = {
-  "date": "2026-07-15",
-  "days_left": 39,
+  "date": "2026-07-16",
+  "days_left": 38,
   "sessions": [
     {
       "slot": "morning",
@@ -1487,6 +1487,13 @@ const PDCA_DATA = {
   "week": "W29",
   "period": "7/13–7/19",
   "do_logs": [
+    {
+      "date": "7/11",
+      "theme": "トランジスタ 電流増幅率（α・β）",
+      "source": "問題演習",
+      "score": 0,
+      "result": "ng"
+    },
     {
       "date": "6/14",
       "theme": "電磁誘導・インダクタンス",
@@ -1549,13 +1556,6 @@ const PDCA_DATA = {
       "source": "問題演習",
       "score": 0,
       "result": "ng"
-    },
-    {
-      "date": "5/24",
-      "theme": "過去問演習",
-      "source": "問題演習",
-      "score": 0,
-      "result": "risky"
     }
   ],
   "check_pending": [
@@ -1563,43 +1563,43 @@ const PDCA_DATA = {
       "theme": "静電容量",
       "result": "risky",
       "category": "",
-      "days_ago": 45
+      "days_ago": 46
     },
     {
       "theme": "電磁誘導",
       "result": "risky",
       "category": "",
-      "days_ago": 49
+      "days_ago": 50
     },
     {
       "theme": "電磁誘導・インダクタンス",
       "result": "ng",
       "category": "",
-      "days_ago": 49
+      "days_ago": 50
     },
     {
       "theme": "過去問演習",
       "result": "risky",
       "category": "",
-      "days_ago": 93
+      "days_ago": 94
     },
     {
       "theme": "静電容量",
       "result": "ok",
       "category": "",
-      "days_ago": 96
+      "days_ago": 97
     },
     {
       "theme": "不等率",
       "result": "risky",
       "category": "",
-      "days_ago": 103
+      "days_ago": 104
     },
     {
       "theme": "磁界",
       "result": "risky",
       "category": "",
-      "days_ago": 105
+      "days_ago": 106
     }
   ],
   "act_bugs": [],
@@ -1607,7 +1607,7 @@ const PDCA_DATA = {
 };
 
 // ===== PAST_ERRORS =====
-const PAST_ERRORS = [{"question_id": "電磁誘導・インダクタンス", "category": "電磁誘導・インダクタンス", "subject": "理論", "result": "ng", "date": "2026-06-14", "memo": "概念3問再テスト（2026-05-27 attempt2/3と同一問・18日経過の実質SR）。Q1レンツ符号=risky（方向OK・エネルギー保存則に未到達＝5/27と不変・改善なし）/Q2双対=ok（C電界L磁界・電圧↔電流・開放↔短絡を完答＝5/27ng→定着）/Q3N²比例=ng（鎖交の2段階に未到達＝5/27と不変・改善なし）。自信度Q1=3/5・Q2=3/5（実は満点で過小評価）・Q3=1/5（較正良好）。Q1/Q3が18日間不変＝SR未発火と受動閲覧の限界の物証。", "next_review": "SR1"}, {"question_id": "絶縁耐力試験", "category": "絶縁耐力試験", "subject": "法規", "result": "risky", "date": "2026-06-11", "memo": "5日空白後の再エントリ。絶縁耐力クラスタ4択 2/4。✕(1) 6.6kV試験電圧で6,900V止まり＝最大使用電圧への換算後に倍率1.5を掛け忘れ（定番罠に正面から着弾）。✕(2) 7,000V超60kV以下を1.5倍と誤答（正1.25倍・7kV境界の取り違え）。〇印加時間10分（全区分一律）・〇ケーブル直流2倍は定着。", "next_review": "SR1"}, {"question_id": "電位・電界・磁界", "category": "電位・電界・磁界", "subject": "理論", "result": "ng", "date": "2026-06-06", "memo": "ローレンツ力でフレミング右手と左手を取り違え（力なのに右手を使用）。電子は電流と逆向きという符号も未考慮。", "next_review": "SR1"}, {"question_id": "三相交流", "category": "三相交流", "subject": "理論", "result": "risky", "date": "2026-06-03", "memo": "3日空白後のSR再エントリ(reentry本命)。定義の核心「120度位相差で送る」は出たが要点1/3。公式(Y:線間=√3相電圧/Δ:線電流=√3相電流, P=√3 V_l I_l cosθ)と使い分け(√3が電圧側Yか電流側Δか)が両方欠落。120度→ベクトル合成→√3 の展開で止まる(最頻弱点MAP/VEC再発)。", "next_review": "SR1"}, {"question_id": "電磁誘導", "category": "電磁誘導", "subject": "理論", "result": "risky", "date": "2026-05-31", "memo": "4日空白後のSR即解き直し（D案修正後の書き出し形式・1回目）。(1)『電流を流すと磁束変化』→自己誘導視点になっており一般形のファラデー（dΦ/dt 比例）が抜け、レンツの『向きだけ』も抜けた。(2)フレミング左手＝モーターはok。(3)『金属が動くと右手の方向に電流』→指の対応（親=動・人=磁・中=電）と起電力／電流の区別が前回patchから定着せず。前回2026-05-27もrisky・連続でMAP/VEC弱点持ち越し。", "next_review": "SR1"}, {"question_id": "静電容量", "category": "静電容量", "subject": "理論", "result": "risky", "date": "2026-05-31", "memo": "4日空白後のSR即解き直し（D案修正後の書き出し形式・1回目）。(1)『距離反比例・面積比例』→誘電率 ε が抜けて3変数のうち2変数しか書けず。(2)『並列で増・直列で減（距離が増えたのと同じ）』のアナロジー秀逸だが計算式（並列=和、直列=逆数和）が欠落。(3)空欄→Q=CV や使い分け次元の認識不足。基礎理解はあるが深さ不足。", "next_review": "SR2"}, {"question_id": "電磁誘導", "category": "電磁誘導", "subject": "理論", "result": "risky", "date": "2026-05-27", "memo": "3日空白後のSR即解き直し1問。(1)e=-LdΦ/dt と回答→自己誘導(L di/dt)と混同・基本形は e=-dΦ/dt または -NdΦ/dt。(2)レンツの法則名抜け・方向は正解。(3)右手左手の用途OK。(4)右手の親指=力と回答→正は親=動(v)。古舘自身のpatchメモ(2026-04-10)『右手は親=動、人=磁、中=電』を再確認要。", "next_review": "SR2"}, {"question_id": "電磁誘導・インダクタンス", "category": "電磁誘導・インダクタンス", "subject": "理論", "result": "ng", "date": "2026-05-27", "memo": "概念4問テスト。Q1レンツ符号=risky(方向OK・本質エネルギー保存則未到達)/Q2双対=ng(電圧↔電流の急変嫌う混同・最重要)/Q3N²比例=risky(2段階分解未到達・鎖交概念欠落)/Q4結合係数=ng(k=1の意味未理解・正直告白)", "next_review": "SR1"}, {"question_id": "電磁誘導・インダクタンス", "category": "電磁誘導・インダクタンス", "subject": "理論", "result": "ng", "date": "2026-05-27", "memo": "SR1即解き直し。Q1(C-L双対)=ok(C=電圧の慣性/L=電流の慣性 正解、typoあり)。Q2(N²比例)=ng未回答。Q3(結合係数k)=ng未回答。本命3点中1点のみ言及・2点空白でng。", "next_review": "SR2"}, {"question_id": "過去問演習", "category": "過去問演習", "subject": "法規", "result": "risky", "date": "2026-05-24", "memo": "2026-05-24 学習復帰（41日空白）・PDCA Wiki整備からの切替・記録動線テスト", "next_review": "SR1"}, {"question_id": "過去問演習", "category": "過去問演習", "subject": "理論", "result": "risky", "date": "2026-04-13", "memo": "API直接実行のテスト記録", "next_review": "SR2"}, {"question_id": "電磁誘導", "category": "電磁誘導", "subject": "理論", "result": "ng", "date": "2026-04-10", "memo": "AIの説明が間違え。理解していた。", "next_review": "SR1"}, {"question_id": "不等率", "category": "不等率", "subject": "電力", "result": "risky", "date": "2026-04-03", "memo": "需要率との区別で一部迷い（設備容量との関係が曖昧）", "next_review": "SR3"}, {"question_id": "磁界", "category": "磁界", "subject": "理論", "result": "risky", "date": "2026-04-01", "memo": "磁界が1/r、点電荷の電界が1/r^2になる理由の区別がやや曖昧。式は選べたが、広がり方の説明補強が必要。", "next_review": "SR2"}];
+const PAST_ERRORS = [{"question_id": "トランジスタ 電流増幅率（α・β）", "category": "トランジスタ 電流増幅率（α・β）", "subject": "理論", "result": "ng", "date": "2026-07-11", "memo": "エミッタ接地の増幅率β=I_C/I_Bを想起できず過去問未解答。αとβの分母取り違え。I_E=I_C+I_Bからの復元経路が未定着。", "next_review": "SR1"}, {"question_id": "電磁誘導・インダクタンス", "category": "電磁誘導・インダクタンス", "subject": "理論", "result": "ng", "date": "2026-06-14", "memo": "概念3問再テスト（2026-05-27 attempt2/3と同一問・18日経過の実質SR）。Q1レンツ符号=risky（方向OK・エネルギー保存則に未到達＝5/27と不変・改善なし）/Q2双対=ok（C電界L磁界・電圧↔電流・開放↔短絡を完答＝5/27ng→定着）/Q3N²比例=ng（鎖交の2段階に未到達＝5/27と不変・改善なし）。自信度Q1=3/5・Q2=3/5（実は満点で過小評価）・Q3=1/5（較正良好）。Q1/Q3が18日間不変＝SR未発火と受動閲覧の限界の物証。", "next_review": "SR1"}, {"question_id": "絶縁耐力試験", "category": "絶縁耐力試験", "subject": "法規", "result": "risky", "date": "2026-06-11", "memo": "5日空白後の再エントリ。絶縁耐力クラスタ4択 2/4。✕(1) 6.6kV試験電圧で6,900V止まり＝最大使用電圧への換算後に倍率1.5を掛け忘れ（定番罠に正面から着弾）。✕(2) 7,000V超60kV以下を1.5倍と誤答（正1.25倍・7kV境界の取り違え）。〇印加時間10分（全区分一律）・〇ケーブル直流2倍は定着。", "next_review": "SR1"}, {"question_id": "電位・電界・磁界", "category": "電位・電界・磁界", "subject": "理論", "result": "ng", "date": "2026-06-06", "memo": "ローレンツ力でフレミング右手と左手を取り違え（力なのに右手を使用）。電子は電流と逆向きという符号も未考慮。", "next_review": "SR1"}, {"question_id": "三相交流", "category": "三相交流", "subject": "理論", "result": "risky", "date": "2026-06-03", "memo": "3日空白後のSR再エントリ(reentry本命)。定義の核心「120度位相差で送る」は出たが要点1/3。公式(Y:線間=√3相電圧/Δ:線電流=√3相電流, P=√3 V_l I_l cosθ)と使い分け(√3が電圧側Yか電流側Δか)が両方欠落。120度→ベクトル合成→√3 の展開で止まる(最頻弱点MAP/VEC再発)。", "next_review": "SR1"}, {"question_id": "電磁誘導", "category": "電磁誘導", "subject": "理論", "result": "risky", "date": "2026-05-31", "memo": "4日空白後のSR即解き直し（D案修正後の書き出し形式・1回目）。(1)『電流を流すと磁束変化』→自己誘導視点になっており一般形のファラデー（dΦ/dt 比例）が抜け、レンツの『向きだけ』も抜けた。(2)フレミング左手＝モーターはok。(3)『金属が動くと右手の方向に電流』→指の対応（親=動・人=磁・中=電）と起電力／電流の区別が前回patchから定着せず。前回2026-05-27もrisky・連続でMAP/VEC弱点持ち越し。", "next_review": "SR1"}, {"question_id": "静電容量", "category": "静電容量", "subject": "理論", "result": "risky", "date": "2026-05-31", "memo": "4日空白後のSR即解き直し（D案修正後の書き出し形式・1回目）。(1)『距離反比例・面積比例』→誘電率 ε が抜けて3変数のうち2変数しか書けず。(2)『並列で増・直列で減（距離が増えたのと同じ）』のアナロジー秀逸だが計算式（並列=和、直列=逆数和）が欠落。(3)空欄→Q=CV や使い分け次元の認識不足。基礎理解はあるが深さ不足。", "next_review": "SR2"}, {"question_id": "電磁誘導", "category": "電磁誘導", "subject": "理論", "result": "risky", "date": "2026-05-27", "memo": "3日空白後のSR即解き直し1問。(1)e=-LdΦ/dt と回答→自己誘導(L di/dt)と混同・基本形は e=-dΦ/dt または -NdΦ/dt。(2)レンツの法則名抜け・方向は正解。(3)右手左手の用途OK。(4)右手の親指=力と回答→正は親=動(v)。古舘自身のpatchメモ(2026-04-10)『右手は親=動、人=磁、中=電』を再確認要。", "next_review": "SR2"}, {"question_id": "電磁誘導・インダクタンス", "category": "電磁誘導・インダクタンス", "subject": "理論", "result": "ng", "date": "2026-05-27", "memo": "概念4問テスト。Q1レンツ符号=risky(方向OK・本質エネルギー保存則未到達)/Q2双対=ng(電圧↔電流の急変嫌う混同・最重要)/Q3N²比例=risky(2段階分解未到達・鎖交概念欠落)/Q4結合係数=ng(k=1の意味未理解・正直告白)", "next_review": "SR1"}, {"question_id": "電磁誘導・インダクタンス", "category": "電磁誘導・インダクタンス", "subject": "理論", "result": "ng", "date": "2026-05-27", "memo": "SR1即解き直し。Q1(C-L双対)=ok(C=電圧の慣性/L=電流の慣性 正解、typoあり)。Q2(N²比例)=ng未回答。Q3(結合係数k)=ng未回答。本命3点中1点のみ言及・2点空白でng。", "next_review": "SR2"}, {"question_id": "過去問演習", "category": "過去問演習", "subject": "法規", "result": "risky", "date": "2026-05-24", "memo": "2026-05-24 学習復帰（41日空白）・PDCA Wiki整備からの切替・記録動線テスト", "next_review": "SR1"}, {"question_id": "過去問演習", "category": "過去問演習", "subject": "理論", "result": "risky", "date": "2026-04-13", "memo": "API直接実行のテスト記録", "next_review": "SR2"}, {"question_id": "電磁誘導", "category": "電磁誘導", "subject": "理論", "result": "ng", "date": "2026-04-10", "memo": "AIの説明が間違え。理解していた。", "next_review": "SR1"}, {"question_id": "不等率", "category": "不等率", "subject": "電力", "result": "risky", "date": "2026-04-03", "memo": "需要率との区別で一部迷い（設備容量との関係が曖昧）", "next_review": "SR3"}, {"question_id": "磁界", "category": "磁界", "subject": "理論", "result": "risky", "date": "2026-04-01", "memo": "磁界が1/r、点電荷の電界が1/r^2になる理由の区別がやや曖昧。式は選べたが、広がり方の説明補強が必要。", "next_review": "SR2"}];
 
 // ================================================================
 // ===== CANVAS BACKGROUND (stars) =====
