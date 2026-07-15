@@ -332,5 +332,25 @@
     "ease_factor": 2.3,
     "interval_days": 1,
     "recall_test_due": null
+  },
+  {
+    "theme_id": "transistor",
+    "theme": "トランジスタ 電流増幅率（α・β）",
+    "subject": "理論",
+    "date": "2026-07-11",
+    "result": "ng",
+    "attempt": 1,
+    "next_review": "SR1",
+    "memo": "エミッタ接地の増幅率β=I_C/I_Bを想起できず過去問未解答。αとβの分母取り違え。I_E=I_C+I_Bからの復元経路が未定着。",
+    "patch": "Eが全体Cが大部分→α=I_C/I_E(<1)、β=I_C/I_B(>1)。I_E=I_C+I_Bを書けばα=β/(β+1)を復元。分母がI_EかI_Bかで判別。",
+    "L1": "MAP",
+    "L2": "CONF",
+    "phase": "A",
+    "ease_factor": 2.3,
+    "interval_days": 1,
+    "recall_test_due": null,
+    "confidence_pre": 2,
+    "error_tag": "公式忘れ",
+    "self_summary": ""
   }
 ]
