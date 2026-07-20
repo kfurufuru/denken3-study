@@ -1,9 +1,13 @@
-name: 📊 テスト記録 → ダッシュボード更新
+name: 📊 quiz.html 再生成（手動）
 
+# Option B（2026-07-20 SoT一本化）で退役:
+#   records.json は now ローカル sr-record.py が唯一の writer（原子 commit+push）。
+#   Make.com → repository_dispatch(new_record) → append_record.py による
+#   サーバ側 records.json 追記は「第2 writer」となり dual-writer / 日次 pull 衝突の
+#   原因だったため、repository_dispatch トリガーと append_record 追記ステップを撤去。
+#   本 workflow は quiz.html の手動再生成のみを担い、records.json は読むだけで commit しない。
 on:
-  repository_dispatch:
-    types: [new_record]   # Make.com からのトリガー
-  workflow_dispatch:       # 手動実行用
+  workflow_dispatch:       # 手動実行のみ（repository_dispatch: new_record は退役）
 
 permissions:
   contents: write
@@ -21,12 +25,6 @@ jobs:
         with:
           python-version: '3.11'
 
-      - name: 📝 テスト記録を追記
-        if: github.event_name == 'repository_dispatch'
-        env:
-          RECORD: ${{ toJson(github.event.client_payload) }}
-        run: python scripts/append_record.py
-
       - name: 🔨 ダッシュボード HTML を生成
         env:
           TZ: Asia/Tokyo
@@ -42,6 +40,7 @@ jobs:
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
-          git add data/records.json index.html
-          git diff --staged --quiet || git commit -m "📝 テスト記録追加 & ダッシュボード更新 [$(date +'%Y-%m-%d %H:%M JST')]"
+          # Option B: records.json は commit しない（ローカル sr-record.py が唯一の writer）
+          git add index.html quiz.html
+          git diff --staged --quiet || git commit -m "📊 quiz.html 再生成 [$(date +'%Y-%m-%d %H:%M JST')]"
           git push
