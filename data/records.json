@@ -352,5 +352,25 @@
     "confidence_pre": 2,
     "error_tag": "公式忘れ",
     "self_summary": ""
+  },
+  {
+    "theme_id": "seiden-energy",
+    "theme": "静電エネルギー",
+    "subject": "理論",
+    "date": "2026-07-30",
+    "result": "ng",
+    "attempt": 1,
+    "next_review": "SR1",
+    "memo": "平成26年理論問17(b)（B問題）誤答。エネルギーの比較（½m_Bv_B² と q_Aq_B/(4πε₀r)）を力の冪 1/r² のまま計算した（力とエネルギーの混同）。",
+    "patch": "エネルギー＝力×距離。W=∫F dr で 1/r² を積分すると 1/r（冪が1つ下がる）。動き出すか＝力比較(1/r²)／戻ってくるか＝エネルギー収支(1/r)。",
+    "L1": "MAP",
+    "L2": "CONF",
+    "phase": "B",
+    "ease_factor": 2.3,
+    "interval_days": 1,
+    "recall_test_due": null,
+    "confidence_pre": null,
+    "error_tag": "概念不理解",
+    "self_summary": ""
   }
 ]
