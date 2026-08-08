@@ -504,5 +504,27 @@
     "confidence_pre": 2,
     "error_tag": "概念不理解",
     "self_summary": ""
+  },
+  {
+    "theme_id": "jikai",
+    "theme": "磁界",
+    "subject": "理論",
+    "date": "2026-08-08",
+    "result": "ng",
+    "attempt": 3,
+    "next_review": "SR1",
+    "memo": "R2問4 磁力線。(4)『磁力線の密度＝磁束密度』を誤りと見抜けず。磁力線の密度はH、磁束線の密度はB、両者はB=μHで結ばれる別物、という分離ができていない。",
+    "patch": "磁力線の密度=H、磁束線の密度=B、B=μH。μがどちらに効くかは何を固定したか次第：磁荷m固定ならHが1/μでBは不変、起磁力NI固定ならHは不変でBがμ倍。",
+    "L1": "MAP",
+    "L2": "VEC",
+    "phase": "A",
+    "ease_factor": 2.1,
+    "interval_days": 1,
+    "fsrs_stability": 0.3087,
+    "fsrs_difficulty": 9.2781,
+    "recall_test_due": null,
+    "confidence_pre": null,
+    "error_tag": "概念不理解",
+    "self_summary": ""
   }
 ]
