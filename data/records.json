@@ -526,5 +526,27 @@
     "confidence_pre": null,
     "error_tag": "概念不理解",
     "self_summary": ""
+  },
+  {
+    "theme_id": "inductance",
+    "theme": "電磁誘導・インダクタンス",
+    "subject": "理論",
+    "date": "2026-08-10",
+    "result": "ng",
+    "attempt": 6,
+    "next_review": "SR2",
+    "memo": "k=1(漏れ磁束ゼロ)は想起可。差動が負にならない理由をエネルギー保存で説明できず循環論法。同名端子は完全ブランク",
+    "patch": "L<0=エネルギー放出の永久機関で禁止。式は L1+L2-2M=(√L1-√L2)^2≥0。●は極性でなく巻き方向の相対印・●同士接続で差動",
+    "L1": "MAP",
+    "L2": "CONF",
+    "phase": "A",
+    "ease_factor": 2.2,
+    "interval_days": 2,
+    "fsrs_stability": 1.837,
+    "fsrs_difficulty": 8.043,
+    "recall_test_due": null,
+    "confidence_pre": null,
+    "error_tag": "概念不理解",
+    "self_summary": "K=1は一次側コイルの磁束が漏れない状態。合成Lが負はありえない状況。同名端子は分からない"
   }
 ]
