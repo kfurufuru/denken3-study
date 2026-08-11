@@ -548,5 +548,27 @@
     "confidence_pre": null,
     "error_tag": "概念不理解",
     "self_summary": "K=1は一次側コイルの磁束が漏れない状態。合成Lが負はありえない状況。同名端子は分からない"
+  },
+  {
+    "theme_id": "futouritsu",
+    "theme": "不等率",
+    "subject": "電力",
+    "date": "2026-08-12",
+    "result": "ok",
+    "attempt": 2,
+    "next_review": "done",
+    "memo": "130日ぶり。不等率=1で全系統ピーク同時刻を即答し機序まで到達。前回patch(負荷同士のズレ)は達成。加重平均条件は初見でわからないと申告。",
+    "patch": "次は2点。(1)×÷は率の性質でなく変形の向きで決まる=逆向きなら 設備容量=最大需要÷需要率・各最大の合計=合成最大×不等率。(2)設備容量合計に単一の率を掛けられるのは、その率が各系統需要率の設備容量加重平均のとき(全系統同率は十分条件であって必要条件ではない)。",
+    "L1": "MAP",
+    "L2": "REL",
+    "phase": "B",
+    "ease_factor": 2.6,
+    "interval_days": 26,
+    "fsrs_stability": 26.4524,
+    "fsrs_difficulty": 3.4917,
+    "recall_test_due": "2026-08-15",
+    "confidence_pre": null,
+    "error_tag": "該当なし",
+    "self_summary": "不等率1=合成最大と各最大の合計が一致=各系統のピークが同じタイミング"
   }
 ]

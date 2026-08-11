@@ -1,5 +1,5 @@
 {
-  "lastUpdate": "2026-08-10",
+  "lastUpdate": "2026-08-12",
   "subjects": {
     "理論": {
       "pct": 24,
@@ -25,8 +25,6 @@
     0,
     0,
     0,
-    0,
-    0,
     1,
     0,
     3,
@@ -38,9 +36,11 @@
     0,
     1,
     0,
+    1,
+    0,
     1
   ],
   "streakDays": 1,
-  "activeDays": 4,
+  "activeDays": 5,
   "totalDays": 28
 }
