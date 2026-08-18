@@ -45,6 +45,28 @@
 
 ## ② 磁気
 
+<a id="exam-checkpoint-fleming"></a>
+
+> ### 📌 試験直前の確認ポイント — フレミングの左手／右手
+>
+> ![フレミングの左手の法則と右手の法則。左手は親指=力F・人差し指=磁束密度B・中指=電流I で F = BIL sinθ、右手は親指=導体の移動速度v・人差し指=磁束密度B・中指=起電力e で e = BLv sinθ](../assets/images/fleming-left-right-hand.svg)
+>
+> **欲しいものが力 F なら左手（モーター）、起電力 e なら右手（発電機）。違うのは親指だけ。**
+>
+> | 指 | 左手＝モーター | 右手＝発電機 |
+> |---|---|---|
+> | 親指 | **力 F**［N］ | **速度 v**［m/s］ |
+> | 人差し指 | 磁束密度 B［T］ | 磁束密度 B［T］（共通） |
+> | 中指 | 電流 I［A］ | 起電力 e［V］ |
+>
+> - `F = BIL sinθ`［N］ … θ は**電流 I と磁界 B** のなす角（原因は I）
+> - `e = BLv sinθ`［V］ … θ は**速度 v と磁界 B** のなす角（原因は v）
+> - **θ の相手が式ごとに違う**のが最頻の失点源。平行（θ=0°）で 0、直交（θ=90°）で最大。
+> - 起電力を聞かれて［N］が出たら力の式を書いている（**単位で検算できる**）。
+> - 右手が使えるのは**導体が動く運動起電力だけ**。磁束が変化する型（`e = −N dΦ/dt`）は**レンツの法則**。
+>
+> 📖 [理論Wiki 1.3 電磁力](https://kfurufuru.github.io/secretary-portal-public/denken3-riron-wiki.html#electromagnetic-force) ／ [当日朝の最重要確認表](https://kfurufuru.github.io/secretary-portal-public/denken3-riron-wiki.html#last-3days)
+
 ### 🔴 rank A（最優先）
 
 - [ ] 円形コイルの中心にできる磁界の強さを求める問題
@@ -176,3 +198,13 @@
 3. **rank Cは直前期の余裕があるときに** → 満点を目指すなら
 4. **チェックを入れたら [mistakes/](../mistakes/) に間違えた問題を記録** → 弱点の可視化
 5. **H12〜R3の過去問を優先** → 出題の88%がこの範囲
+
+---
+
+## ⏱ 試験直前に見るもの
+
+| いつ | 見るもの |
+|---|---|
+| 直前期 | 本ページの各ランク A → B の未チェック項目 |
+| 前日・当日朝 | [② 磁気の「試験直前の確認ポイント」](#exam-checkpoint-fleming)（フレミング左右手の1枚図） |
+| 当日朝（5分） | [理論Wiki 7.2 直前3日戦略 — 当日朝の最重要確認表](https://kfurufuru.github.io/secretary-portal-public/denken3-riron-wiki.html#last-3days) |
