@@ -1,4 +1,4 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="700" height="374" viewBox="0 0 700 374" font-family="Noto Sans JP, Hiragino Sans, Yu Gothic, Meiryo, Helvetica, Arial, sans-serif" role="img" aria-label="フレミングの左手の法則と右手の法則を並べた図。左は左手＝モーターで、親指が上を向いて力 F、人差し指が右を向いて磁束密度 B、中指が手前へ向いて電流 I を表し、式は F = BIL sinθ、θ は導体を流れる電流 I と磁束密度 B のなす角。右は右手＝発電機で、親指が上を向いて導体の移動速度 v、人差し指が左を向いて磁束密度 B、中指が手前へ向いて起電力 e を表し、式は e = BLv sinθ、θ は速度 v と磁束密度 B のなす角。両パネルの外側に導体の小図がある。左は紙面内に斜めに置かれた長さ L の導体で、導体に沿う電流 I と磁界 B のなす角に θ が付いている。右は紙面に垂直に置かれた長さ L の導体を断面（灰色の円）で表し、紙面内の速度 v と磁界 B のなす角に θ が付いている">
+<svg xmlns="http://www.w3.org/2000/svg" width="700" height="374" viewBox="0 0 700 374" font-family="Noto Sans JP, Hiragino Sans, Yu Gothic, Meiryo, Helvetica, Arial, sans-serif" role="img" aria-label="フレミングの左手の法則と右手の法則を並べた図。左は左手＝モーターで、親指が上を向いて力 F、人差し指が右を向いて磁束密度 B、中指が手前へ向いて電流 I を表し、式は F = BIL sinθ、θ は導体を流れる電流 I と磁束密度 B のなす角。右は右手＝発電機で、親指が上を向いて導体の移動速度 v、人差し指が左を向いて磁束密度 B、中指が手前へ向いて起電力 e を表し、式は e = BLv sinθ、θ は速度 v と磁束密度 B のなす角。両パネルの外側に導体の小図がある。左は紙面内に斜めに置かれた長さ L の導体で、導体に沿う電流 I と磁界 B のなす角に θ が付いている。右は紙面に垂直に置かれた長さ L の導体を断面（灰色の円）で表し、紙面内の速度 v と磁界 B のなす角に θ が付いている。右の小図の磁界 B は、右手の図と同じく左向きに描いてあり、どちらで判定しても起電力は紙面の手前を向く">
   <defs>
     <marker id="flem-ok" markerWidth="10" markerHeight="8" refX="9" refY="4" orient="auto" markerUnits="userSpaceOnUse">
       <path d="M0,0 L10,4 L0,8 z" fill="#346b49" />
@@ -61,16 +61,16 @@
   <text x="524" y="45" text-anchor="middle" font-size="12" fill="#5f646b">動かして起電力を得る（運動 → 電気）</text>
   <text x="524" y="74" text-anchor="middle" font-size="16.5" font-weight="700" fill="#151b24">e = BLv sinθ ［V］</text>
 
-  <line x1="600" y1="156" x2="678" y2="156" stroke="#151b24" stroke-width="2.4" marker-end="url(#flem-ink)" />
+  <line x1="660" y1="156" x2="582" y2="156" stroke="#151b24" stroke-width="2.4" marker-end="url(#flem-ink)" />
   <circle cx="630" cy="156" r="9" fill="#5f646b" />
-  <text x="630" y="184" text-anchor="middle" font-size="12.5" font-weight="700" fill="#5f646b">L</text>
-  <text x="684" y="152" font-size="12.5" font-weight="700" fill="#151b24">B</text>
-  <line x1="630" y1="156" x2="648" y2="106" stroke="#346b49" stroke-width="2.4" marker-end="url(#flem-ok)" />
-  <text x="654" y="104" font-size="12.5" font-weight="700" fill="#346b49">v</text>
-  <path d="M 650 156 A 20 20 0 0 0 636.8 137.2" fill="none" stroke="#474d57" stroke-width="1.6" />
-  <text x="656" y="136" font-size="12.5" fill="#474d57">θ</text>
-  <text x="630" y="226" text-anchor="middle" font-size="12" fill="#5f646b">導体は紙面に垂直</text>
-  <text x="630" y="244" text-anchor="middle" font-size="12" fill="#5f646b">θ は v と B のなす角</text>
+  <text x="576" y="152" text-anchor="end" font-size="12.5" font-weight="700" fill="#151b24">B</text>
+  <line x1="630" y1="156" x2="612" y2="106" stroke="#346b49" stroke-width="2.4" marker-end="url(#flem-ok)" />
+  <text x="606" y="104" text-anchor="end" font-size="12.5" font-weight="700" fill="#346b49">v</text>
+  <path d="M 610 156 A 20 20 0 0 1 623.2 137.2" fill="none" stroke="#474d57" stroke-width="1.6" />
+  <text x="600" y="139" text-anchor="end" font-size="12.5" fill="#474d57">θ</text>
+  <text x="630" y="226" text-anchor="middle" font-size="12" fill="#5f646b">灰色の円＝導体の断面</text>
+  <text x="630" y="244" text-anchor="middle" font-size="12" fill="#5f646b">紙面に垂直・長さ L</text>
+  <text x="630" y="262" text-anchor="middle" font-size="12" fill="#5f646b">θ は v と B のなす角</text>
 
   <g opacity="0.3">
     <ellipse cx="494" cy="216" rx="42" ry="33" fill="#90502a" />
