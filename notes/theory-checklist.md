@@ -63,6 +63,7 @@
 > - `e = BLv sinθ`［V］ … θ は**速度 v と磁界 B** のなす角（原因は v）
 > - **θ の相手が式ごとに違う**のが最頻の失点源。平行（θ=0°）で 0、直交（θ=90°）で最大。
 > - 起電力を聞かれて［N］が出たら力の式を書いている（**単位で検算できる**）。
+> - `e = BLv sinθ` は**導体が v・B の両方に直角**であることが前提（**θ の話とは別**。θ は v と B のなす角）。`F = BIL sinθ` は導体の向きが自由。
 > - 右手が使えるのは**導体が動く運動起電力だけ**。磁束が変化する型（`e = −N dΦ/dt`）は**レンツの法則**。
 >
 > 📖 [理論Wiki 1.3 電磁力](https://kfurufuru.github.io/secretary-portal-public/denken3-riron-wiki.html#electromagnetic-force) ／ [当日朝の最重要確認表](https://kfurufuru.github.io/secretary-portal-public/denken3-riron-wiki.html#last-3days)
