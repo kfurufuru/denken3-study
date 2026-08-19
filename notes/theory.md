@@ -92,7 +92,7 @@
 - フレミング右手が使えるのは**導体を動かして生じる運動起電力（e = BLv）だけ**。
   コイルを貫く磁束が変化する型（<code>e = −N dΦ/dt</code>）は**レンツの法則**で向きを決める。
 
-> 📖 詳しい導出・過去問対応は [理論Wiki 1.3 電磁力](https://kfurufuru.github.io/secretary-portal-public/denken3-riron-wiki.html#electromagnetic-force)
+> 📖 詳しい導出・過去問対応は [理論Wiki 1.3 電磁力（公式タブ 3節「フレミング左手 vs 右手」）](https://kfurufuru.github.io/secretary-portal-public/denken3-riron-wiki.html#electromagnetic-force:formulas:fleming-table)
 
 #### インダクタンス（自己・相互）
 

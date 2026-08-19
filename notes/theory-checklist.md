@@ -66,7 +66,7 @@
 > - `e = BLv sinθ` は**導体が v・B の両方に直角**であることが前提（**θ の話とは別**。θ は v と B のなす角）。`F = BIL sinθ` は導体の向きが自由。
 > - 右手が使えるのは**導体が動く運動起電力だけ**。磁束が変化する型（`e = −N dΦ/dt`）は**レンツの法則**。
 >
-> 📖 [理論Wiki 1.3 電磁力](https://kfurufuru.github.io/secretary-portal-public/denken3-riron-wiki.html#electromagnetic-force) ／ [当日朝の最重要確認表](https://kfurufuru.github.io/secretary-portal-public/denken3-riron-wiki.html#last-3days)
+> 📖 [理論Wiki 1.3 電磁力（公式タブ 3節）](https://kfurufuru.github.io/secretary-portal-public/denken3-riron-wiki.html#electromagnetic-force:formulas:fleming-table) ／ [当日朝の最重要確認表](https://kfurufuru.github.io/secretary-portal-public/denken3-riron-wiki.html#last-3days:morning)
 
 ### 🔴 rank A（最優先）
 
@@ -208,4 +208,4 @@
 |---|---|
 | 直前期 | 本ページの各ランク A → B の未チェック項目 |
 | 前日・当日朝 | [② 磁気の「試験直前の確認ポイント」](#exam-checkpoint-fleming)（フレミング左右手の1枚図） |
-| 当日朝（5分） | [理論Wiki 7.2 直前3日戦略 — 当日朝の最重要確認表](https://kfurufuru.github.io/secretary-portal-public/denken3-riron-wiki.html#last-3days) |
+| 当日朝（5分） | [理論Wiki 7.2 直前3日戦略 — 当日朝の最重要確認表](https://kfurufuru.github.io/secretary-portal-public/denken3-riron-wiki.html#last-3days:morning) |
