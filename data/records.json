@@ -592,5 +592,27 @@
     "confidence_pre": null,
     "error_tag": "公式忘れ",
     "self_summary": "計算した後に漏れ電流（1線地絡電流）を2Aに切り上げなかった"
+  },
+  {
+    "theme_id": "jikai",
+    "theme": "磁界",
+    "subject": "理論",
+    "date": "2026-08-28",
+    "result": "risky",
+    "attempt": 4,
+    "next_review": "SR1",
+    "memo": "磁力線の密度=H・磁束線の密度=B・B=μHを即答。R02問4で誤答した名称の罠は解消(ng2回連続から改善)。ただしμがH/Bどちらに効くかは未回答＝固定量による向きが未定着。",
+    "patch": "B=μHは因果の向きを決めない。決めるのは問題文が固定する量。NI固定(無空隙鉄心)→H=NI/lが確定しBがμ倍/Φ固定→B=Φ/Sが確定しHが1/μ/磁荷m固定→Bが確定しHが1/μ。「μを上げるとBが増える」と単純化するとΦ固定問題で必ず外す。",
+    "L1": "MAP",
+    "L2": "VEC",
+    "phase": "A",
+    "ease_factor": 2.0,
+    "interval_days": 1,
+    "fsrs_stability": 1.4677,
+    "fsrs_difficulty": 9.506,
+    "recall_test_due": null,
+    "confidence_pre": null,
+    "error_tag": "未分類",
+    "self_summary": ""
   }
 ]
