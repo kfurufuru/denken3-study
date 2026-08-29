@@ -462,8 +462,8 @@
       "origin_record": "records.json 2026-07-30「平成26年理論問17(b)。エネルギーの比較を力の冪 1/r² のまま計算した（力とエネルギーの混同）」"
     },
     {
-      "id": "denryoku_futouritsu_001",
-      "wiki": "denryoku",
+      "id": "hoki_futouritsu_001",
+      "wiki": "hoki",
       "section": "futouritsu",
       "theme_id": "futouritsu",
       "theme": "不等率",
@@ -472,7 +472,7 @@
       "type": "concept",
       "difficulty": "★★☆",
       "importance": "A",
-      "wiki_anchor": "juyou",
+      "wiki_anchor": "juyoritsu-gainen",
       "question": "需要率と不等率をそれぞれ定義し、設備容量・最大需要電力・合成最大需要電力の間で ×と÷ のどちらを使うかの決め方を述べよ。",
       "key_points": [
         "需要率＝最大需要電力÷設備容量（1以下）",
