@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>SQ3R — 記憶定着の読書法 | 電験3種 学習システム</title>
+  <title>学習法 — SQ3R と暗記型学習との違い | 電験3種 学習システム</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Noto+Sans+JP:wght@400;500;700;800&display=swap" rel="stylesheet">
@@ -141,6 +141,30 @@
     .tag.mid { background: rgba(245,158,11,.15);  color: var(--yellow); }
     .tag.lo  { background: rgba(239,68,68,.15);   color: var(--red); }
 
+    /* ===== vs table ===== */
+    .vs-table th.a, .vs-table td.a { background: rgba(100,116,139,.07); }
+    .vs-table th.b, .vs-table td.b { background: rgba(56,189,248,.06); }
+    .vs-table th.b { color: var(--accent); }
+    .vs-table td.axis { font-weight: 700; color: #fff; white-space: nowrap; }
+    .vs-table td.a { color: #b6c2d2; }
+    .vs-table td.b strong { color: var(--accent); }
+    .vs-table { min-width: 680px; }
+
+    /* ===== prescription ===== */
+    .rx { display: flex; flex-direction: column; gap: 12px; }
+    .rx-row {
+      display: grid; grid-template-columns: 1fr auto 1fr; gap: 12px; align-items: stretch;
+    }
+    .rx-box { border-radius: var(--r-sm); padding: 12px 14px; font-size: 0.87rem; }
+    .rx-box .label {
+      display: block; font-size: 0.7rem; font-weight: 700; letter-spacing: .06em; margin-bottom: 4px;
+    }
+    .rx-bad  { background: rgba(239,68,68,.07);  border: 1px solid rgba(239,68,68,.22); }
+    .rx-bad .label  { color: var(--red); }
+    .rx-good { background: rgba(16,185,129,.07); border: 1px solid rgba(16,185,129,.22); }
+    .rx-good .label { color: var(--green); }
+    .rx-arrow { display: flex; align-items: center; color: var(--muted); font-size: 1.1rem; }
+
     /* ===== caution ===== */
     .caution {
       background: rgba(245,158,11,.06);
@@ -190,14 +214,16 @@
       .ts { margin-left: 0; }
       .check-item { flex-direction: column; gap: 4px; }
       .check-item .when { flex: none; }
+      .rx-row { grid-template-columns: 1fr; }
+      .rx-arrow { justify-content: center; transform: rotate(90deg); }
     }
   </style>
 </head>
 <body>
 
 <header class="header">
-  <h1>🧠 SQ3R</h1>
-  <span class="header-sub">記憶定着の読書法</span>
+  <h1>🧠 学習法</h1>
+  <span class="header-sub">SQ3R ／ 暗記型との違い</span>
   <a class="header-back" href="./index.html">← ダッシュボード</a>
 </header>
 
@@ -381,6 +407,114 @@
           </tbody>
         </table>
       </div>
+    </div>
+  </section>
+
+  <!-- ===== MEMORIZE VS DENKEN ===== -->
+  <section>
+    <div class="sec-title">一般的な暗記型学習と、電験3種のやり方の違い</div>
+
+    <div class="card" style="margin-bottom:16px">
+      <p style="font-size:.92rem">
+        英単語・歴史・宅建のような<strong>暗記型</strong>と、電験3種は「勉強」という同じ言葉で呼ばれているだけで、
+        中身が別物です。暗記型のやり方をそのまま持ち込むと、<strong>時間を使っているのに点が伸びない</strong>という状態になります。
+        違いは8つの軸に整理できます。
+      </p>
+    </div>
+
+    <div class="table-wrap">
+      <table class="vs-table">
+        <thead>
+          <tr>
+            <th>観点</th>
+            <th class="a">一般的な暗記型</th>
+            <th class="b">電験3種</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td class="axis">問われる能力</td>
+            <td class="a">再認。選択肢を見て「知っている」と気づければ正解できる。</td>
+            <td class="b"><strong>再構成</strong>。その場で条件を式に落とし、最後まで計算し切って初めて1点。知っていても完走しなければ0点。</td>
+          </tr>
+          <tr>
+            <td class="axis">知識の単位</td>
+            <td class="a">独立した項目の集合。1個覚えれば1個ぶん点が増える。</td>
+            <td class="b">公式そのものは少ない。本体は<strong>公式どうしの関係と適用条件</strong>。覚える量は少なく、使える状態にするコストが高い。</td>
+          </tr>
+          <tr>
+            <td class="axis">失点の主因</td>
+            <td class="a">忘却。対策は反復回数。</td>
+            <td class="b">忘却より<strong>解法選択のミス・条件の読み落とし・単位と桁のミス</strong>。反復では減らない。誤りを分類しないと同じ穴に落ち続ける。</td>
+          </tr>
+          <tr>
+            <td class="axis">伸び方</td>
+            <td class="a">やった分だけ線形に伸びる。</td>
+            <td class="b">理解が繋がるまで<strong>停滞し、その後に跳ねる非線形</strong>。停滞期を「向いていない」と誤読するのが最大の失敗。</td>
+          </tr>
+          <tr>
+            <td class="axis">教材の順序</td>
+            <td class="a">テキスト → 問題集。インプットが先で機能する。</td>
+            <td class="b"><strong>過去問 → テキスト</strong>の逆順が効率的。過去問が試験の仕様書で、テキストは辞書として引く。</td>
+          </tr>
+          <tr>
+            <td class="axis">「わかった」の判定</td>
+            <td class="a">言える・選べれば合格。</td>
+            <td class="b"><strong>白紙から解ける</strong>で判定。解説を読んで納得した状態は、本番でほぼ再現できない。</td>
+          </tr>
+          <tr>
+            <td class="axis">復習1回のコスト</td>
+            <td class="a">数秒〜十数秒。カードをめくれば済む。</td>
+            <td class="b">1問あたり数分〜十数分。<strong>全範囲を均等に回せない</strong>ので、復習対象の絞り込みが必須になる。</td>
+          </tr>
+          <tr>
+            <td class="axis">網羅の是非</td>
+            <td class="a">網羅が有効。覚えた分だけ得点になる。</td>
+            <td class="b">科目ごとに合否が決まり、合格した科目は一定期間免除される。<strong>捨て問の設計</strong>が戦略の中心で、均等配分は落ちる。</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="card" style="margin-top:16px">
+      <h3 style="font-size:.95rem;font-weight:700;margin-bottom:12px">違いを行動に翻訳すると</h3>
+      <div class="rx">
+        <div class="rx-row">
+          <div class="rx-box rx-bad"><span class="label">✕ 暗記型の処方</span>解けなかった → もう一度テキストを読み直す</div>
+          <div class="rx-arrow">→</div>
+          <div class="rx-box rx-good"><span class="label">○ 電験の処方</span>解けなかった → <strong>なぜ解けなかったかを分類</strong>する（知識がない／解法を選び違えた／条件を読み落とした／計算ミス）。処方は分類ごとに違う</div>
+        </div>
+        <div class="rx-row">
+          <div class="rx-box rx-bad"><span class="label">✕ 暗記型の処方</span>公式を一覧で覚える</div>
+          <div class="rx-arrow">→</div>
+          <div class="rx-box rx-good"><span class="label">○ 電験の処方</span>公式は<strong>いつ使えて、いつ使えないか</strong>とセットで覚える。前提を落とした公式は本番で誤用の元になる</div>
+        </div>
+        <div class="rx-row">
+          <div class="rx-box rx-bad"><span class="label">✕ 暗記型の処方</span>ノートをきれいにまとめる</div>
+          <div class="rx-arrow">→</div>
+          <div class="rx-box rx-good"><span class="label">○ 電験の処方</span>まとめる時間を演習に回す。残すのは<strong>間違えた記録だけ</strong>（<code>mistakes/weak_points.md</code>）</div>
+        </div>
+        <div class="rx-row">
+          <div class="rx-box rx-bad"><span class="label">✕ 暗記型の処方</span>全範囲を均等に回す</div>
+          <div class="rx-arrow">→</div>
+          <div class="rx-box rx-good"><span class="label">○ 電験の処方</span>頻出テーマと弱点に寄せる。<strong>捨てる範囲を先に決める</strong>。60点（年度により調整あり）が目標で、満点は要らない</div>
+        </div>
+        <div class="rx-row">
+          <div class="rx-box rx-bad"><span class="label">✕ 暗記型の処方</span>「答えを見て納得したので次へ」</div>
+          <div class="rx-arrow">→</div>
+          <div class="rx-box rx-good"><span class="label">○ 電験の処方</span>納得は通過点。<strong>その場で閉じて解き直す</strong>。ここを飛ばした問題は、翌週まず解けない</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card" style="margin-top:16px;border-color:rgba(245,158,11,.28)">
+      <h3 style="font-size:.95rem;font-weight:700;margin-bottom:8px;color:var(--yellow)">ただし「暗記は不要」ではない</h3>
+      <p style="font-size:.9rem">
+        電験3種でも純粋な暗記が効く領域はあります。<strong>法規の条文・数値、機械や電力の用語と機器の分類</strong>がそれで、
+        ここは暗記型のやり方（カード・反復）がそのまま最適です。学習方針にある「理解 &gt; 暗記。ただし法規は暗記も必要」は正しい。
+        危険なのは<em>逆方向の持ち込み</em>——理論の計算問題を暗記のやり方で処理しようとすることです。
+        <strong>領域ごとに手法を切り替える</strong>のが正解で、どちらか一方に統一するのは両方とも間違いになります。
+      </p>
     </div>
   </section>
 
