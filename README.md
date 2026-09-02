@@ -14,7 +14,7 @@
 |---|---|
 | [⚡ テスト記録 ダッシュボード](https://kfurufuru.github.io/denken3-study/quiz.html) | Bugマップ・レビュー予定・達成率 → **メイン利用先** |
 | [📚 学習進捗ページ](https://kfurufuru.github.io/denken3-study/) | ノート・テンプレートインデックス |
-| [📖 法規 知識Wiki](https://kfurufuru.github.io/denken-wiki/) | 条文×過去問クロスリファレンス → **法規の理解用** |
+| [📖 法規 知識Wiki](https://kfurufuru.github.io/denken-wiki/) | 条文×過去問クロスリファレンス → **入口は[分野別過去問](https://kfurufuru.github.io/denken-wiki/kakomon/by-field/)。条文ページは辞書として引く** |
 | [🧠 学習法](https://kfurufuru.github.io/denken3-study/sq3r.html) | SQ3R・平行読書法の要点、**一般的な暗記型学習と電験3種のやり方の違い**、科目別の使い分け |
 
 > 🤖 ChatGPTで「記録して」→ Make.com経由 → GitHub Actionsが自動で記録追記・ダッシュボード更新
@@ -67,10 +67,11 @@ Layer 3: 内省・分析（.secretary）      ← 「なぜ間違えたか」
 
 ## 📖 法規科目について
 
-法規の学習は **[denken-wiki](https://kfurufuru.github.io/denken-wiki/)** で条文理解→過去問演習のサイクルを回す。
+法規の学習は **[denken-wiki](https://kfurufuru.github.io/denken-wiki/)** で **過去問→条文** の順に回す。入口は[分野別過去問](https://kfurufuru.github.io/denken-wiki/kakomon/by-field/)。解けなかった問題の条文だけを辞書として引き、閉本で解き直す。条文を通読してから過去問に進む順序は取らない（理由は[学習法ページ](https://kfurufuru.github.io/denken3-study/sq3r.html)）。
 
 | 法規リソース | リンク |
 |---|---|
+| 分野別過去問（**ここから入る**） | [分野別](https://kfurufuru.github.io/denken-wiki/kakomon/by-field/) |
 | テーマ別（接地工事・絶縁性能 等16テーマ） | [テーマ一覧](https://kfurufuru.github.io/denken-wiki/themes/) |
 | 過去問マッピング（H23〜R03 143問） | [過去問](https://kfurufuru.github.io/denken-wiki/kakomon/) |
 | 出題頻度ランキング | [ランキング](https://kfurufuru.github.io/denken-wiki/kakomon/ranking/) |
