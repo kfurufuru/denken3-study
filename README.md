@@ -15,6 +15,7 @@
 | [⚡ テスト記録 ダッシュボード](https://kfurufuru.github.io/denken3-study/quiz.html) | Bugマップ・レビュー予定・達成率 → **メイン利用先** |
 | [📚 学習進捗ページ](https://kfurufuru.github.io/denken3-study/) | ノート・テンプレートインデックス |
 | [📖 法規 知識Wiki](https://kfurufuru.github.io/denken-wiki/) | 条文×過去問クロスリファレンス → **法規の理解用** |
+| [🧠 学習法](https://kfurufuru.github.io/denken3-study/sq3r.html) | SQ3R・平行読書法の要点、**一般的な暗記型学習と電験3種のやり方の違い**、科目別の使い分け |
 
 > 🤖 ChatGPTで「記録して」→ Make.com経由 → GitHub Actionsが自動で記録追記・ダッシュボード更新
 

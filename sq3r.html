@@ -1,0 +1,592 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>学習法 — SQ3R と暗記型学習との違い | 電験3種 学習システム</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Noto+Sans+JP:wght@400;500;700;800&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg:      #0f172a;
+      --bg2:     #1e293b;
+      --bg3:     #263347;
+      --accent:  #38bdf8;
+      --accent2: #6366f1;
+      --text:    #e2e8f0;
+      --muted:   #64748b;
+      --border:  rgba(255,255,255,0.08);
+      --green:   #10b981;
+      --yellow:  #f59e0b;
+      --red:     #ef4444;
+      --font:    'Inter','Noto Sans JP',sans-serif;
+      --r-sm:    6px;
+      --r-md:    12px;
+      line-break: strict; overflow-wrap: break-word; word-break: normal;
+    }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      background: var(--bg); color: var(--text);
+      font-family: var(--font); font-size: 0.95rem; line-height: 1.75;
+      min-height: 100vh;
+    }
+
+    /* ===== header ===== */
+    .header {
+      background: var(--bg2); border-bottom: 1px solid var(--border);
+      padding: 16px 24px; display: flex; align-items: center; gap: 12px;
+      position: sticky; top: 0; z-index: 10;
+    }
+    .header h1 { font-size: 1.1rem; font-weight: 700; color: var(--accent); }
+    .header-sub { font-size: 0.8rem; color: var(--muted); }
+    .header-back {
+      margin-left: auto; font-size: 0.82rem; color: var(--muted);
+      text-decoration: none; padding: 4px 12px;
+      border: 1px solid var(--border); border-radius: var(--r-sm); transition: 0.2s;
+      white-space: nowrap;
+    }
+    .header-back:hover { color: var(--accent); border-color: var(--accent); }
+
+    .main { max-width: 900px; margin: 0 auto; padding: 28px 20px 64px; }
+
+    /* ===== section ===== */
+    section { margin-bottom: 40px; }
+    .sec-title {
+      font-size: 0.78rem; font-weight: 700; color: var(--muted);
+      text-transform: uppercase; letter-spacing: 0.1em;
+      margin-bottom: 14px; padding-bottom: 8px;
+      border-bottom: 1px solid var(--border);
+    }
+    .card {
+      background: var(--bg2); border: 1px solid var(--border);
+      border-radius: var(--r-md); padding: 20px;
+    }
+    p + p { margin-top: 12px; }
+    .lead { font-size: 1rem; }
+    .muted { color: var(--muted); }
+    strong { color: #fff; font-weight: 700; }
+
+    /* ===== hero ===== */
+    .hero {
+      background: linear-gradient(135deg, #1e293b 0%, #172554 100%);
+      border: 1px solid var(--border); border-radius: var(--r-md);
+      padding: 26px 24px; margin-bottom: 36px;
+    }
+    .hero h2 { font-size: 1.35rem; font-weight: 800; margin-bottom: 6px; }
+    .hero h2 .en { color: var(--accent); }
+    .hero .tagline { color: var(--muted); font-size: 0.85rem; margin-bottom: 16px; }
+    .hero p { font-size: 0.95rem; }
+    .hero-chips { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 18px; }
+    .chip {
+      font-size: 0.78rem; font-weight: 600; padding: 4px 12px;
+      border-radius: 999px; background: rgba(56,189,248,.12);
+      color: var(--accent); border: 1px solid rgba(56,189,248,.25);
+    }
+
+    /* ===== steps ===== */
+    .steps { position: relative; padding-left: 34px; }
+    .steps::before {
+      content: ''; position: absolute; left: 15px; top: 12px; bottom: 12px;
+      width: 2px; background: linear-gradient(var(--accent), var(--accent2));
+      opacity: .35;
+    }
+    .step { position: relative; margin-bottom: 18px; }
+    .step-num {
+      position: absolute; left: -34px; top: 16px;
+      width: 32px; height: 32px; border-radius: 50%;
+      background: var(--bg); border: 2px solid var(--accent);
+      color: var(--accent); font-weight: 800; font-size: 0.9rem;
+      display: flex; align-items: center; justify-content: center;
+    }
+    .step-head { display: flex; align-items: baseline; flex-wrap: wrap; gap: 8px; margin-bottom: 4px; }
+    .step-head h3 { font-size: 1.05rem; font-weight: 800; }
+    .step-head .jp { color: var(--muted); font-size: 0.85rem; font-weight: 500; }
+    .ts {
+      margin-left: auto; font-size: 0.72rem; font-weight: 600;
+      color: var(--muted); font-variant-numeric: tabular-nums;
+      background: var(--bg3); padding: 2px 8px; border-radius: var(--r-sm);
+    }
+    .step-lead { font-size: 0.92rem; margin-bottom: 14px; }
+    ul.do { list-style: none; display: flex; flex-direction: column; gap: 6px; }
+    ul.do li { position: relative; padding-left: 18px; font-size: 0.9rem; }
+    ul.do li::before {
+      content: ''; position: absolute; left: 2px; top: 0.62em;
+      width: 6px; height: 6px; border-radius: 50%; background: var(--accent); opacity: .7;
+    }
+    .apply {
+      margin-top: 14px; padding: 12px 14px;
+      background: rgba(16,185,129,.07); border-left: 3px solid var(--green);
+      border-radius: 0 var(--r-sm) var(--r-sm) 0; font-size: 0.88rem;
+    }
+    .apply .label {
+      display: block; font-size: 0.72rem; font-weight: 700; letter-spacing: .06em;
+      color: var(--green); margin-bottom: 4px;
+    }
+
+    /* ===== 2-col cards ===== */
+    .grid2 { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 16px; }
+    .grid2 .card h3 { font-size: 1rem; font-weight: 700; margin-bottom: 4px; }
+    .grid2 .card .ts { margin-left: 0; display: inline-block; margin-bottom: 10px; }
+
+    /* ===== table ===== */
+    .table-wrap { overflow-x: auto; -webkit-overflow-scrolling: touch; }
+    table { width: 100%; border-collapse: collapse; font-size: 0.88rem; min-width: 560px; }
+    th, td { text-align: left; padding: 10px 12px; border-bottom: 1px solid var(--border); vertical-align: top; }
+    th { font-size: 0.75rem; text-transform: uppercase; letter-spacing: .06em; color: var(--muted); font-weight: 700; }
+    tbody tr:last-child td { border-bottom: none; }
+    td.fit { white-space: nowrap; }
+    .tag { font-size: 0.72rem; font-weight: 700; padding: 2px 8px; border-radius: 999px; display: inline-block; }
+    .tag.hi  { background: rgba(16,185,129,.15);  color: var(--green); }
+    .tag.mid { background: rgba(245,158,11,.15);  color: var(--yellow); }
+    .tag.lo  { background: rgba(239,68,68,.15);   color: var(--red); }
+
+    /* ===== vs table ===== */
+    .vs-table th.a, .vs-table td.a { background: rgba(100,116,139,.07); }
+    .vs-table th.b, .vs-table td.b { background: rgba(56,189,248,.06); }
+    .vs-table th.b { color: var(--accent); }
+    .vs-table td.axis { font-weight: 700; color: #fff; white-space: nowrap; }
+    .vs-table td.a { color: #b6c2d2; }
+    .vs-table td.b strong { color: var(--accent); }
+    .vs-table { min-width: 680px; }
+
+    /* ===== prescription ===== */
+    .rx { display: flex; flex-direction: column; gap: 12px; }
+    .rx-row {
+      display: grid; grid-template-columns: 1fr auto 1fr; gap: 12px; align-items: stretch;
+    }
+    .rx-box { border-radius: var(--r-sm); padding: 12px 14px; font-size: 0.87rem; }
+    .rx-box .label {
+      display: block; font-size: 0.7rem; font-weight: 700; letter-spacing: .06em; margin-bottom: 4px;
+    }
+    .rx-bad  { background: rgba(239,68,68,.07);  border: 1px solid rgba(239,68,68,.22); }
+    .rx-bad .label  { color: var(--red); }
+    .rx-good { background: rgba(16,185,129,.07); border: 1px solid rgba(16,185,129,.22); }
+    .rx-good .label { color: var(--green); }
+    .rx-arrow { display: flex; align-items: center; color: var(--muted); font-size: 1.1rem; }
+
+    /* ===== caution ===== */
+    .caution {
+      background: rgba(245,158,11,.06);
+      border: 1px solid rgba(245,158,11,.28);
+      border-radius: var(--r-md); padding: 20px 22px;
+    }
+    .caution h3 {
+      font-size: 0.95rem; font-weight: 800; color: var(--yellow);
+      margin-bottom: 10px; display: flex; align-items: center; gap: 8px;
+    }
+    .caution ol { padding-left: 20px; display: flex; flex-direction: column; gap: 12px; }
+    .caution li { font-size: 0.9rem; }
+    .caution li strong { display: block; color: #fde68a; margin-bottom: 2px; font-weight: 700; }
+
+    /* ===== checklist ===== */
+    .checklist { display: flex; flex-direction: column; gap: 10px; }
+    .check-item {
+      display: flex; gap: 12px; align-items: flex-start;
+      background: var(--bg2); border: 1px solid var(--border);
+      border-radius: var(--r-sm); padding: 12px 14px;
+    }
+    .check-item .when {
+      flex: 0 0 92px; font-size: 0.76rem; font-weight: 700;
+      color: var(--accent); padding-top: 2px;
+    }
+    .check-item .what { font-size: 0.89rem; }
+    .check-item .what small { display: block; color: var(--muted); font-size: 0.78rem; margin-top: 2px; }
+
+    .links { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 14px; }
+    .links a {
+      font-size: 0.83rem; color: var(--accent); text-decoration: none;
+      border: 1px solid var(--border); border-radius: var(--r-sm);
+      padding: 6px 12px; transition: .2s;
+    }
+    .links a:hover { border-color: var(--accent); background: rgba(56,189,248,.08); }
+
+    footer {
+      margin-top: 48px; padding-top: 20px; border-top: 1px solid var(--border);
+      font-size: 0.78rem; color: var(--muted); text-align: center;
+    }
+
+    @media (max-width: 560px) {
+      .main { padding: 20px 14px 48px; }
+      .steps { padding-left: 26px; }
+      .steps::before { left: 11px; }
+      .step-num { left: -26px; width: 26px; height: 26px; font-size: 0.8rem; }
+      .ts { margin-left: 0; }
+      .check-item { flex-direction: column; gap: 4px; }
+      .check-item .when { flex: none; }
+      .rx-row { grid-template-columns: 1fr; }
+      .rx-arrow { justify-content: center; transform: rotate(90deg); }
+    }
+  </style>
+</head>
+<body>
+
+<header class="header">
+  <h1>🧠 学習法</h1>
+  <span class="header-sub">SQ3R ／ 暗記型との違い</span>
+  <a class="header-back" href="./index.html">← ダッシュボード</a>
+</header>
+
+<div class="main">
+
+  <!-- ===== HERO ===== -->
+  <div class="hero">
+    <h2><span class="en">SQ3R</span> メソッド</h2>
+    <div class="tagline">Survey → Question → Read → Recite → Review ／ 情報を効率よく頭に入れる5ステップ</div>
+    <p>
+      本を「最初のページから最後まで黙読する」のをやめ、<strong>読む前に地図を作り、読む前に問いを立て、読んだ直後に本を閉じて自分の言葉で言い直す</strong>——
+      という順番に組み替えるだけの手法。5つのステップのうち、記憶定着に実際に効いているのは後半2つ（Recite / Review）です。
+    </p>
+    <div class="hero-chips">
+      <span class="chip">読む前の設計 3割</span>
+      <span class="chip">読む 3割</span>
+      <span class="chip">読んだ後の再生 4割</span>
+    </div>
+  </div>
+
+  <!-- ===== STEPS ===== -->
+  <section>
+    <div class="sec-title">5つのステップ</div>
+    <div class="steps">
+
+      <div class="step card">
+        <div class="step-num">1</div>
+        <div class="step-head">
+          <h3>Survey</h3><span class="jp">調査 — 全体像を俯瞰する</span>
+          <span class="ts">01:34</span>
+        </div>
+        <p class="step-lead">本文を読む前に、目次・見出し・図表・まとめだけに目を通し、構成と全体像を先に掴む。</p>
+        <ul class="do">
+          <li>目次を読み、章がどう積み上がっているかを把握する</li>
+          <li>見出し・太字・図表・章末まとめだけを拾い読みする</li>
+          <li>「この本はどこに向かう話か」を1〜2行で言えるようにする</li>
+        </ul>
+        <div class="apply">
+          <span class="label">電験3種でやるなら</span>
+          新しい単元に入る前に、テキストの節見出しと例題の「問われ方」だけを5分で流し見る。理解しようとしない。<em>どこに計算が来て、どこが暗記なのか</em>の地図だけ作る。
+        </div>
+      </div>
+
+      <div class="step card">
+        <div class="step-num">2</div>
+        <div class="step-head">
+          <h3>Question</h3><span class="jp">質問 — 読む前に疑問を作る</span>
+          <span class="ts">04:09</span>
+        </div>
+        <p class="step-lead">「なぜこのテーマが強調されているのか？」など、読む前に問いを立てる。答えを探す目的意識が生まれ、受け身の黙読にならない。</p>
+        <ul class="do">
+          <li>見出しを疑問文に変換する（「三相交流」→「なぜ三相にするのか？」）</li>
+          <li>自分が説明できない用語を、読む前に3つ書き出す</li>
+          <li>問いは紙／メモに残す。頭の中だけだと消える</li>
+        </ul>
+        <div class="apply">
+          <span class="label">電験3種でやるなら</span>
+          過去問を先に1問見てから解説を読む。これが最強の Question。<strong>「解けなかった問題」そのものが、最も精度の高い問い</strong>になる。
+        </div>
+      </div>
+
+      <div class="step card">
+        <div class="step-num">3</div>
+        <div class="step-head">
+          <h3>Read</h3><span class="jp">読む — 答えを探しながら能動的に</span>
+          <span class="ts">05:41</span>
+        </div>
+        <p class="step-lead">立てた疑問への答えを探しながら読む。重要な箇所にはメモ・書き込みをして、手を動かしながら進める。</p>
+        <ul class="do">
+          <li>ステップ2の問いに答えている箇所を探す読み方をする</li>
+          <li>線を引くだけで終えない。余白に「つまり何か」を自分の言葉で書く</li>
+          <li>答えが見つからない問いは、そのまま残しておく（次の教材への宿題）</li>
+        </ul>
+        <div class="apply">
+          <span class="label">電験3種でやるなら</span>
+          解説を読むときは、式変形を目で追わず<strong>必ず自分で手を動かして再現</strong>する。読んで分かった気になった計算は、試験本番でまず解けない。
+        </div>
+      </div>
+
+      <div class="step card">
+        <div class="step-num">4</div>
+        <div class="step-head">
+          <h3>Recite</h3><span class="jp">暗唱 — 本を閉じて自分の言葉で</span>
+          <span class="ts">06:29</span>
+        </div>
+        <p class="step-lead">読んだ内容を一度閉じ、自分の言葉で要約する／要点を声に出して説明する。<strong>この工程が記憶定着の本体</strong>。</p>
+        <ul class="do">
+          <li>本・ノートを<strong>閉じてから</strong>行う。開いたままの要約は再読であって想起ではない</li>
+          <li>思い出せなかった箇所こそが弱点。そこだけ開き直して確認する</li>
+          <li>声に出す／誰かに説明するつもりで話すと、曖昧な理解が露出する</li>
+        </ul>
+        <div class="apply">
+          <span class="label">電験3種でやるなら</span>
+          思い出せなかった項目は、その場で <code>mistakes/weak_points.md</code> に「何が弱いか／正しくはどう考えるか」の形式で書く。Recite の出力先を弱点集に固定すると、この工程が資産になる。
+        </div>
+      </div>
+
+      <div class="step card">
+        <div class="step-num">5</div>
+        <div class="step-head">
+          <h3>Review</h3><span class="jp">復習 — 間隔をあけて振り返る</span>
+          <span class="ts">07:31</span>
+        </div>
+        <p class="step-lead">当日・翌日・数日後と、間隔をあけて内容を振り返り、記憶を確実なものにする。</p>
+        <ul class="do">
+          <li>復習は「読み返す」ではなく「白紙から思い出す」で行う</li>
+          <li>間隔は当日 → 翌日 → 3〜4日後 → 1〜2週間後が目安</li>
+          <li>できた項目の間隔は伸ばし、落とした項目は間隔を戻す</li>
+        </ul>
+        <div class="apply">
+          <span class="label">電験3種でやるなら</span>
+          復習日程を手帳で自作しないこと。<strong>このリポジトリのテスト記録（<code>data/records.json</code>）が既にレビュー予定を自動算出している</strong>。ダッシュボードの「今日のレビュー」に従うだけでよい。二重管理は破綻する。
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ===== OTHER ===== -->
+  <section>
+    <div class="sec-title">その他の学習テクニック</div>
+    <div class="grid2">
+
+      <div class="card">
+        <h3>平行読書法</h3>
+        <span class="ts">08:50</span>
+        <p style="font-size:.9rem">
+          知りたいテーマについて<strong>複数の本を同時に読む</strong>。同じ論点が本ごとにどう扱われるかを比べることで、多角的な視点が得られ、
+          「どの本にも必ず出てくる＝本当に重要な点」が浮かび上がる。
+        </p>
+        <div class="apply">
+          <span class="label">電験3種でやるなら</span>
+          本を増やすのではなく、<strong>テキスト × 過去問解説 × <a href="https://kfurufuru.github.io/denken-wiki/" style="color:var(--green)">denken-wiki</a></strong> の3系統で同じテーマを突き合わせる。教材の冊数を増やすのは、この試験では時間の浪費になりやすい。
+        </div>
+      </div>
+
+      <div class="card">
+        <h3>アクティブリーディング</h3>
+        <span class="ts">10:11</span>
+        <p style="font-size:.9rem">
+          黙読で終わらせない読み方。常に疑問を持ちながら読む、読後に<strong>情報を3つのポイントに絞って要約する</strong>など、
+          頭を動かし続ける状態を意図的に作る。
+        </p>
+        <div class="apply">
+          <span class="label">電験3種でやるなら</span>
+          「3つに絞る」は学習方針の<strong>「今日やることを3つだけ決める」</strong>と同じ発想。1単元終えたら、要点を3行でメモする。3行に収まらないなら、まだ理解が整理されていない。
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ===== FIT MAP ===== -->
+  <section>
+    <div class="sec-title">科目別・使いどころマップ</div>
+    <div class="card">
+      <p class="muted" style="font-size:.85rem;margin-bottom:14px">
+        SQ3R は「文章を読んで理解する」ための手法。科目によって効きが大きく違うので、全科目に一律で適用しない。
+      </p>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr><th class="fit">科目</th><th class="fit">相性</th><th>使い方</th></tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td class="fit"><strong>法規</strong></td>
+              <td class="fit"><span class="tag hi">高い</span></td>
+              <td>条文・定義の文章が主戦場。Survey→Question→Read がそのまま機能する。Recite は条文を閉じて要件を言い直す形で。</td>
+            </tr>
+            <tr>
+              <td class="fit"><strong>電力・機械</strong></td>
+              <td class="fit"><span class="tag mid">部分的</span></td>
+              <td>用語・機器の原理説明パートには有効。計算問題は SQ3R ではなく反復演習で処理する。</td>
+            </tr>
+            <tr>
+              <td class="fit"><strong>理論</strong></td>
+              <td class="fit"><span class="tag lo">低い</span></td>
+              <td>読解ではなく<strong>手を動かす量</strong>で決まる領域。使うなら Recite（解法を閉本で再現）と Review（間隔復習）の2つだけ。</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== MEMORIZE VS DENKEN ===== -->
+  <section>
+    <div class="sec-title">一般的な暗記型学習と、電験3種のやり方の違い</div>
+
+    <div class="card" style="margin-bottom:16px">
+      <p style="font-size:.92rem">
+        英単語・歴史・宅建のような<strong>暗記型</strong>と、電験3種は「勉強」という同じ言葉で呼ばれているだけで、
+        中身が別物です。暗記型のやり方をそのまま持ち込むと、<strong>時間を使っているのに点が伸びない</strong>という状態になります。
+        違いは8つの軸に整理できます。
+      </p>
+    </div>
+
+    <div class="table-wrap">
+      <table class="vs-table">
+        <thead>
+          <tr>
+            <th>観点</th>
+            <th class="a">一般的な暗記型</th>
+            <th class="b">電験3種</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td class="axis">問われる能力</td>
+            <td class="a">再認。選択肢を見て「知っている」と気づければ正解できる。</td>
+            <td class="b"><strong>再構成</strong>。その場で条件を式に落とし、最後まで計算し切って初めて1点。知っていても完走しなければ0点。</td>
+          </tr>
+          <tr>
+            <td class="axis">知識の単位</td>
+            <td class="a">独立した項目の集合。1個覚えれば1個ぶん点が増える。</td>
+            <td class="b">公式そのものは少ない。本体は<strong>公式どうしの関係と適用条件</strong>。覚える量は少なく、使える状態にするコストが高い。</td>
+          </tr>
+          <tr>
+            <td class="axis">失点の主因</td>
+            <td class="a">忘却。対策は反復回数。</td>
+            <td class="b">忘却より<strong>解法選択のミス・条件の読み落とし・単位と桁のミス</strong>。反復では減らない。誤りを分類しないと同じ穴に落ち続ける。</td>
+          </tr>
+          <tr>
+            <td class="axis">伸び方</td>
+            <td class="a">やった分だけ線形に伸びる。</td>
+            <td class="b">理解が繋がるまで<strong>停滞し、その後に跳ねる非線形</strong>。停滞期を「向いていない」と誤読するのが最大の失敗。</td>
+          </tr>
+          <tr>
+            <td class="axis">教材の順序</td>
+            <td class="a">テキスト → 問題集。インプットが先で機能する。</td>
+            <td class="b"><strong>過去問 → テキスト</strong>の逆順が効率的。過去問が試験の仕様書で、テキストは辞書として引く。</td>
+          </tr>
+          <tr>
+            <td class="axis">「わかった」の判定</td>
+            <td class="a">言える・選べれば合格。</td>
+            <td class="b"><strong>白紙から解ける</strong>で判定。解説を読んで納得した状態は、本番でほぼ再現できない。</td>
+          </tr>
+          <tr>
+            <td class="axis">復習1回のコスト</td>
+            <td class="a">数秒〜十数秒。カードをめくれば済む。</td>
+            <td class="b">1問あたり数分〜十数分。<strong>全範囲を均等に回せない</strong>ので、復習対象の絞り込みが必須になる。</td>
+          </tr>
+          <tr>
+            <td class="axis">網羅の是非</td>
+            <td class="a">網羅が有効。覚えた分だけ得点になる。</td>
+            <td class="b">科目ごとに合否が決まり、合格した科目は一定期間免除される。<strong>捨て問の設計</strong>が戦略の中心で、均等配分は落ちる。</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="card" style="margin-top:16px">
+      <h3 style="font-size:.95rem;font-weight:700;margin-bottom:12px">違いを行動に翻訳すると</h3>
+      <div class="rx">
+        <div class="rx-row">
+          <div class="rx-box rx-bad"><span class="label">✕ 暗記型の処方</span>解けなかった → もう一度テキストを読み直す</div>
+          <div class="rx-arrow">→</div>
+          <div class="rx-box rx-good"><span class="label">○ 電験の処方</span>解けなかった → <strong>なぜ解けなかったかを分類</strong>する（知識がない／解法を選び違えた／条件を読み落とした／計算ミス）。処方は分類ごとに違う</div>
+        </div>
+        <div class="rx-row">
+          <div class="rx-box rx-bad"><span class="label">✕ 暗記型の処方</span>公式を一覧で覚える</div>
+          <div class="rx-arrow">→</div>
+          <div class="rx-box rx-good"><span class="label">○ 電験の処方</span>公式は<strong>いつ使えて、いつ使えないか</strong>とセットで覚える。前提を落とした公式は本番で誤用の元になる</div>
+        </div>
+        <div class="rx-row">
+          <div class="rx-box rx-bad"><span class="label">✕ 暗記型の処方</span>ノートをきれいにまとめる</div>
+          <div class="rx-arrow">→</div>
+          <div class="rx-box rx-good"><span class="label">○ 電験の処方</span>まとめる時間を演習に回す。残すのは<strong>間違えた記録だけ</strong>（<code>mistakes/weak_points.md</code>）</div>
+        </div>
+        <div class="rx-row">
+          <div class="rx-box rx-bad"><span class="label">✕ 暗記型の処方</span>全範囲を均等に回す</div>
+          <div class="rx-arrow">→</div>
+          <div class="rx-box rx-good"><span class="label">○ 電験の処方</span>頻出テーマと弱点に寄せる。<strong>捨てる範囲を先に決める</strong>。60点（年度により調整あり）が目標で、満点は要らない</div>
+        </div>
+        <div class="rx-row">
+          <div class="rx-box rx-bad"><span class="label">✕ 暗記型の処方</span>「答えを見て納得したので次へ」</div>
+          <div class="rx-arrow">→</div>
+          <div class="rx-box rx-good"><span class="label">○ 電験の処方</span>納得は通過点。<strong>その場で閉じて解き直す</strong>。ここを飛ばした問題は、翌週まず解けない</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card" style="margin-top:16px;border-color:rgba(245,158,11,.28)">
+      <h3 style="font-size:.95rem;font-weight:700;margin-bottom:8px;color:var(--yellow)">ただし「暗記は不要」ではない</h3>
+      <p style="font-size:.9rem">
+        電験3種でも純粋な暗記が効く領域はあります。<strong>法規の条文・数値、機械や電力の用語と機器の分類</strong>がそれで、
+        ここは暗記型のやり方（カード・反復）がそのまま最適です。学習方針にある「理解 &gt; 暗記。ただし法規は暗記も必要」は正しい。
+        危険なのは<em>逆方向の持ち込み</em>——理論の計算問題を暗記のやり方で処理しようとすることです。
+        <strong>領域ごとに手法を切り替える</strong>のが正解で、どちらか一方に統一するのは両方とも間違いになります。
+      </p>
+    </div>
+  </section>
+
+  <!-- ===== CAUTION ===== -->
+  <section>
+    <div class="sec-title">採用前に知っておくこと</div>
+    <div class="caution">
+      <h3>⚠️ この手法をそのまま信じない</h3>
+      <ol>
+        <li>
+          <strong>効いているのは5ステップ全部ではない</strong>
+          記憶定着に強い根拠があるのは Recite（想起練習）と Review（間隔反復）。Survey / Question / Read の3つは「読み方が丁寧になる」効果はあるが、ここを作り込みすぎると、<em>準備に時間を使って演習量が落ちる</em>という典型的な失敗に入る。迷ったら4と5に時間を寄せる。
+        </li>
+        <li>
+          <strong>電験3種の得点源は「読む」ではなく「解く」</strong>
+          SQ3R は教科書の散文を対象にした読解法。理論・電力・機械の得点は演習量で決まる。読書法を整えることが勉強した気分を生むが、点数に直結するのは過去問を解いた回数。<em>SQ3R の導入が演習時間を削るなら、導入しないほうが強い。</em>
+        </li>
+        <li>
+          <strong>復習スケジュールを新規に作らない</strong>
+          「当日・翌日・数日後」は正しいが、このリポジトリには既にレビュー予定の自動算出がある。学習方針の「二重管理しない」に従い、復習日程は既存ダッシュボードに一本化する。手帳やNotionに別の復習表を作った時点で、どちらも続かなくなる。
+        </li>
+        <li>
+          <strong>平行読書法は 55点合格戦略と衝突しうる</strong>
+          複数冊の同時並行は理解が深まる一方、コストが跳ね上がる。「完璧を目指さず、55点合格を最短で取る」方針の下では、教材は増やさず<em>同一テーマを別の切り口（過去問・wiki）で当たる</em>形に留めるのが妥当。
+        </li>
+      </ol>
+    </div>
+  </section>
+
+  <!-- ===== ROUTINE ===== -->
+  <section>
+    <div class="sec-title">明日からの最小運用</div>
+    <div class="checklist">
+      <div class="check-item">
+        <span class="when">学習前 5分</span>
+        <span class="what">見出しを流し見て、答えられない用語を3つ書き出す
+          <small>Survey + Question をまとめて済ませる。ここに時間をかけない。</small></span>
+      </div>
+      <div class="check-item">
+        <span class="when">学習中</span>
+        <span class="what">解説の式は必ず自分の手で再現する
+          <small>Read。目で追った計算は本番で解けない。</small></span>
+      </div>
+      <div class="check-item">
+        <span class="when">単元終了直後</span>
+        <span class="what">テキストを閉じ、要点を3行で言い直す
+          <small>Recite。ここが本体。詰まった項目は次の行へ。</small></span>
+      </div>
+      <div class="check-item">
+        <span class="when">つまずいたら</span>
+        <span class="what"><code>mistakes/weak_points.md</code> に弱点として記録する
+          <small>何が弱いか／どこで間違えたか／正しくはどう考えるか／次回どう防ぐか。</small></span>
+      </div>
+      <div class="check-item">
+        <span class="when">翌日以降</span>
+        <span class="what">ダッシュボードの「レビュー予定」に出た項目だけ復習する
+          <small>Review。自前の復習表は作らない。</small></span>
+      </div>
+    </div>
+    <div class="links">
+      <a href="./index.html">📚 学習ダッシュボード</a>
+      <a href="./stats.html">📈 統計</a>
+      <a href="./study-weakness-ranking.html">🎯 弱点ランキング</a>
+      <a href="https://kfurufuru.github.io/denken-wiki/">📖 法規Wiki</a>
+    </div>
+  </section>
+
+  <footer>
+    出典：学習法解説動画の要点整理（タイムスタンプは動画内の位置）＋ 電験3種学習への適用メモ<br>
+    記憶定着に効くのは <strong>Recite</strong> と <strong>Review</strong>。他は前準備。
+  </footer>
+
+</div>
+</body>
+</html>
