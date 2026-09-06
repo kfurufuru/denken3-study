@@ -22,6 +22,19 @@
 | 理論の科目別まとめ | [denken-wiki](https://kfurufuru.github.io/denken-wiki/) の theory/ | 既に整備済み。重複させない |
 | 間違えた記録 | `mistakes/weak_points.md` | 弱点は資産 |
 | テスト記録（数値） | `data/records.json`（`sr-record.py` が唯一の writer） | **手で編集しない** |
+| 機械・電力の**進捗** | `machine-checklist.md` / `power-checklist.md` のチェックボックス | ここが達成率の SoT。`portal-summary.json` はこれを集計する |
+
+## 進捗チェックリスト（下期受験科目）
+
+チェックボックスを付けることが**進捗計測そのもの**。別途どこかへ転記しない。
+`update_dashboard.py` が `- [x]` / `- [ ]` を数えて `data/portal-summary.json` の達成率を出す。
+
+| 科目 | ファイル | 項目数 |
+|---|---|---:|
+| 機械 | [`machine-checklist.md`](machine-checklist.md) | 68 |
+| 電力 | [`power-checklist.md`](power-checklist.md) | 61 |
+
+---
 
 ## クラスタ一覧
 

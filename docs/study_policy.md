@@ -34,6 +34,7 @@ Wiki は「条文×過去問クロスリファレンス」という**構造に�
 | 機械・電力の機器知識 | **`notes/<科目>.md`** |
 | 弱点記録 | **`mistakes/weak_points.md`** |
 | テスト記録（数値） | **`data/records.json`**（`sr-record.py` が唯一の writer。手編集禁止） |
+| 機械・電力の進捗 | **`notes/machine-checklist.md` / `notes/power-checklist.md`** のチェックボックス |
 
 詳細な判定フローは [`notes/README.md`](../notes/README.md)。
 
