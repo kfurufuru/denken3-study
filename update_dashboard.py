@@ -38,8 +38,14 @@ HEADERS = {
 # 試験日・残日数
 # 環境変数 EXAM_DATE（ISO 形式 YYYY-MM-DD）で上書きできる。
 # 未設定なら _EXAM_DATE_DEFAULT を使う。
-# ⚠️ 2026-08-23 は既に過去日。次回試験日が決まったら EXAM_DATE を設定すること。
-_EXAM_DATE_DEFAULT = datetime.date(2026, 8, 23)
+#
+# 目標: 令和8年度下期（2027年3月）
+# ⚠️ 2027-03-28 は暫定値。過去の下期試験が3月第4日曜（R5下期 2024-03-24 /
+#    R6下期 2025-03-23）だった実績からの推定であり、公式発表日ではない。
+#    電気技術者試験センターの発表後に正しい日付へ差し替えること。
+#    CBT方式で受験する場合は筆記日より前（2〜3週間前から）に受験日を選ぶため、
+#    その場合は自分の予約日を EXAM_DATE に設定する。
+_EXAM_DATE_DEFAULT = datetime.date(2027, 3, 28)
 try:
     EXAM_DATE = datetime.date.fromisoformat(os.environ["EXAM_DATE"])
 except (KeyError, ValueError):
