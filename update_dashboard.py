@@ -36,7 +36,14 @@ HEADERS = {
 # ===== 定数定義 =====
 
 # 試験日・残日数
-EXAM_DATE = datetime.date(2026, 8, 23)
+# 環境変数 EXAM_DATE（ISO 形式 YYYY-MM-DD）で上書きできる。
+# 未設定なら _EXAM_DATE_DEFAULT を使う。
+# ⚠️ 2026-08-23 は既に過去日。次回試験日が決まったら EXAM_DATE を設定すること。
+_EXAM_DATE_DEFAULT = datetime.date(2026, 8, 23)
+try:
+    EXAM_DATE = datetime.date.fromisoformat(os.environ["EXAM_DATE"])
+except (KeyError, ValueError):
+    EXAM_DATE = _EXAM_DATE_DEFAULT
 
 # スロット割り当てルール: 分野カテゴリ → スロット
 THEORY_CATEGORIES = {"電気回路", "電磁気学", "電子理論", "電気計測", "電気・電子計測", "電気及び電子計測"}
@@ -727,7 +734,7 @@ def inject_data(stats, today_data, pdca_data, past_errors):
 const ACHIEVED = {achieved}, TOTAL = {total};
 const FIRST_MARU = {stats['maru1']}, FIRST_BATU = {stats['batu1']};
 const STREAK = 3;
-const EXAM_DATE = new Date('2026-08-30');
+const EXAM_DATE = new Date('{EXAM_DATE.isoformat()}');
 const STUDY_START = new Date('2025-09-01');
 const TODAY = new Date();
 const GENERATED_DATE = '{stats['updated']}';
