@@ -36,7 +36,20 @@ HEADERS = {
 # ===== 定数定義 =====
 
 # 試験日・残日数
-EXAM_DATE = datetime.date(2026, 8, 23)
+# 環境変数 EXAM_DATE（ISO 形式 YYYY-MM-DD）で上書きできる。
+# 未設定なら _EXAM_DATE_DEFAULT を使う。
+#
+# 目標: 令和8年度下期（2027年3月）
+# ⚠️ 2027-03-28 は暫定値。過去の下期試験が3月第4日曜（R5下期 2024-03-24 /
+#    R6下期 2025-03-23）だった実績からの推定であり、公式発表日ではない。
+#    電気技術者試験センターの発表後に正しい日付へ差し替えること。
+#    CBT方式で受験する場合は筆記日より前（2〜3週間前から）に受験日を選ぶため、
+#    その場合は自分の予約日を EXAM_DATE に設定する。
+_EXAM_DATE_DEFAULT = datetime.date(2027, 3, 28)
+try:
+    EXAM_DATE = datetime.date.fromisoformat(os.environ["EXAM_DATE"])
+except (KeyError, ValueError):
+    EXAM_DATE = _EXAM_DATE_DEFAULT
 
 # スロット割り当てルール: 分野カテゴリ → スロット
 THEORY_CATEGORIES = {"電気回路", "電磁気学", "電子理論", "電気計測", "電気・電子計測", "電気及び電子計測"}
@@ -646,8 +659,10 @@ def compute_portal_summary(notion_records, records_list):
         "lastUpdate": today.isoformat(),
         "subjects": {
             "理論": {"pct": theory_pct, "achieved": theory_done, "total": theory_total},
-            "電力": None,
-            "機械": None,
+            # 機械・電力は notes/ のチェックリストが SoT（Notion DB は理論専用のため）
+            "電力": count_checklist("power-checklist.md"),
+            "機械": count_checklist("machine-checklist.md"),
+            # 法規は denken-wiki 側で管理しているため、ここでは計測しない
             "法規": None,
         },
         "heatmap":    heatmap,
@@ -657,13 +672,36 @@ def compute_portal_summary(notion_records, records_list):
     }
 
 
+def count_checklist(filename):
+    """notes/ 配下のチェックリストの進捗を集計する。
+
+    `- [x]` を達成、`- [ ]` を未達として数える。
+    ファイルが無い / 項目が0件なら None を返し、達成率は「未計測」のままにする。
+    """
+    path = os.path.join(os.path.dirname(__file__), "notes", filename)
+    try:
+        with open(path, encoding="utf-8") as f:
+            text = f.read()
+    except OSError:
+        return None
+    done  = len(re.findall(r"^\s*-\s\[[xX]\]", text, flags=re.MULTILINE))
+    todo  = len(re.findall(r"^\s*-\s\[ \]",   text, flags=re.MULTILINE))
+    total = done + todo
+    if total == 0:
+        return None
+    return {"pct": round(done / total * 100), "achieved": done, "total": total}
+
+
 def write_portal_summary(summary):
     """data/portal-summary.json を書き出す"""
     path = os.path.join(os.path.dirname(__file__), "data", "portal-summary.json")
     os.makedirs(os.path.dirname(path), exist_ok=True)
     with open(path, "w", encoding="utf-8") as f:
         json.dump(summary, f, ensure_ascii=False, indent=2)
-    print(f"📄 portal-summary.json: 理論 {summary['subjects']['理論']['pct']}% / "
+    def _pct(name):
+        d = summary["subjects"].get(name)
+        return f"{d['pct']}%" if d else "—"
+    print(f"📄 portal-summary.json: 理論 {_pct('理論')} / 機械 {_pct('機械')} / 電力 {_pct('電力')} / "
           f"streak {summary['streakDays']}d / active {summary['activeDays']}/28d")
 
 
@@ -727,7 +765,7 @@ def inject_data(stats, today_data, pdca_data, past_errors):
 const ACHIEVED = {achieved}, TOTAL = {total};
 const FIRST_MARU = {stats['maru1']}, FIRST_BATU = {stats['batu1']};
 const STREAK = 3;
-const EXAM_DATE = new Date('2026-08-30');
+const EXAM_DATE = new Date('{EXAM_DATE.isoformat()}');
 const STUDY_START = new Date('2025-09-01');
 const TODAY = new Date();
 const GENERATED_DATE = '{stats['updated']}';
