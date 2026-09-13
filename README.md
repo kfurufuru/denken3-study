@@ -6,13 +6,13 @@
 
 ## ⚡ テスト記録 ダッシュボード
 
-[![テスト記録ダッシュボード](https://img.shields.io/badge/⚡_テスト記録-ダッシュボード-blue?style=for-the-badge)](https://kfurufuru.github.io/denken3-study/quiz.html)
+[![テスト記録ダッシュボード](https://img.shields.io/badge/⚡_テスト記録-ダッシュボード-blue?style=for-the-badge)](https://kfurufuru.github.io/denken3-study/stats.html)
 [![学習進捗ページ](https://img.shields.io/badge/📚_学習進捗-ページ-brightgreen?style=for-the-badge)](https://kfurufuru.github.io/denken3-study/)
 [![法規Wiki](https://img.shields.io/badge/📖_法規Wiki-条文×過去問-teal?style=for-the-badge)](https://kfurufuru.github.io/denken-wiki/)
 
 | ダッシュボード | 内容 |
 |---|---|
-| [⚡ テスト記録 ダッシュボード](https://kfurufuru.github.io/denken3-study/quiz.html) | Bugマップ・レビュー予定・達成率 → **メイン利用先** |
+| [⚡ テスト記録 ダッシュボード](https://kfurufuru.github.io/denken3-study/stats.html) | OK率・要復習/NG件数・科目別カバレッジ・PDCA振り返り → **メイン利用先** |
 | [📚 学習進捗ページ](https://kfurufuru.github.io/denken3-study/) | ノート・テンプレートインデックス |
 | [📖 法規 知識Wiki](https://kfurufuru.github.io/denken-wiki/) | 条文×過去問クロスリファレンス → **入口は[分野別過去問](https://kfurufuru.github.io/denken-wiki/kakomon/by-field/)。条文ページは辞書として引く** |
 | [🧠 学習法](https://kfurufuru.github.io/denken3-study/sq3r.html) | SQ3R・平行読書法の要点、**一般的な暗記型学習と電験3種のやり方の違い**、科目別の使い分け |
