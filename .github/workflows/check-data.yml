@@ -1,0 +1,37 @@
+name: ✅ データ構造チェック
+
+# 2026-09-16 新設。data/concept-questions.json を参照する検証も CI も1本も無く、
+# スキーマ不備・ID 衝突・theme_id の綴り違いが素通りしていたため。
+# 射程は構造のみ。内容の正しさ（問題文・模範解答・数値）は検査しない。
+
+on:
+  pull_request:
+    paths:
+      - 'data/concept-questions.json'
+      - 'data/records.json'
+      - 'scripts/check_concept_questions.py'
+      - '.github/workflows/check-data.yml'
+  push:
+    branches: [main]
+    paths:
+      - 'data/concept-questions.json'
+      - 'data/records.json'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - name: ⬇️ チェックアウト
+        uses: actions/checkout@v4
+
+      - name: 🐍 Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: ✅ concept-questions.json の構造検査
+        run: python scripts/check_concept_questions.py
