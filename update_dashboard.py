@@ -36,7 +36,18 @@ HEADERS = {
 # ===== 定数定義 =====
 
 # 試験日・残日数
-EXAM_DATE = datetime.date(2026, 8, 23)
+# ── 試験日（令和8年度 下期）────────────────────────────────
+# 正本は OneDrive の tools/denken-countdown.py（電気技術者試験センター公式で確認済み）。
+#   申込 2026-11-09 10:00 〜 11-26 17:00 / CBT 2027-02-04〜02-28 / 筆記 2027-03-21
+# カウントダウンは正本と同じく **CBT 初日** を基準にする（最短で受けうる日。
+# 筆記を基準にすると残り時間を 45 日多く見積もることになる）。
+#
+# **この定数を2つに分けないこと。** 以前は Python 側が date(2026, 8, 23)、
+# 注入する JS 側が new Date('2026-08-30') と別々に直書きされており、
+# 前者は実在しない日付、後者は令和8年度「上期」の筆記日だった。
+# 結果ダッシュボードは 2026-09-18 時点で「試験まで -19日」と表示していた。
+# 日付を変えるときは下の1行だけを直す（JS 側は f-string でここから生成される）。
+EXAM_DATE = datetime.date(2027, 2, 4)
 
 # スロット割り当てルール: 分野カテゴリ → スロット
 THEORY_CATEGORIES = {"電気回路", "電磁気学", "電子理論", "電気計測", "電気・電子計測", "電気及び電子計測"}
@@ -727,7 +738,7 @@ def inject_data(stats, today_data, pdca_data, past_errors):
 const ACHIEVED = {achieved}, TOTAL = {total};
 const FIRST_MARU = {stats['maru1']}, FIRST_BATU = {stats['batu1']};
 const STREAK = 3;
-const EXAM_DATE = new Date('2026-08-30');
+const EXAM_DATE = new Date('{EXAM_DATE.isoformat()}T00:00:00+09:00');
 const STUDY_START = new Date('2025-09-01');
 const TODAY = new Date();
 const GENERATED_DATE = '{stats['updated']}';
