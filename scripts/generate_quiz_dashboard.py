@@ -19,24 +19,41 @@ INDEX_PATH   = "index.html"
 SUBJECT_ORDER = ["理論", "電力", "機械", "法規"]
 REVIEW_DAYS   = {"SR1": 1, "SR2": 3, "SR3": 7, "SR4": 14, "SR5": 30, "done": 9999}
 
-WIKI_BASE = "https://kfurufuru.github.io/denken-wiki-riron/themes/"
+# 理論Wiki は 2026 年に単一 HTML の SPA（secretary-portal-public）へ一本化された。
+# 旧 denken-wiki-riron はまだ 200 を返すが、各 Wiki のヘッダが「理論Wiki(旧)」と
+# ラベルしているとおり更新は止まっている。ここから旧サイトへ送ると、学習者は
+# 弱点テーマの最新解説に永久に辿り着けない。
+# 新 Wiki はハッシュルーティングなので URL は <base>#<pageId> の形になる。
+WIKI_BASE = "https://kfurufuru.github.io/secretary-portal-public/denken3-riron-wiki.html"
+# records.json の theme 名 → 理論Wiki の pageId。
+# pageId は Wiki 本体の window.WIKI_DATA.chapters[].pages[].id と一致させること
+# （2026-09-19 に実サイトで全 16 件の存在を確認済み）。
+# **複数ページにまたがるテーマは載せない。** 「電位・電界・磁界」「静電エネルギー」は
+# 静電気・電磁力・コンデンサのどれとも読めるため、推測で 1 ページへ送らず未登録のままにする
+# （未登録テーマはリンクなしで表示される＝従来どおりで、誤誘導だけを避ける）。
 WIKI_MAP = {
-    "三相交流": "sansou-kouryu",
-    "電磁誘導": "denjiryoku",
-    "コンデンサ": "condenser",
-    "磁気回路": "jiki-kairo",
-    "過渡現象": "kato-gensho",
-    "直流回路": "chokuryu-kairo",
-    "交流基礎": "kouryu-kiso",
-    "RLC回路": "rlc-kairo",
-    "交流電力": "kouryu-denryoku",
-    "静電気": "seidenki",
+    # 旧 slug からの対応（全件を新 pageId へ付け替え）
+    "三相交流": "three-phase",
+    "電磁誘導": "inductance",          # 旧 slug は denjiryoku（電磁力）だったが 3.1 が電磁誘導の担当
+    "コンデンサ": "capacitor",
+    "磁気回路": "magnetic-circuit",
+    "過渡現象": "transient",
+    "直流回路": "dc-circuit",
+    "交流基礎": "ac-basics",
+    "RLC回路": "rlc-resonance",
+    "交流電力": "ac-power",
+    "静電気": "coulomb-field",
     "インダクタンス": "inductance",
-    "半導体": "handotai",
+    "半導体": "semiconductor",
     "トランジスタ": "transistor",
-    "オペアンプ": "opamp",
-    "電気計測": "keiki",
-    "ブリッジ回路": "bridge",
+    "オペアンプ": "op-amp",
+    "電気計測": "measurement",
+    "ブリッジ回路": "bridge-circuit",
+    # records.json に実在するが未登録だった theme 名（曖昧でないものだけ追加）
+    "電磁誘導・インダクタンス": "inductance",
+    "磁界": "electromagnetic-force",
+    "静電容量": "capacitor",
+    "トランジスタ 電流増幅率（α・β）": "transistor",
 }
 
 def load():
@@ -150,9 +167,9 @@ def generate():
                 attempt_count = len(recs)
                 tip = f"OK:{cnt['ok']} Risky:{cnt['risky']} NG:{cnt['ng']} ({attempt_count}回)"
 
-                wiki_slug = WIKI_MAP.get(display_name)
-                if wiki_slug:
-                    wiki_url = f"{WIKI_BASE}{wiki_slug}/"
+                wiki_page = WIKI_MAP.get(display_name)
+                if wiki_page:
+                    wiki_url = f"{WIKI_BASE}#{wiki_page}"
                     cells += f'<td class="{css}" title="{tip}"><a href="{wiki_url}" target="_blank" style="color:inherit;text-decoration:none;display:block">{lbl} <span style="font-size:.6rem;opacity:.8">📖</span></a></td>'
                 else:
                     cells += f'<td class="{css}" title="{tip}">{lbl}</td>'
