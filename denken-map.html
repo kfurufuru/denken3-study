@@ -1056,8 +1056,16 @@ function buildFromRecords(records, configNodes) {
 
 async function loadData() {
   // 1. GitHub Pages: records.json を直接 fetch（API不要）
+  // ローカルは **相対パス** で取る。records.json は本ファイルと同じリポジトリの
+  // data/ 直下にあるので、リポジトリのルートを配信しても（/denken-map.html）、
+  // .secretary 側をルートにして配信しても（/denken3-study-dashboard/denken-map.html）、
+  // どちらでも正しい場所に解決する。
+  // 以前は `${API}/denken3-study-dashboard/data/records.json` と絶対パスを組んでおり、
+  // リポジトリのルートを配信すると 404 → catch に落ちて STATIC_DATA で描画されていた。
+  // 画面は出るので気づきにくいが、実際の学習記録が乗らない（エラーは console のみ）。
+  // 本番（GitHub Pages）は下の raw.githubusercontent 側を使うので影響は無かった。
   const RECORDS_URL = IS_LOCAL
-    ? `${API}/denken3-study-dashboard/data/records.json`
+    ? './data/records.json'
     : 'https://raw.githubusercontent.com/kfurufuru/denken3-study/main/data/records.json';
 
   try {
