@@ -680,5 +680,27 @@
     "fsrs_stability": 0.212,
     "fsrs_difficulty": 6.4133,
     "recall_test_due": null
+  },
+  {
+    "theme_id": "chokuryuuki",
+    "theme": "直流機（並列回路数・誘導起電力）",
+    "subject": "機械",
+    "date": "2026-09-19",
+    "result": "ng",
+    "attempt": 1,
+    "next_review": "SR1",
+    "memo": "[elog:2026-09-19#1] [elog L1=DEF] 直流機の並列回路数 a の決め方を知らなかった。正：巻線法で決まる。重ね巻は a=p（極数と同じ・ブラシも極数と同数・大電流向き）／波巻は a=2（極数によらず常に2・ブラシ2本・高電圧向き）。問題文の「波巻」「重ね巻」の一語が a を決める。E=pZnφ/(60a) は暗記でなく「導体1本が1回転で切る磁束 pφ ×毎秒回転数 n/60 ×直列導体数 Z/a」で組み立てる",
+    "patch": "",
+    "L1": "",
+    "L2": "",
+    "phase": "",
+    "ease_factor": 2.3,
+    "interval_days": 1,
+    "fsrs_stability": 0.212,
+    "fsrs_difficulty": 6.4133,
+    "recall_test_due": null,
+    "confidence_pre": null,
+    "error_tag": "未分類",
+    "self_summary": ""
   }
 ]
