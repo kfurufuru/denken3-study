@@ -702,5 +702,27 @@
     "confidence_pre": null,
     "error_tag": "未分類",
     "self_summary": ""
+  },
+  {
+    "theme_id": "chokuryuuki",
+    "theme": "直流機（並列回路数・誘導起電力）",
+    "subject": "機械",
+    "date": "2026-09-19",
+    "result": "ng",
+    "attempt": 2,
+    "next_review": "SR1",
+    "memo": "[elog:2026-09-19#2] [elog L1=COND/L2=MAP] 直流機の出力問題で E を作る順番が分からなかった。正：与えられた量で2パターンに分岐する。①端子電圧Vと電機子抵抗raが無い→出力＝E·Ia（EIaがそのまま機械的出力）。②Vとraがある→先に E=V−ra·Ia を作ってから掛ける（出力＝VIa−ra·Ia²）。トルクは T=P/ω=pZφIa/(2πa)",
+    "patch": "",
+    "L1": "",
+    "L2": "",
+    "phase": "",
+    "ease_factor": 2.1,
+    "interval_days": 1,
+    "fsrs_stability": 0.0834,
+    "fsrs_difficulty": 8.8063,
+    "recall_test_due": null,
+    "confidence_pre": null,
+    "error_tag": "未分類",
+    "self_summary": ""
   }
 ]
