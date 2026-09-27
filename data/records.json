@@ -98,16 +98,6 @@
     "phase": "B"
   },
   {
-    "theme_id": "test-q1",
-    "theme": "test-Q1",
-    "subject": "理論",
-    "date": "2026-04-09",
-    "result": "ok",
-    "attempt": 1,
-    "next_review": "done",
-    "memo": ""
-  },
-  {
     "theme_id": "denji-yudou",
     "theme": "電磁誘導",
     "subject": "理論",

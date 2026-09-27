@@ -179,11 +179,14 @@ def generate():
     bugmap_html = f'<div style="overflow-x:auto"><table class="q-bug-tbl"><thead><tr><th style="text-align:left">テーマ＼科目</th>{th}</tr></thead><tbody>{rows}</tbody></table></div>'
 
     # フェーズ別進捗
+    # phase キーが無い記録と空文字の記録を同じ「未設定」にまとめ、末尾に置く。
+    # 以前は前者が「Phase ?」、後者が「Phase 」（名前なし）と別々に並んでいた。
+    PHASE_UNSET = "未設定"
     phase_stats = defaultdict(Counter)
     for r in records:
-        phase_stats[r.get("phase", "?")][r.get("result", "")] += 1
+        phase_stats[r.get("phase") or PHASE_UNSET][r.get("result", "")] += 1
     phase_html = ""
-    for ph, cnt in sorted(phase_stats.items()):
+    for ph, cnt in sorted(phase_stats.items(), key=lambda kv: (kv[0] == PHASE_UNSET, kv[0])):
         tot = sum(cnt.values())
         if not tot:
             continue
