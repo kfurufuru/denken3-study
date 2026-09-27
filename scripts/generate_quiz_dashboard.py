@@ -178,34 +178,6 @@ def generate():
 
     bugmap_html = f'<div style="overflow-x:auto"><table class="q-bug-tbl"><thead><tr><th style="text-align:left">テーマ＼科目</th>{th}</tr></thead><tbody>{rows}</tbody></table></div>'
 
-    # フェーズ別進捗
-    phase_stats = defaultdict(Counter)
-    for r in records:
-        phase_stats[r.get("phase", "?")][r.get("result", "")] += 1
-    phase_html = ""
-    for ph, cnt in sorted(phase_stats.items()):
-        tot = sum(cnt.values())
-        if not tot:
-            continue
-        bars = "".join(
-            f'<div style="width:{round(cnt.get(r, 0) / tot * 100)}%;background:{"#22c55e" if r == "ok" else "#f59e0b" if r == "risky" else "#ef4444"};height:100%"></div>'
-            for r in ["ok", "risky", "ng"]
-        )
-        phase_html += f'''<div class="q-phase-bar">
-          <div style="display:flex;align-items:center;gap:8px;margin-bottom:5px">
-            <span style="color:var(--text);font-weight:600;font-size:.85rem">Phase {ph}</span>
-            <span style="color:var(--muted);font-size:.72rem">{tot}問</span>
-          </div>
-          <div style="height:10px;background:var(--bg);border-radius:5px;overflow:hidden;display:flex">{bars}</div>
-          <div style="font-size:.7rem;margin-top:4px;display:flex;gap:12px">
-            <span style="color:#4ade80">✓ {cnt.get("ok", 0)}</span>
-            <span style="color:#fbbf24">⚠ {cnt.get("risky", 0)}</span>
-            <span style="color:#f87171">✗ {cnt.get("ng", 0)}</span>
-          </div>
-        </div>'''
-    if not phase_html:
-        phase_html = '<p style="color:var(--muted)">データがありません</p>'
-
     # レビューリスト
     if not due:
         due_html = '<p style="color:#22c55e;padding:16px 0">🎉 本日のレビュー対象はありません！</p>'
@@ -256,23 +228,17 @@ def generate():
     <div class="card"><div class="card-header">📅 直近30日の学習活動</div><canvas id="q-ac" class="q-chart"></canvas></div>
   </div>
 
-  <!-- バグマップ + フェーズ別 -->
+  <!-- バグマップ -->
   <div class="section">
-    <div class="g21">
-      <div class="card">
-        <div class="card-header">🗺️ テーマ状態マップ（科目 × テーマ）</div>
-        <div style="display:flex;gap:12px;flex-wrap:wrap;margin-bottom:12px;font-size:.7rem">
-          <span><span class="q-legend q-legend-ok"></span> 一発OK</span>
-          <span><span class="q-legend q-legend-recovered"></span> 回復OK</span>
-          <span><span class="q-legend q-legend-risky"></span> Risky</span>
-          <span><span class="q-legend q-legend-ng"></span> NG</span>
-        </div>
-        {bugmap_html}
+    <div class="card">
+      <div class="card-header">🗺️ テーマ状態マップ（科目 × テーマ）</div>
+      <div style="display:flex;gap:12px;flex-wrap:wrap;margin-bottom:12px;font-size:.7rem">
+        <span><span class="q-legend q-legend-ok"></span> 一発OK</span>
+        <span><span class="q-legend q-legend-recovered"></span> 回復OK</span>
+        <span><span class="q-legend q-legend-risky"></span> Risky</span>
+        <span><span class="q-legend q-legend-ng"></span> NG</span>
       </div>
-      <div class="card">
-        <div class="card-header">📊 フェーズ別進捗</div>
-        {phase_html}
-      </div>
+      {bugmap_html}
     </div>
   </div>
 
@@ -303,10 +269,6 @@ def generate():
     </div>
   </div>
 
-  <!-- 更新ボタン -->
-  <div class="section" style="text-align:right">
-    <button id="q-refresh-btn" onclick="quizRefresh()" style="background:linear-gradient(135deg,#065f46,#047857);color:#6ee7b7;border:1px solid #10b981;padding:10px 20px;border-radius:10px;font-size:.85rem;font-weight:700;cursor:pointer;font-family:inherit;transition:all .3s">🔄 Make.com更新トリガー</button>
-  </div>
 
   <div class="footer">⚡ テスト記録 ダッシュボード ｜ 最終更新: {today.isoformat()}</div>
 </main>'''

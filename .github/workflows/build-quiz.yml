@@ -1,11 +1,13 @@
-name: 📊 quiz.html 再生成（手動）
+name: 📊 テスト記録ダッシュボード再生成（手動）
 
 # Option B（2026-07-20 SoT一本化）で退役:
 #   records.json は now ローカル sr-record.py が唯一の writer（原子 commit+push）。
 #   Make.com → repository_dispatch(new_record) → append_record.py による
 #   サーバ側 records.json 追記は「第2 writer」となり dual-writer / 日次 pull 衝突の
 #   原因だったため、repository_dispatch トリガーと append_record 追記ステップを撤去。
-#   本 workflow は quiz.html の手動再生成のみを担い、records.json は読むだけで commit しない。
+#   本 workflow は index.html テスト記録タブの手動再生成のみを担い、records.json は読むだけで commit しない。
+#   quiz.html は廃止済み（index.html に一本化）。存在しないファイルを git add すると
+#   pathspec エラーで commit ステップが必ず落ちていたため、add 対象から外した。
 on:
   workflow_dispatch:       # 手動実行のみ（repository_dispatch: new_record は退役）
 
@@ -33,14 +35,12 @@ jobs:
           cat data/records.json | python3 -c "import json,sys; d=json.load(sys.stdin); print(f'レコード数: {len(d)}')"
           echo "=== ダッシュボード生成 ==="
           python -u scripts/generate_quiz_dashboard.py
-          echo "=== 生成ファイル確認 ==="
-          ls -la quiz.html || echo "⚠️ quiz.html が見つかりません"
 
       - name: 💾 コミット & プッシュ
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
           # Option B: records.json は commit しない（ローカル sr-record.py が唯一の writer）
-          git add index.html quiz.html
-          git diff --staged --quiet || git commit -m "📊 quiz.html 再生成 [$(date +'%Y-%m-%d %H:%M JST')]"
+          git add index.html
+          git diff --staged --quiet || git commit -m "📊 テスト記録ダッシュボード再生成 [$(date +'%Y-%m-%d %H:%M JST')]"
           git push
