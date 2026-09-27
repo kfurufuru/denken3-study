@@ -1143,10 +1143,6 @@ canvas.q-chart{max-height:200px!important}
     </div>
   </div>
 
-  <!-- 更新ボタン -->
-  <div class="section" style="text-align:right">
-    <button id="q-refresh-btn" onclick="quizRefresh()" style="background:linear-gradient(135deg,#065f46,#047857);color:#6ee7b7;border:1px solid #10b981;padding:10px 20px;border-radius:10px;font-size:.85rem;font-weight:700;cursor:pointer;font-family:inherit;transition:all .3s">🔄 Make.com更新トリガー</button>
-  </div>
 
   <div class="footer">⚡ テスト記録 ダッシュボード ｜ 最終更新: 2026-09-19</div>
 </main>
@@ -1166,22 +1162,22 @@ canvas.q-chart{max-height:200px!important}
       <div class="card-header">データパイプライン概要</div>
       <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:20px;padding:8px 0">
 
-        <!-- リアルタイムフロー -->
+        <!-- テスト記録フロー -->
         <div>
-          <div style="font-size:.75rem;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:#60a5fa;margin-bottom:14px">⚡ リアルタイム更新</div>
+          <div style="font-size:.75rem;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:#60a5fa;margin-bottom:14px">⚡ テスト記録</div>
           <div class="sys-flow">
             <div class="sys-node" style="border-color:rgba(96,165,250,.4);background:rgba(96,165,250,.08);color:#93c5fd">
-              📱 ChatGPT<br><span style="font-size:.7rem;color:#64748b">テスト記録採取（スマホ）</span>
+              💻 sr-record.py（ローカル）<br><span style="font-size:.7rem;color:#64748b">records.json の唯一の writer</span>
             </div>
-            <div class="sys-arrow">↓ POST repository_dispatch</div>
-            <div class="sys-node highlight">
-              ⚙️ GitHub Actions<br><span style="font-size:.7rem;color:#64748b">build-quiz.yml</span>
-            </div>
-            <div class="sys-arrow">↓ append_record.py</div>
+            <div class="sys-arrow">↓ commit + push</div>
             <div class="sys-node" style="border-color:rgba(16,185,129,.3);background:rgba(16,185,129,.06);color:#6ee7b7">
-              📄 data/records.json<br><span style="font-size:.7rem;color:#64748b">テスト記録追記</span>
+              📄 data/records.json<br><span style="font-size:.7rem;color:#64748b">テスト記録</span>
             </div>
-            <div class="sys-arrow">↓ generate_quiz_dashboard.py</div>
+            <div class="sys-arrow">↓ build-quiz.yml（手動）</div>
+            <div class="sys-node highlight">
+              ⚙️ generate_quiz_dashboard.py<br><span style="font-size:.7rem;color:#64748b">records.json は読むだけ</span>
+            </div>
+            <div class="sys-arrow">↓</div>
             <div class="sys-node action">
               🌐 GitHub Pages<br><span style="font-size:.7rem;color:#64748b">index.html テスト記録タブ更新</span>
             </div>

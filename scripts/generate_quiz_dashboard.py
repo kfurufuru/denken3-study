@@ -303,10 +303,6 @@ def generate():
     </div>
   </div>
 
-  <!-- 更新ボタン -->
-  <div class="section" style="text-align:right">
-    <button id="q-refresh-btn" onclick="quizRefresh()" style="background:linear-gradient(135deg,#065f46,#047857);color:#6ee7b7;border:1px solid #10b981;padding:10px 20px;border-radius:10px;font-size:.85rem;font-weight:700;cursor:pointer;font-family:inherit;transition:all .3s">🔄 Make.com更新トリガー</button>
-  </div>
 
   <div class="footer">⚡ テスト記録 ダッシュボード ｜ 最終更新: {today.isoformat()}</div>
 </main>'''
