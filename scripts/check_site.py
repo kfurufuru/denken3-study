@@ -118,7 +118,7 @@ def main():
             if not url or url.startswith(("#", "http://", "https://", "mailto:", "javascript:", "data:", "{", "$")):
                 continue
             if url.startswith("file:"):
-                warns.append(f"{where}: file:// リンクは公開ページから開けない: {url}")
+                errors.append(f"{where}: file:// リンクは公開ページから開けない（#33 で撤去）: {url}")
                 continue
             target = (path.parent / url.split("#")[0].split("?")[0]).resolve()
             if ROOT not in target.parents and target != ROOT:
