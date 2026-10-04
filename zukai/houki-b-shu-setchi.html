@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>B種接地抵抗ドリル | 電験3種 学習システム</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Noto+Sans+JP:wght@400;500;700;800&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #0f172a; --bg2: #1e293b; --bg3: #263347;
+      --accent: #38bdf8; --text: #e2e8f0; --muted: #64748b; --muted2: #94a3b8;
+      --border: rgba(255,255,255,0.08);
+      --green: #10b981; --yellow: #f59e0b; --red: #ef4444;
+      --font: 'Inter','Noto Sans JP',sans-serif;
+      --r-sm: 6px; --r-md: 12px;
+      line-break: strict; overflow-wrap: break-word; word-break: normal;
+    }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body { background: var(--bg); color: var(--text); font-family: var(--font); font-size: 0.95rem; line-height: 1.75; min-height: 100vh; }
+    .header { background: var(--bg2); border-bottom: 1px solid var(--border); padding: 14px 16px; display: flex; flex-wrap: wrap; align-items: center; gap: 4px 12px; position: sticky; top: 0; z-index: 10; }
+    .header h1 { font-size: 1.05rem; font-weight: 700; color: var(--accent); }
+    .header-sub { font-size: 0.78rem; color: var(--muted2); }
+    .header-back { margin-left: auto; font-size: 0.82rem; color: var(--muted2); text-decoration: none; padding: 4px 12px; border: 1px solid var(--border); border-radius: var(--r-sm); white-space: nowrap; }
+    .header-back:hover { color: var(--accent); border-color: var(--accent); }
+    .main { max-width: 820px; margin: 0 auto; padding: 24px 16px 64px; }
+    section { margin-bottom: 36px; }
+    .sec-title { font-size: 0.8rem; font-weight: 700; color: var(--muted2); letter-spacing: 0.08em; margin-bottom: 12px; padding-bottom: 6px; border-bottom: 1px solid var(--border); }
+    .card { background: var(--bg2); border: 1px solid var(--border); border-radius: var(--r-md); padding: 16px; }
+    .goal { border-left: 4px solid var(--accent); }
+    .task { border-left: 4px solid var(--yellow); }
+    ul, ol { padding-left: 1.3em; }
+    li { margin: 4px 0; }
+    strong { color: #fff; }
+    .red { color: var(--red); } .green { color: var(--green); } .yellow { color: var(--yellow); } .dim { color: var(--muted2); }
+    .fig { background: var(--bg); border: 1px solid var(--border); border-radius: var(--r-md); padding: 8px; }
+    svg { display: block; width: 100%; height: auto; }
+    svg text { font-family: var(--font); }
+    svg .t { fill: var(--text); font-size: 16px; }
+    svg .t.dim { fill: var(--muted2); }
+    svg .lab { fill: var(--muted2); font-size: 14px; font-weight: 700; }
+    svg .ans { fill: var(--green); font-size: 16px; font-weight: 700; }
+    svg .blank { fill: var(--yellow); font-size: 22px; font-weight: 800; }
+    svg .note { font-size: 15px; font-weight: 700; }
+    svg .note.red { fill: var(--red); }
+    details { background: var(--bg2); border: 1px solid var(--border); border-radius: var(--r-sm); margin: 8px 0; }
+    details > summary { cursor: pointer; padding: 10px 14px; font-weight: 600; color: var(--accent); list-style: none; }
+    details > summary::-webkit-details-marker { display: none; }
+    details > summary::before { content: "▶ "; font-size: 0.75em; }
+    details[open] > summary::before { content: "▼ "; }
+    details > .body { padding: 0 14px 14px; }
+    .answers { display: grid; gap: 6px; }
+    .calc { font-family: 'Inter', monospace; background: var(--bg3); border-radius: var(--r-sm); padding: 12px 14px; overflow-x: auto; }
+    .calc div { white-space: nowrap; }
+    .calc .c { color: var(--muted2); font-family: var(--font); }
+    .warn { color: var(--yellow); }
+    .check li { list-style: none; margin-left: -1.3em; }
+    .check li::before { content: "☐ "; color: var(--accent); }
+    a { color: var(--accent); }
+    code { background: var(--bg3); padding: 1px 6px; border-radius: 4px; font-size: 0.88em; }
+  </style>
+</head>
+<body>
+<header class="header">
+  <div>
+    <h1>B種接地工事の接地抵抗：計算 → 丸め → 代入</h1>
+    <div class="header-sub">元の弱点：mistakes/weak_points.md「[法規] B種接地工事の接地抵抗」（R6下期 法規 A問4）／ 作成日 2026-10-04</div>
+  </div>
+  <a class="header-back" href="../index.html">← ダッシュボード</a>
+</header>
+
+<main class="main">
+
+  <section>
+    <div class="sec-title">この図で答えられるようになること</div>
+    <div class="card goal">
+      公称電圧・こう長・遮断時間が与えられたとき、<strong>V′ → L → I₁（計算値）→ 丸め → 分子 → R_B</strong> の6段を自力で書き、途中の V′・L・I₁ をそれぞれ言える。
+      とくに「I₁ を出したら、割る前に丸める」を手順として書ける。
+    </div>
+  </section>
+
+  <section>
+    <div class="sec-title">描き直し課題（先に紙に描く）</div>
+    <div class="card task">
+      <p><strong>紙に「R6下期 A問4 の計算の流れ図」を上から下へ描いてから、下に進む。</strong>条件：公称電圧 6,600 V、三相3線式・架空、こう長 20 km、地絡時に 1 秒以内で自動遮断。</p>
+      <p style="margin-top:8px">描くときに入れる要素：</p>
+      <ul>
+        <li>V′ の求め方（公称電圧に何をするか）と値</li>
+        <li>L の求め方（こう長に何を掛けるか）と値</li>
+        <li>I₁ の計算式と計算値</li>
+        <li><strong>丸めの箱</strong>（規定の文言と、丸めた後の値）</li>
+        <li>分子 150／300／600 の選び方と、この問題で選ぶ値</li>
+        <li>最終的な R_B</li>
+      </ul>
+    </div>
+  </section>
+
+  <section>
+    <div class="sec-title">空欄版の図</div>
+    <div class="fig"><svg viewBox="0 0 380 694" role="img" aria-label="B種接地抵抗の計算手順（空欄版）" xmlns="http://www.w3.org/2000/svg"><defs><marker id="ahb" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="var(--muted)"/></marker><marker id="ahrb" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="var(--red)"/></marker></defs><line x1="190.0" y1="88" x2="190.0" y2="104" stroke="var(--muted)" stroke-width="2" marker-end="url(#ahb)"/>
+<line x1="190.0" y1="188" x2="190.0" y2="204" stroke="var(--muted)" stroke-width="2" marker-end="url(#ahb)"/>
+<line x1="190.0" y1="288" x2="190.0" y2="304" stroke="var(--muted)" stroke-width="2" marker-end="url(#ahb)"/>
+<line x1="190.0" y1="388" x2="190.0" y2="404" stroke="var(--muted)" stroke-width="2" marker-end="url(#ahb)"/>
+<line x1="190.0" y1="488" x2="190.0" y2="504" stroke="var(--muted)" stroke-width="2" marker-end="url(#ahb)"/>
+<line x1="190.0" y1="588" x2="190.0" y2="604" stroke="var(--muted)" stroke-width="2" marker-end="url(#ahb)"/>
+<rect x="8" y="8" width="364" height="78" rx="8" fill="var(--bg2)" stroke="var(--muted)" stroke-width="1.5"/>
+<text x="20" y="30" class="lab">入力</text>
+<text x="20" y="54" class="t">公称電圧 6,600 V ／ こう長 20 km</text>
+<text x="20" y="76" class="t">三相3線式・架空 ／ 遮断 1 秒以内</text>
+<rect x="8" y="108" width="364" height="78" rx="8" fill="var(--bg2)" stroke="var(--accent)" stroke-width="1.5"/>
+<text x="20" y="130" class="lab">Step1</text>
+<text x="20" y="162" class="t">V′〔kV〕 ＝</text>
+<rect x="256" y="140" width="104" height="36" rx="6" fill="none" stroke="var(--yellow)" stroke-width="2" stroke-dasharray="6 4"/>
+<text x="308.0" y="166" class="blank" text-anchor="middle">①</text>
+<rect x="8" y="208" width="364" height="78" rx="8" fill="var(--bg2)" stroke="var(--accent)" stroke-width="1.5"/>
+<text x="20" y="230" class="lab">Step2</text>
+<text x="20" y="262" class="t">L〔km〕 ＝</text>
+<rect x="256" y="240" width="104" height="36" rx="6" fill="none" stroke="var(--yellow)" stroke-width="2" stroke-dasharray="6 4"/>
+<text x="308.0" y="266" class="blank" text-anchor="middle">②</text>
+<rect x="8" y="308" width="364" height="78" rx="8" fill="var(--bg2)" stroke="var(--accent)" stroke-width="1.5"/>
+<text x="20" y="330" class="lab">Step3</text>
+<text x="20" y="354" class="t">I₁（計算値）＝ 1 ＋ (V′/3·L − 100)/150</text>
+<text x="20" y="376" class="t dim">→ ①②を代入して紙で計算</text>
+<rect x="8" y="408" width="364" height="78" rx="8" fill="var(--bg2)" stroke="var(--red)" stroke-width="2"/>
+<text x="20" y="430" class="lab">Step4</text>
+<text x="78" y="430" class="note red">★前回ここを飛ばした</text>
+<text x="20" y="462" class="t">丸めた I₁ ＝</text>
+<rect x="256" y="440" width="104" height="36" rx="6" fill="none" stroke="var(--yellow)" stroke-width="2" stroke-dasharray="6 4"/>
+<text x="308.0" y="466" class="blank" text-anchor="middle">③</text>
+<rect x="8" y="508" width="364" height="78" rx="8" fill="var(--bg2)" stroke="var(--accent)" stroke-width="1.5"/>
+<text x="20" y="530" class="lab">Step5</text>
+<text x="20" y="562" class="t">分子（遮断 1 秒以内）＝</text>
+<rect x="256" y="540" width="104" height="36" rx="6" fill="none" stroke="var(--yellow)" stroke-width="2" stroke-dasharray="6 4"/>
+<text x="308.0" y="566" class="blank" text-anchor="middle">④</text>
+<rect x="8" y="608" width="364" height="78" rx="8" fill="var(--bg2)" stroke="var(--green)" stroke-width="2"/>
+<text x="20" y="630" class="lab">Step6</text>
+<text x="20" y="662" class="t">R_B ＝ 分子 ÷ 丸めた I₁ ＝ ？ Ω</text></svg></div>
+    <p class="dim" style="margin:8px 0 4px;font-size:.85rem">紙の図で埋めてから、1つずつ開いて答え合わせする。</p>
+    <div class="answers">
+      <details><summary>① の答え</summary><div class="body"><strong>6,600 ÷ 1.1 ＝ 6 kV</strong>。÷1.1 だけ。×1.15/1.1 ＝ 6.9 kV は絶縁耐力試験の「最大使用電圧」で別の規定。6.6 のまま使うのも誤り。</div></details>
+      <details><summary>② の答え</summary><div class="body"><strong>20 km × 3 線 ＝ 60 km</strong>（電線延長＝こう長×線条数）。こう長 20 km をそのまま入れない。</div></details>
+      <details><summary>③ の答え</summary><div class="body">計算値 1.133 A を<strong>小数点以下切り上げ、2 A 未満なら 2 A</strong> → <strong>2 A</strong>。前回はここを飛ばして 1.133 A のまま割った。</div></details>
+      <details><summary>④ の答え</summary><div class="body"><strong>600</strong>（1 秒以内に自動遮断）。1 秒を超え 2 秒以下なら 300、それ以外（遮断装置なし・2 秒超）は 150。</div></details>
+    </div>
+  </section>
+
+  <section>
+    <div class="sec-title">完成図</div>
+    <details>
+      <summary>完成図を開く（紙の図を描き終えてから）</summary>
+      <div class="body">
+        <div class="fig"><svg viewBox="0 0 380 694" role="img" aria-label="B種接地抵抗の計算手順（完成図）" xmlns="http://www.w3.org/2000/svg"><defs><marker id="ahf" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="var(--muted)"/></marker><marker id="ahrf" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="var(--red)"/></marker></defs><line x1="190.0" y1="88" x2="190.0" y2="104" stroke="var(--muted)" stroke-width="2" marker-end="url(#ahf)"/>
+<line x1="190.0" y1="188" x2="190.0" y2="204" stroke="var(--muted)" stroke-width="2" marker-end="url(#ahf)"/>
+<line x1="190.0" y1="288" x2="190.0" y2="304" stroke="var(--muted)" stroke-width="2" marker-end="url(#ahf)"/>
+<line x1="190.0" y1="388" x2="190.0" y2="404" stroke="var(--muted)" stroke-width="2" marker-end="url(#ahf)"/>
+<line x1="190.0" y1="488" x2="190.0" y2="504" stroke="var(--muted)" stroke-width="2" marker-end="url(#ahf)"/>
+<line x1="190.0" y1="588" x2="190.0" y2="604" stroke="var(--muted)" stroke-width="2" marker-end="url(#ahf)"/>
+<rect x="8" y="8" width="364" height="78" rx="8" fill="var(--bg2)" stroke="var(--muted)" stroke-width="1.5"/>
+<text x="20" y="30" class="lab">入力</text>
+<text x="20" y="54" class="t">公称電圧 6,600 V ／ こう長 20 km</text>
+<text x="20" y="76" class="t">三相3線式・架空 ／ 遮断 1 秒以内</text>
+<rect x="8" y="108" width="364" height="78" rx="8" fill="var(--bg2)" stroke="var(--accent)" stroke-width="1.5"/>
+<text x="20" y="130" class="lab">Step1</text>
+<text x="20" y="154" class="t">V′〔kV〕 ＝</text>
+<text x="20" y="176" class="ans">6,600 ÷ 1.1 ＝ 6 kV</text>
+<rect x="8" y="208" width="364" height="78" rx="8" fill="var(--bg2)" stroke="var(--accent)" stroke-width="1.5"/>
+<text x="20" y="230" class="lab">Step2</text>
+<text x="20" y="254" class="t">L〔km〕 ＝</text>
+<text x="20" y="276" class="ans">20 km × 3 線 ＝ 60 km</text>
+<rect x="8" y="308" width="364" height="78" rx="8" fill="var(--bg2)" stroke="var(--accent)" stroke-width="1.5"/>
+<text x="20" y="330" class="lab">Step3</text>
+<text x="20" y="354" class="t">I₁（計算値）＝ 1 ＋ (V′/3·L − 100)/150</text>
+<text x="20" y="376" class="ans">＝ 1 ＋ (120 − 100)/150 ＝ 1.133 A</text>
+<rect x="8" y="408" width="364" height="78" rx="8" fill="var(--bg2)" stroke="var(--red)" stroke-width="2"/>
+<text x="20" y="430" class="lab">Step4</text>
+<text x="78" y="430" class="note red">★前回ここを飛ばした</text>
+<text x="20" y="454" class="t">丸めた I₁ ＝</text>
+<text x="20" y="476" class="ans">1.133 → 切り上げ・2 A未満は2 A → 2 A</text>
+<rect x="8" y="508" width="364" height="78" rx="8" fill="var(--bg2)" stroke="var(--accent)" stroke-width="1.5"/>
+<text x="20" y="530" class="lab">Step5</text>
+<text x="20" y="554" class="t">分子（遮断 1 秒以内）＝</text>
+<text x="20" y="576" class="ans">600（1〜2秒 300 ／ それ以外 150）</text>
+<rect x="8" y="608" width="364" height="78" rx="8" fill="var(--bg2)" stroke="var(--green)" stroke-width="2"/>
+<text x="20" y="630" class="lab">Step6</text>
+<text x="20" y="654" class="ans">R_B ＝ 600 ÷ 2 ＝ 300 Ω</text>
+<text x="20" y="676" class="note red">✗ 丸めずに割ると 600÷1.133 ≒ 529 Ω</text></svg></div>
+        <p class="dim" style="margin-top:8px;font-size:.85rem">Step6 の赤字は前回の誤答（Step4 を飛ばして 600 ÷ 1.133 ≒ 529 Ω）。</p>
+      </div>
+    </details>
+  </section>
+
+  <section>
+    <div class="sec-title">検算</div>
+    <div class="calc">
+      <div><span class="c">V′ ＝</span> 6,600 ÷ 1.1 ＝ 6,000 V ＝ <strong>6 kV</strong></div>
+      <div><span class="c">L ＝</span> 20 × 3 ＝ <strong>60 km</strong></div>
+      <div><span class="c">V′/3·L ＝</span> 6/3 × 60 ＝ 120</div>
+      <div><span class="c">第2項 ＝</span> (120 − 100)/150 ＝ 0.133</div>
+      <div><span class="c">I₁（計算値）＝</span> 1 ＋ 0.133 ＝ <strong>1.133 A</strong></div>
+      <div><span class="c">丸め ＝</span> 切り上げ → 2、2 A 未満なら 2 → <strong>2 A</strong></div>
+      <div><span class="c">R_B ＝</span> 600 ÷ 2 ＝ <strong class="green">300 Ω</strong>（正解 (4)）</div>
+      <div class="red"><span class="c">前回の誤答：</span> 600 ÷ 1.133 ≒ 529 Ω</div>
+    </div>
+    <p style="margin:14px 0 6px"><strong>条件を変えた検算例：こう長 40 km</strong>（最終値が偶然合うケースを見抜く）</p>
+    <div class="calc">
+      <div><span class="c">正しい V′ ＝ 6：</span> L ＝ 120、V′/3·L ＝ 240、I₁ ＝ 1 ＋ (240 − 100)/150 ＝ 1.933 → 2 A → R_B ＝ 600 ÷ 2 ＝ <strong class="green">300 Ω</strong></div>
+      <div class="red"><span class="c">誤って V′ ＝ 6.9：</span> V′/3·L ＝ 276、I₁ ＝ 2.173 → 3 A → R_B ＝ 600 ÷ 3 ＝ 200 Ω（不正解）</div>
+    </div>
+    <p class="dim" style="margin-top:8px;font-size:.88rem">こう長 20 km では V′ を 6.9 にしても I₁ ＝ 1.253 → 2 A で 300 Ω になり、誤りが見えない（AI比較で Claude Opus が実際にこうなった）。40 km にすると差が出る。だから最終値ではなく V′・L・I₁ を1つずつ照合する。</p>
+  </section>
+
+  <section>
+    <div class="sec-title">自己採点チェックリスト</div>
+    <div class="card">
+      <ul class="check">
+        <li>V′ を「÷1.1」で出し、6 kV と書いた（6.6 や 6.9 になっていない）</li>
+        <li>L を「こう長×線条数」で出し、60 km と書いた</li>
+        <li>I₁ の計算値（1.133 A）と、<strong>丸めた後の値（2 A）を別の箱</strong>に書いた</li>
+        <li>丸めの規定を「小数点以下切り上げ・2 A 未満は 2 A」と文言で書いた</li>
+        <li>分子 600／300／150 を遮断時間で選び分ける表を書き、600 を選んだ理由（1 秒以内）を書いた</li>
+      </ul>
+    </div>
+  </section>
+
+  <section>
+    <div class="sec-title">根拠と要確認事項</div>
+    <div class="card">
+      <p><strong>根拠（リポジトリ内の記述）</strong></p>
+      <ul>
+        <li>R_B の上限 ＝ 150／300／600 ÷ I₁：電技解釈 第17条（17-1表）。<code>mistakes/weak_points.md</code>、<code>data/concept-questions.json</code>（hoki_b-shu-setchi_001）</li>
+        <li>I₁ ＝ 1 ＋ (V′/3·L − 100)/150（ケーブル以外の電路）、V′ ＝ 公称電圧 ÷ 1.1、L ＝ 電線延長：解釈 17-2表。同上</li>
+        <li>I₁ の端数処理（小数点以下切り上げ・2 A 未満は 2 A）：<code>concept-questions.json</code> では「解釈第17条第2項第二号ロ ただし書き」と記載</li>
+        <li>計算式の第2項が負になる場合は 0 とする：<code>concept-questions.json</code> の記述（この問題では第2項 ＝ 0.133 で正なので影響なし）</li>
+        <li>ケーブルの区間は L に入れず L′ として別の項で扱う：<code>concept-questions.json</code> の記述（この問題は架空のみ）</li>
+        <li>正解の数値（6 kV・60 km・1.133 A → 2 A・300 Ω）：<code>docs/ai-comparison/2026-09-27-results.md</code> と一致</li>
+      </ul>
+      <p style="margin-top:12px"><strong class="warn">⚠ 要確認</strong></p>
+      <ul>
+        <li class="warn">⚠ 要確認：端数処理の条番号「第17条第2項第二号ロ ただし書き」は、リポジトリ内の記述（concept-questions.json）だけが出典。電技解釈の原文で項・号の番号を確かめていない。</li>
+        <li class="warn">⚠ 要確認：問題の条件（6,600 V・三相3線式・架空・こう長 20 km・1 秒以内遮断）は weak_points.md と AI比較メモからの再構成。R6下期 A問4 の原文で確かめていない。</li>
+      </ul>
+    </div>
+  </section>
+
+  <section>
+    <div class="sec-title">戻る</div>
+    <p><a href="../index.html">← ダッシュボード（index.html）へ戻る</a></p>
+    <p class="dim" style="font-size:.88rem">元になった弱点：<a href="https://github.com/kfurufuru/denken3-study/blob/main/mistakes/weak_points.md">mistakes/weak_points.md</a> の「[法規] B種接地工事の接地抵抗（1線地絡電流の端数処理）」。</p>
+  </section>
+
+</main>
+</body>
+</html>
