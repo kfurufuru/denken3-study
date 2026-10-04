@@ -64,7 +64,7 @@ description: 電験三種の弱点・間違えた過去問・わかりにくい�
 node .claude/skills/zukai-drill/scripts/check_layout.js zukai/<file>.html <スクリーンショットの保存先>
 ```
 
-横スクロール、SVG の文字が枠や viewBox からはみ出していないか、文字が 11px 未満になっていないかを調べ、問題があれば終了コード 1 で一覧を出す。保存したスクリーンショットも自分の目で見て、文字の重なりや空欄の位置を確かめる。このスクリプトは Playwright（`npm root -g` の下）と `/opt/pw-browsers` の Chromium を使う。
+横スクロール、SVG の文字が枠や viewBox からはみ出していないか、文字が 11px 未満になっていないかを調べ、問題があれば終了コード 1 で一覧を出す。保存したスクリーンショットも自分の目で見て、文字の重なりや空欄の位置を確かめる。続けて `python scripts/check_site.py` も実行し、リンク切れ・退役済み URL・未定義の onclick がないことを確かめる（`zukai/` も検査対象で、CI でも走る）。このスクリプトは Playwright（`npm root -g` の下）と `/opt/pw-browsers` の Chromium を使う。
 
 ## 作ったあと
 

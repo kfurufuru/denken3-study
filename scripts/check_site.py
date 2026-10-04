@@ -10,7 +10,7 @@
 人の注意では再発を防げなかったので、機械で落とす。
 
 **射程**: オフラインで決まることだけを見る。
-  1. 退役済み URL（DENYLIST）が *.html / 生成スクリプトに残っていないか
+  1. 退役済み URL（DENYLIST）が *.html / zukai/*.html / 生成スクリプトに残っていないか
   2. リポジトリ内への相対リンク（href / src）の先が実在するか
   3. 試験日が update_dashboard.py の EXAM_DATE 1か所と一致しているか
      （index.html の JS 定数・手書きラベルの日付と試験回「R08下」の両方）
@@ -42,7 +42,8 @@ DENYLIST = {
 }
 # DENYLIST を検査する対象。コメントで旧 URL に言及するのは可なので、
 # .py は「文字列リテラル内」だけを見る。
-HTML_GLOB = "*.html"
+# zukai/ は zukai-drill スキルが生成する図解ドリル（#34）。直下の *.html と同じく公開される。
+HTML_GLOBS = ["*.html", "zukai/*.html"]
 PY_FILES = ["update_dashboard.py", "scripts/generate_quiz_dashboard.py"]
 
 LINK = re.compile(r'\b(?:href|src)\s*=\s*"([^"]*)"')
@@ -59,6 +60,10 @@ def session_of(iso):
     y, m = int(iso[:4]), int(iso[5:7])
     nendo = y if m >= 4 else y - 1
     return f"R{nendo - 2018:02d}", ("上" if 4 <= m <= 9 else "下")
+
+
+def relpath(path):
+    return path.relative_to(ROOT).as_posix()
 
 
 def lineno(text, pos):
@@ -94,14 +99,14 @@ def exam_date_from_py():
 
 def main():
     errors, warns = [], []
-    htmls = sorted(ROOT.glob(HTML_GLOB))
+    htmls = sorted(p for g in HTML_GLOBS for p in ROOT.glob(g))
 
     # 1. 退役済み URL
     for path in htmls:
         text = path.read_text(encoding="utf-8")
         for bad, why in DENYLIST.items():
             for m in re.finditer(re.escape(bad), text):
-                errors.append(f"{path.name}:{lineno(text, m.start())}: 退役済み URL {bad} — {why}")
+                errors.append(f"{relpath(path)}:{lineno(text, m.start())}: 退役済み URL {bad} — {why}")
     for rel in PY_FILES:
         path = ROOT / rel
         for ln, s in py_string_literals(path):
@@ -114,7 +119,7 @@ def main():
         text = path.read_text(encoding="utf-8")
         for m in LINK.finditer(text):
             url = m.group(1).strip()
-            where = f"{path.name}:{lineno(text, m.start())}"
+            where = f"{relpath(path)}:{lineno(text, m.start())}"
             if not url or url.startswith(("#", "http://", "https://", "mailto:", "javascript:", "data:", "{", "$")):
                 continue
             if url.startswith("file:"):
@@ -156,7 +161,7 @@ def main():
         for m in ONCLICK.finditer(text):
             name = m.group(1)
             if not re.search(JS_DEF.format(re.escape(name)), text):
-                errors.append(f"{path.name}:{lineno(text, m.start())}: onclick の {name}() が定義されていない")
+                errors.append(f"{relpath(path)}:{lineno(text, m.start())}: onclick の {name}() が定義されていない")
 
     for w in warns:
         print(f"[WARN] {w}")
