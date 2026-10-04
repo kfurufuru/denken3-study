@@ -36,6 +36,11 @@ jobs:
           echo "=== ダッシュボード生成 ==="
           python -u scripts/generate_quiz_dashboard.py
 
+      # 生成結果を公開前に検査する（update.yml と同じ理由。bot の push では check-site.yml が起動しない）。
+      # 落ちたら commit されず、公開中の index.html はそのまま残る。
+      - name: 🔗 公開 HTML の回帰検査
+        run: python scripts/check_site.py
+
       - name: 💾 コミット & プッシュ
         run: |
           git config user.name "github-actions[bot]"
