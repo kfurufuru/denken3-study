@@ -29,6 +29,12 @@ jobs:
           DB_ID: ff4fcb73cc14408caedf87c904ae2fd9
         run: python update_dashboard.py
 
+      # 生成結果を公開前に検査する。bot の push では check-site.yml が起動しないため、
+      # ここで落とさないと壊れた index.html がそのまま公開される。
+      # 落ちた日は commit されず、前日のダッシュボードが残る（壊れた版より古い版を出す）。
+      - name: 公開 HTML の回帰検査
+        run: python scripts/check_site.py
+
       - name: Commit & Push
         run: |
           git config user.name "github-actions[bot]"
