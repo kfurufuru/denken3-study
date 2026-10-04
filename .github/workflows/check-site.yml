@@ -1,0 +1,38 @@
+name: 🔗 公開ページ回帰チェック
+
+# 2026-09-30 新設。同じ修正の繰り返し（#22→#27 リンクの直し漏れ、#23→#24 試験日ラベルの
+# 取り残し、#30 未定義関数の onclick）を人の注意で防げなかったため、機械で落とす。
+# 射程はオフラインで決まることのみ。外部 URL の生死・内容の正しさは検査しない。
+
+on:
+  pull_request:
+    paths:
+      - '*.html'
+      - 'update_dashboard.py'
+      - 'scripts/**'
+      - '.github/workflows/check-site.yml'
+  push:
+    branches: [main]
+    paths:
+      - '*.html'
+      - 'update_dashboard.py'
+      - 'scripts/**'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - name: ⬇️ チェックアウト
+        uses: actions/checkout@v4
+
+      - name: 🐍 Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: 🔗 公開 HTML の回帰検査
+        run: python scripts/check_site.py
