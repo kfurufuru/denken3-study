@@ -1,0 +1,333 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Git の基本 — push・PR・Revert | 電験3種 学習システム</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Noto+Sans+JP:wght@400;500;700;800&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg:      #0f172a;
+      --bg2:     #1e293b;
+      --bg3:     #263347;
+      --accent:  #38bdf8;
+      --accent2: #6366f1;
+      --text:    #e2e8f0;
+      --muted:   #64748b;
+      --border:  rgba(255,255,255,0.08);
+      --green:   #10b981;
+      --yellow:  #f59e0b;
+      --red:     #ef4444;
+      --font:    'Inter','Noto Sans JP',sans-serif;
+      --r-sm:    6px;
+      --r-md:    12px;
+      line-break: strict; overflow-wrap: break-word; word-break: normal;
+    }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      background: var(--bg); color: var(--text);
+      font-family: var(--font); font-size: 0.95rem; line-height: 1.75;
+      min-height: 100vh;
+    }
+
+    /* ===== header ===== */
+    .header {
+      background: var(--bg2); border-bottom: 1px solid var(--border);
+      padding: 16px 24px; display: flex; align-items: center; gap: 12px;
+      position: sticky; top: 0; z-index: 10;
+    }
+    .header h1 { font-size: 1.1rem; font-weight: 700; color: var(--accent); }
+    .header-sub { font-size: 0.8rem; color: var(--muted); }
+    .header-back {
+      margin-left: auto; font-size: 0.82rem; color: var(--muted);
+      text-decoration: none; padding: 4px 12px;
+      border: 1px solid var(--border); border-radius: var(--r-sm); transition: 0.2s;
+      white-space: nowrap;
+    }
+    .header-back:hover { color: var(--accent); border-color: var(--accent); }
+
+    .main { max-width: 900px; margin: 0 auto; padding: 28px 20px 64px; }
+
+    /* ===== section ===== */
+    section { margin-bottom: 40px; }
+    .sec-title {
+      font-size: 0.78rem; font-weight: 700; color: var(--muted);
+      text-transform: uppercase; letter-spacing: 0.1em;
+      margin-bottom: 14px; padding-bottom: 8px;
+      border-bottom: 1px solid var(--border);
+    }
+    .card {
+      background: var(--bg2); border: 1px solid var(--border);
+      border-radius: var(--r-md); padding: 20px;
+    }
+    p + p { margin-top: 12px; }
+    .lead { font-size: 1rem; }
+    .muted { color: var(--muted); }
+    strong { color: #fff; font-weight: 700; }
+
+    /* ===== hero ===== */
+    .hero {
+      background: linear-gradient(135deg, #1e293b 0%, #172554 100%);
+      border: 1px solid var(--border); border-radius: var(--r-md);
+      padding: 26px 24px; margin-bottom: 36px;
+    }
+    .hero h2 { font-size: 1.35rem; font-weight: 800; margin-bottom: 6px; }
+    .hero h2 .en { color: var(--accent); }
+    .hero .tagline { color: var(--muted); font-size: 0.85rem; margin-bottom: 16px; }
+    .hero p { font-size: 0.95rem; }
+    .hero-chips { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 18px; }
+    .chip {
+      font-size: 0.78rem; font-weight: 600; padding: 4px 12px;
+      border-radius: 999px; background: rgba(56,189,248,.12);
+      color: var(--accent); border: 1px solid rgba(56,189,248,.25);
+    }
+
+    /* ===== steps ===== */
+    .steps { position: relative; padding-left: 34px; }
+    .steps::before {
+      content: ''; position: absolute; left: 15px; top: 12px; bottom: 12px;
+      width: 2px; background: linear-gradient(var(--accent), var(--accent2));
+      opacity: .35;
+    }
+    .step { position: relative; margin-bottom: 18px; }
+    .step-num {
+      position: absolute; left: -34px; top: 16px;
+      width: 32px; height: 32px; border-radius: 50%;
+      background: var(--bg); border: 2px solid var(--accent);
+      color: var(--accent); font-weight: 800; font-size: 0.9rem;
+      display: flex; align-items: center; justify-content: center;
+    }
+    .step-head { display: flex; align-items: baseline; flex-wrap: wrap; gap: 8px; margin-bottom: 4px; }
+    .step-head h3 { font-size: 1.05rem; font-weight: 800; }
+    .step-head .jp { color: var(--muted); font-size: 0.85rem; font-weight: 500; }
+    .ts {
+      margin-left: auto; font-size: 0.72rem; font-weight: 600;
+      color: var(--muted); font-variant-numeric: tabular-nums;
+      background: var(--bg3); padding: 2px 8px; border-radius: var(--r-sm);
+    }
+    .step-lead { font-size: 0.92rem; margin-bottom: 14px; }
+    ul.do { list-style: none; display: flex; flex-direction: column; gap: 6px; }
+    ul.do li { position: relative; padding-left: 18px; font-size: 0.9rem; }
+    ul.do li::before {
+      content: ''; position: absolute; left: 2px; top: 0.62em;
+      width: 6px; height: 6px; border-radius: 50%; background: var(--accent); opacity: .7;
+    }
+    .apply {
+      margin-top: 14px; padding: 12px 14px;
+      background: rgba(16,185,129,.07); border-left: 3px solid var(--green);
+      border-radius: 0 var(--r-sm) var(--r-sm) 0; font-size: 0.88rem;
+    }
+    .apply .label {
+      display: block; font-size: 0.72rem; font-weight: 700; letter-spacing: .06em;
+      color: var(--green); margin-bottom: 4px;
+    }
+
+    /* ===== 2-col cards ===== */
+    .grid2 { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 16px; }
+    .grid2 .card h3 { font-size: 1rem; font-weight: 700; margin-bottom: 4px; }
+    .grid2 .card .ts { margin-left: 0; display: inline-block; margin-bottom: 10px; }
+
+    /* ===== table ===== */
+    .table-wrap { overflow-x: auto; -webkit-overflow-scrolling: touch; }
+    table { width: 100%; border-collapse: collapse; font-size: 0.88rem; min-width: 560px; }
+    th, td { text-align: left; padding: 10px 12px; border-bottom: 1px solid var(--border); vertical-align: top; }
+    th { font-size: 0.75rem; text-transform: uppercase; letter-spacing: .06em; color: var(--muted); font-weight: 700; }
+    tbody tr:last-child td { border-bottom: none; }
+    td.fit { white-space: nowrap; }
+    .tag { font-size: 0.72rem; font-weight: 700; padding: 2px 8px; border-radius: 999px; display: inline-block; }
+    .tag.hi  { background: rgba(16,185,129,.15);  color: var(--green); }
+    .tag.mid { background: rgba(245,158,11,.15);  color: var(--yellow); }
+    .tag.lo  { background: rgba(239,68,68,.15);   color: var(--red); }
+
+    /* ===== vs table ===== */
+    .vs-table th.a, .vs-table td.a { background: rgba(100,116,139,.07); }
+    .vs-table th.b, .vs-table td.b { background: rgba(56,189,248,.06); }
+    .vs-table th.b { color: var(--accent); }
+    .vs-table td.axis { font-weight: 700; color: #fff; white-space: nowrap; }
+    .vs-table td.a { color: #b6c2d2; }
+    .vs-table td.b strong { color: var(--accent); }
+    .vs-table { min-width: 680px; }
+
+    /* ===== prescription ===== */
+    .rx { display: flex; flex-direction: column; gap: 12px; }
+    .rx-row {
+      display: grid; grid-template-columns: 1fr auto 1fr; gap: 12px; align-items: stretch;
+    }
+    .rx-box { border-radius: var(--r-sm); padding: 12px 14px; font-size: 0.87rem; }
+    .rx-box .label {
+      display: block; font-size: 0.7rem; font-weight: 700; letter-spacing: .06em; margin-bottom: 4px;
+    }
+    .rx-bad  { background: rgba(239,68,68,.07);  border: 1px solid rgba(239,68,68,.22); }
+    .rx-bad .label  { color: var(--red); }
+    .rx-good { background: rgba(16,185,129,.07); border: 1px solid rgba(16,185,129,.22); }
+    .rx-good .label { color: var(--green); }
+    .rx-arrow { display: flex; align-items: center; color: var(--muted); font-size: 1.1rem; }
+
+    /* ===== caution ===== */
+    .caution {
+      background: rgba(245,158,11,.06);
+      border: 1px solid rgba(245,158,11,.28);
+      border-radius: var(--r-md); padding: 20px 22px;
+    }
+    .caution h3 {
+      font-size: 0.95rem; font-weight: 800; color: var(--yellow);
+      margin-bottom: 10px; display: flex; align-items: center; gap: 8px;
+    }
+    .caution ol { padding-left: 20px; display: flex; flex-direction: column; gap: 12px; }
+    .caution li { font-size: 0.9rem; }
+    .caution li strong { display: block; color: #fde68a; margin-bottom: 2px; font-weight: 700; }
+
+    /* ===== checklist ===== */
+    .checklist { display: flex; flex-direction: column; gap: 10px; }
+    .check-item {
+      display: flex; gap: 12px; align-items: flex-start;
+      background: var(--bg2); border: 1px solid var(--border);
+      border-radius: var(--r-sm); padding: 12px 14px;
+    }
+    .check-item .when {
+      flex: 0 0 92px; font-size: 0.76rem; font-weight: 700;
+      color: var(--accent); padding-top: 2px;
+    }
+    .check-item .what { font-size: 0.89rem; }
+    .check-item .what small { display: block; color: var(--muted); font-size: 0.78rem; margin-top: 2px; }
+
+    .links { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 14px; }
+    .links a {
+      font-size: 0.83rem; color: var(--accent); text-decoration: none;
+      border: 1px solid var(--border); border-radius: var(--r-sm);
+      padding: 6px 12px; transition: .2s;
+    }
+    .links a:hover { border-color: var(--accent); background: rgba(56,189,248,.08); }
+
+    footer {
+      margin-top: 48px; padding-top: 20px; border-top: 1px solid var(--border);
+      font-size: 0.78rem; color: var(--muted); text-align: center;
+    }
+
+
+    /* ===== git guide ===== */
+    figure.zu { margin: 0; }
+    figure.zu img { width: 100%; height: auto; display: block; border-radius: var(--r-md); border: 1px solid var(--border); background: #fff; }
+    figure.zu figcaption { font-size: 0.8rem; color: var(--muted); margin-top: 8px; }
+    ol.flow { padding-left: 22px; display: flex; flex-direction: column; gap: 6px; font-size: 0.9rem; }
+    code { font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: 0.85em; background: var(--bg3); padding: 1px 6px; border-radius: 4px; }
+    .ui { color: #fff; font-weight: 700; }
+
+    @media (max-width: 560px) {
+      .main { padding: 20px 14px 48px; }
+      .steps { padding-left: 26px; }
+      .steps::before { left: 11px; }
+      .step-num { left: -26px; width: 26px; height: 26px; font-size: 0.8rem; }
+      .ts { margin-left: 0; }
+      .check-item { flex-direction: column; gap: 4px; }
+      .check-item .when { flex: none; }
+      .rx-row { grid-template-columns: 1fr; }
+      .rx-arrow { justify-content: center; transform: rotate(90deg); }
+    }
+  </style>
+</head>
+<body>
+<header class="header">
+  <h1>🔀 Git の基本</h1>
+  <span class="header-sub">push ／ プルリクエスト ／ Revert</span>
+  <a class="header-back" href="./index.html">← ダッシュボード</a>
+</header>
+
+<div class="main">
+
+  <div class="hero">
+    <h2><span class="en">Git</span> の1周</h2>
+    <div class="tagline">つなぐ → 提出させる → 差分を見る → 合わせる → 戻す</div>
+    <p>
+      このリポジトリは AI（Claude など）にブランチで作業させ、<strong>プルリクエスト（PR）で差分を見てから main に入れる</strong>運用です。
+      見る場所と押すボタンは毎回同じ。この1周を覚えれば、AI の変更を安全に受け取れます。
+    </p>
+    <div class="hero-chips">
+      <span class="chip">第1章 GitHubにつなぐ</span>
+      <span class="chip">第2章 PRで合わせる</span>
+      <span class="chip">第3章 Revertで戻す</span>
+    </div>
+  </div>
+
+  <section>
+    <div class="sec-title">図解（1枚まとめ）</div>
+    <figure class="zu">
+      <a href="./assets/images/git-github-basics.jpg"><img src="./assets/images/git-github-basics.jpg" width="1672" height="941" loading="lazy"
+        alt="高校生でもわかるGit。第1章 GitHubにつなぐ、第2章 プルリクエストで合わせる、差分の見方、マージ、第3章 Revertで戻す、の手順と画面の押す場所をまとめた図解"></a>
+      <figcaption>画像は生成図のため一部の文字が崩れています（リード文・差分の行番号など）。手順は下の本文を正としてください。タップで原寸表示。</figcaption>
+    </figure>
+  </section>
+
+  <section>
+    <div class="sec-title">手順</div>
+    <div class="steps">
+
+      <div class="step card">
+        <div class="step-num">1</div>
+        <div class="step-head"><h3>GitHubにつなぐ</h3><span class="jp">リポジトリを作って、手元の記録を上げる</span></div>
+        <ol class="flow">
+          <li>右上の <span class="ui">「+」→「New repository」</span></li>
+          <li>名前と公開範囲を設定（迷ったら <span class="ui">Private</span>）</li>
+          <li><span class="ui">「Create repository」</span>を押す</li>
+          <li>表示される3行のコマンド（<code>git remote add</code> 〜 <code>git push</code>）をコピーして AI に渡す</li>
+          <li>ブラウザを更新して、ファイルが表示されれば完了</li>
+        </ol>
+      </div>
+
+      <div class="step card">
+        <div class="step-num">2</div>
+        <div class="step-head"><h3>プルリクエストで合わせる</h3><span class="jp">AIの作業を提出させて、差分を見てから押す</span></div>
+        <ol class="flow">
+          <li>AI に<strong>新しいブランチ</strong>で作業させて push させる（main に直接 push させない）</li>
+          <li>黄色い帯の <span class="ui">「Compare &amp; pull request」</span></li>
+          <li><code>base: main</code> ← <code>compare: 作業ブランチ</code> になっているか確認し、題名を入れる</li>
+          <li><span class="ui">「Create pull request」</span></li>
+          <li><span class="ui">「Files changed」</span>で差分を確認（<strong>緑＝追加、赤＝削除</strong>）。頼んだ内容になっているか、頼んでいない変更が混ざっていないかを見る</li>
+          <li>「No conflicts with base branch」かつ CI が緑なら <span class="ui">「Merge pull request」</span></li>
+        </ol>
+        <div class="apply">
+          <span class="label">このリポジトリでは</span>
+          マージ前に CI（<code>check-site.yml</code> / <code>check-data.yml</code>）が緑であることを確認する。赤のままマージしない。
+          また <code>data/records.json</code> を書き換える PR と、<code>index.html</code> の生成領域（<code>// ===== DATA =====</code> ブロックなど）を手で直す PR はマージしない（前者は <code>sr-record.py</code> だけが書く、後者は翌朝の自動更新で戻る）。
+        </div>
+      </div>
+
+      <div class="step card">
+        <div class="step-num">3</div>
+        <div class="step-head"><h3>Revertで戻す</h3><span class="jp">合わせたあとでも打ち消せる</span></div>
+        <ol class="flow">
+          <li>マージ済みのプルリクエストを開く</li>
+          <li>右端の <span class="ui">「Revert」</span>を押す</li>
+          <li>打ち消し用の<strong>新しいプルリクエスト</strong>が作られるので、差分を見てマージする</li>
+        </ol>
+        <div class="apply">
+          <span class="label">注意</span>
+          「ボタン1つ」で戻るわけではない。Revert は<strong>逆向きの変更を新しい PR として作るだけ</strong>で、マージするまで main は戻らない。
+          また、マージ後に同じ行が別のコミット（毎朝の自動更新など）で書き換わっていると、ボタンが自動 Revert できずに失敗する。その場合は AI に「PR #番号 を revert する PR を作って」と頼む。
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <section>
+    <div class="sec-title">覚え方</div>
+    <div class="card">
+      <p><strong>ブランチ</strong>＝下書き用の別ノート、<strong>PR</strong>＝「この下書きを清書に写していいですか」という申請、<strong>マージ</strong>＝写す、<strong>Revert</strong>＝「写した内容を打ち消す」新しい申請。</p>
+      <p class="muted">履歴は消えない。消すのではなく、打ち消しを積む——だから何度でもやり直せる。</p>
+    </div>
+    <div class="links">
+      <a href="./index.html">📚 学習ダッシュボード</a>
+      <a href="./sq3r.html">🧠 学習法</a>
+    </div>
+  </section>
+
+  <footer>
+    このリポジトリ（denken3-study）を AI と運用するための操作メモ
+  </footer>
+
+</div>
+</body>
+</html>

@@ -16,6 +16,7 @@
 | [📚 学習進捗ページ](https://kfurufuru.github.io/denken3-study/) | ノート・テンプレートインデックス |
 | [📖 法規 知識Wiki](https://kfurufuru.github.io/denken-wiki/) | 条文×過去問クロスリファレンス → **入口は[分野別過去問](https://kfurufuru.github.io/denken-wiki/kakomon/by-field/)。条文ページは辞書として引く** |
 | [🧠 学習法](https://kfurufuru.github.io/denken3-study/sq3r.html) | SQ3R・平行読書法の要点、**一般的な暗記型学習と電験3種のやり方の違い**、科目別の使い分け |
+| [🔀 Git の基本](https://kfurufuru.github.io/denken3-study/git-guide.html) | GitHub につなぐ → PR で差分を見てマージ → Revert で戻す。AI に作業させるときの操作手順 |
 
 > 🤖 記録はローカルの sr-record.py が data/records.json に直接 commit + push する（唯一の writer）。ダッシュボードの再生成は build-quiz.yml を手動実行。
 > 旧経路（ChatGPT → Make.com → repository_dispatch → append_record.py）は 2026-07-20 に退役済み。
