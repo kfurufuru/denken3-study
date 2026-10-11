@@ -7,6 +7,9 @@
 追加した際は手で検査したが、手検査は次から効かない。
 
 **射程**: 構造だけを見る。内容の正しさは一切見ない。
+あわせて mistakes/weak_points.md の参照（`rec:日付/theme_id/attempt` と `q:問題ID`）が
+records.json・本ファイルに実在するかを見る（2026-10-11 追加。誤答記録 → 原因パターン →
+検証問題を辿れるようにしたため。参照先が消えたり綴りが違ったりすると辿れなくなる）。
 問題文・模範解答が学問的に正しいか、数値が実在の規格と一致するかは検査しない。
 それは wiki-review の観点レビューと第4監修の仕事で、本スクリプトでは代替できない。
 
@@ -27,6 +30,9 @@ except Exception:
     pass
 
 DEFAULT = Path(__file__).resolve().parent.parent / "data" / "concept-questions.json"
+WEAK_POINTS = Path(__file__).resolve().parent.parent / "mistakes" / "weak_points.md"
+# バッククォートで囲んだ参照だけを拾う（書式の説明文に出てくる雛形は囲まない）
+WP_REF = re.compile(r"`(rec|q):([^`]+)`")
 
 REQUIRED = [
     "id", "wiki", "section", "theme_id", "theme", "subject", "seq",
@@ -136,6 +142,8 @@ def check(path):
         except Exception as e:
             warns.append(f"records.json と突合できませんでした: {e}")
 
+    errors += check_weak_points(qs, rec)
+
     print(f"検査 {len(qs)} 問 / 違反 {len(errors)} 件")
     for w in warns:
         print(f"  [WARN] {w}")
@@ -149,6 +157,28 @@ def check(path):
     print("  科目別: " + " / ".join(f"{k} {v}" for k, v in sorted(by_sub.items())))
     print("判定: PASS（構造のみ。内容の正しさは検査していません）")
     return 0
+
+
+def check_weak_points(qs, rec):
+    """weak_points.md の `rec:` `q:` 参照が実在するか。"""
+    if not WEAK_POINTS.exists():
+        return []
+    errors = []
+    qids = {q.get("id") for q in qs}
+    keys = set()
+    if rec.exists():
+        try:
+            keys = {f"{r.get('date')}/{r.get('theme_id')}/{r.get('attempt')}"
+                    for r in json.loads(rec.read_text(encoding="utf-8"))}
+        except Exception:
+            pass  # records.json の読み込み失敗は上で WARN 済み
+    text = WEAK_POINTS.read_text(encoding="utf-8")
+    for kind, ref in sorted(set(WP_REF.findall(text))):
+        if kind == "q" and ref not in qids:
+            errors.append(f"weak_points.md: 問題IDが存在しない: q:{ref}")
+        if kind == "rec" and keys and ref not in keys:
+            errors.append(f"weak_points.md: records.json に該当記録が無い: rec:{ref}")
+    return errors
 
 
 if __name__ == "__main__":
