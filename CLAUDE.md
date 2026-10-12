@@ -17,7 +17,7 @@ python scripts/check_concept_questions.py
 ## 書き込みの持ち主（誰がどこを書くか）
 
 - `data/records.json` の writer はローカルの `sr-record.py` だけ。手編集・workflow からの追記はしない。
-- 学習内容（`notes/` `mistakes/` `data/` `zukai/` の数値・条文・公式）を変える PR はエージェントがマージしない。ユーザーが Files changed で数値と条文番号を見てからマージする（CI は内容の正しさを見ない。#15, #30, #32）。
+- 学習内容（`notes/` `mistakes/` `data/` `zukai/` の数値・条文・公式）を変える PR は、マージ前に変えた値を1〜3問のクイズにしてユーザーに先に答えてもらう（値は見せない）。一致したらマージしてよい。食い違ったら出典（試験センター公式・電技解釈）で確かめてから直し、ユーザーの答えだけを根拠に値を書き換えない（CI は内容の正しさを見ない。#15, #30, #32）。
 - `index.html` の一部は生成物で、手で直しても翌朝戻る。
   - `update_dashboard.py`（毎朝 update.yml）: `// ===== DATA =====` ブロック、達成率リング、`EXAM_DATE` の JS 行など
   - `scripts/generate_quiz_dashboard.py`（build-quiz.yml 手動）: QUIZ_MAIN / QUIZ_CHART セクション
