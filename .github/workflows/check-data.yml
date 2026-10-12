@@ -9,6 +9,7 @@ on:
     paths:
       - 'data/concept-questions.json'
       - 'data/records.json'
+      - 'mistakes/weak_points.md'
       - 'scripts/check_concept_questions.py'
       - '.github/workflows/check-data.yml'
   push:
@@ -16,6 +17,7 @@ on:
     paths:
       - 'data/concept-questions.json'
       - 'data/records.json'
+      - 'mistakes/weak_points.md'
   workflow_dispatch:
 
 permissions:
