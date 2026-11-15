@@ -16,7 +16,7 @@ python scripts/check_concept_questions.py
 
 ## 書き込みの持ち主（誰がどこを書くか）
 
-- `data/records.json` の writer はローカルの `sr-record.py` だけ。手編集・workflow からの追記はしない。
+- `data/records.json` の writer は `sr-record.py`（secretary-portal の `scripts/`）だけ。PC でもクラウドのセッションでも同じスクリプトを通す（クラウドはこのリポジトリの clone を `SR_DASHBOARD_DIR` で指し、`--no-rebuild` で流す）。手編集・workflow からの追記はしない。
 - 学習内容（`notes/` `mistakes/` `data/` `zukai/` の数値・条文・公式）を変える PR は、マージ前に変えた値を1〜3問のクイズにしてユーザーに先に答えてもらう（値は見せない）。一致したらマージしてよい。食い違ったら出典（試験センター公式・電技解釈）で確かめてから直し、ユーザーの答えだけを根拠に値を書き換えない（CI は内容の正しさを見ない。#15, #30, #32）。
 - `index.html` の一部は生成物で、手で直しても翌朝戻る。
   - `update_dashboard.py`（毎朝 update.yml）: `// ===== DATA =====` ブロック、達成率リング、`EXAM_DATE` の JS 行など
