@@ -734,5 +734,27 @@
     "confidence_pre": null,
     "error_tag": "公式選択ミス",
     "self_summary": "総落差は損失込み、有効落差は損失を引いた残りで式に使う"
+  },
+  {
+    "theme_id": "genshiryoku-kakubunretsu-energy",
+    "theme": "原子力・核分裂エネルギー（質量欠損）",
+    "subject": "電力",
+    "date": "2026-11-15",
+    "result": "ng",
+    "attempt": 1,
+    "next_review": "SR1",
+    "memo": "H23問4空欄。質量欠損＝反応前後で減る質量と分からず、光速cが問題文に無く換算できなかった",
+    "patch": "E=mc²。m=U-235の質量×0.09%（燃料全体でなくU-235だけ）。c=3.0×10⁸m/sは暗記。kgで入れる",
+    "L1": "",
+    "L2": "",
+    "phase": "",
+    "ease_factor": 2.3,
+    "interval_days": 1,
+    "fsrs_stability": 0.212,
+    "fsrs_difficulty": 6.4133,
+    "recall_test_due": null,
+    "confidence_pre": null,
+    "error_tag": "概念不理解",
+    "self_summary": "質量欠損の割合を確かめる"
   }
 ]
