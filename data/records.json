@@ -712,5 +712,27 @@
     "confidence_pre": null,
     "error_tag": "概念不理解",
     "self_summary": "熱効率を見たら、分子/分母は何かを確認する。○○熱効率とは何か？○○発電は何か？と概念が理解不足なので類題をたくさん解き、覚える。"
+  },
+  {
+    "theme_id": "yousui-hatsuden",
+    "theme": "揚水発電（有効落差・揚程と損失水頭）",
+    "subject": "電力",
+    "date": "2026-11-14",
+    "result": "ng",
+    "attempt": 1,
+    "next_review": "SR1",
+    "memo": "総落差450mを有効落差と思い込みH=450で計算。損失水頭の記載は見たが曖昧なまま進め、(a)(2)・(b)(5)を選んだ",
+    "patch": "「損失はH₀の○%」と書かれたらH₀は損失込みの総落差。発電はH₀−hで効率を掛け、揚水はH₀+hで効率で割る。曖昧なら図を描いてから計算",
+    "L1": "",
+    "L2": "",
+    "phase": "",
+    "ease_factor": 2.3,
+    "interval_days": 1,
+    "fsrs_stability": 0.212,
+    "fsrs_difficulty": 6.4133,
+    "recall_test_due": null,
+    "confidence_pre": null,
+    "error_tag": "公式選択ミス",
+    "self_summary": "総落差は損失込み、有効落差は損失を引いた残りで式に使う"
   }
 ]
