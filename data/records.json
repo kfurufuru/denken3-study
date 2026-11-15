@@ -690,5 +690,27 @@
     "confidence_pre": null,
     "error_tag": "未分類",
     "self_summary": ""
+  },
+  {
+    "theme_id": "combined-cycle-netsukouritsu",
+    "theme": "火力・コンバインド熱効率",
+    "subject": "電力",
+    "date": "2026-11-15",
+    "result": "ng",
+    "attempt": 1,
+    "next_review": "SR1",
+    "memo": "η_s（蒸気タービン側の熱効率）の分母がガスタービン排熱だと知らず解けなかった。確認問題は問1を28.6→28.5と切り捨て、問2は0.44を0.34と入力ミス",
+    "patch": "効率を見たら分母を余白に書く。CCはη=η_g+η_s(1−η_g)。次段が出力を受けるなら掛け算、捨てた熱を受けるなら(1−η)を掛けて足す",
+    "L1": "",
+    "L2": "",
+    "phase": "",
+    "ease_factor": 2.3,
+    "interval_days": 1,
+    "fsrs_stability": 0.212,
+    "fsrs_difficulty": 6.4133,
+    "recall_test_due": null,
+    "confidence_pre": null,
+    "error_tag": "概念不理解",
+    "self_summary": "熱効率を見たら、分子/分母は何かを確認する。○○熱効率とは何か？○○発電は何か？と概念が理解不足なので類題をたくさん解き、覚える。"
   }
 ]
