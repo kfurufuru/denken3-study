@@ -1679,7 +1679,8 @@ function renderTodaySessions() {
     const prevResultHtml = s.last_result
       ? `<span style="font-size:.7rem;padding:3px 8px;border-radius:6px;background:rgba(255,255,255,.04);border:1px solid var(--border);color:var(--muted2)">前回: ${s.last_result==='ok'?'🟢 OK':s.last_result==='risky'?'🟡 Risky':'🔴 NG'}</span>`
       : '';
-    const pct = s.memory_retention !== undefined ? s.memory_retention : 70;
+    // 記憶残量は records.json の FSRS から出したものだけを出す（無いカードに固定値を出さない）
+    const pct = typeof s.memory_retention === 'number' ? s.memory_retention : null;
     const errCtxHtml = s.last_result && s.last_result !== 'ok' && s.memo
       ? `<div class="err-context-inner"><div class="err-context-label">前回のメモ</div><div>${s.memo}</div></div>`
       : '';
@@ -1705,7 +1706,7 @@ function renderTodaySessions() {
         </div>
       </div>
       <div class="s-detail${isActive?' open':''}" id="s-detail-${idx}">
-        ${memoryBarHTML(pct)}
+        ${pct !== null ? memoryBarHTML(pct) : ''}
         ${errCtxHtml}
         <div class="feedback-row">
           <button class="fb-btn-rich btn-ok" disabled>

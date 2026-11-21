@@ -432,6 +432,8 @@ def compute_today_sessions(notion_records, records_list):
                     "last_result":   last_res if last_res in ("ok", "risky", "ng") else "ng",
                     # カードの「前回のメモ」欄（index.html が innerHTML に差し込むのでエスケープする）
                     "memo":          html_lib.escape(rec.get("memo", "") or ""),
+                    # カードの記憶残量バー。FSRS の想起確率 R（今日時点）を % にする（sr_order と同じ計算）
+                    "memory_retention": round(100 * sr_order.retrievability(rec, _today())),
                 }
 
         # Notion弱点から探す
