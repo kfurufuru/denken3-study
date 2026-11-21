@@ -13,6 +13,12 @@
 import os, json, re, datetime, requests
 import sys
 
+# SR 復習の候補・期日・並べ方の正本は secretary-portal の scripts/sr_order.py。
+# この repo の CI からは import できないので、vendor/ にバイト一致の写しを置く（vendor/README.md）。
+# 並べ方をここに書き直さない（同じ records.json から別の順序が出る。R2）。
+sys.path.insert(0, os.path.join(os.path.dirname(os.path.abspath(__file__)), "vendor"))
+import sr_order  # noqa: E402
+
 # Windows cp932 コンソールで 📡/📄/✅ 等の非ASCII print が UnicodeEncodeError で
 # 落ちないように（file書込みは utf-8 明示済だが print が cp932 で死ぬ位置依存バグ予防）
 try:
@@ -372,12 +378,9 @@ def compute_today_sessions(notion_records, records_list):
     days_left = (EXAM_DATE - _today()).days
 
     # --- SR復習候補を抽出 ---
-    sr_candidates = []
-    for rec in records_list:
-        nr = rec.get("next_review", "")
-        rec_date = rec.get("date", "")
-        if nr in ("SR1", "SR2", "SR3", "SR4", "SR5") and rec_date <= today_str:
-            sr_candidates.append(rec)
+    # テーマの最新の記録で期日が今日以前のものを、未克服が先・想起確率の低い順に並べる
+    # （sr-quick の sr-pick-next.py・セッション開始フックと同じ順）。
+    sr_candidates = sr_order.due_themes(records_list, _today())
 
     # --- Notion弱点候補を抽出（未達成・重要度順）---
     notion_weak = []

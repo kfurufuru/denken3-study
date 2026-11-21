@@ -15,6 +15,8 @@
   3. 試験日が update_dashboard.py の EXAM_DATE 1か所と一致しているか
      （index.html の JS 定数・手書きラベルの日付と試験回「R08下」の両方）
   4. onclick="f(...)" の f が同じファイル内で定義されているか
+  5. vendor/ の写し（sr_order.py・fsrs_engine.py）が secretary-portal の正本とバイト一致か
+     （正本に届くのは、この repo が .secretary/ の中に置かれた PC だけ。CI では照合せず WARN）
 外部 URL の生死（HTTP 200 か）は見ない。ネットワーク依存で CI が不安定になるため。
 内容の正しさ（合格点・数値・解説）も見ない。
 
@@ -33,6 +35,9 @@ except Exception:
     pass
 
 ROOT = Path(__file__).resolve().parent.parent
+
+# secretary-portal の scripts/ から写したファイル（vendor/README.md）
+VENDORED = ("sr_order.py", "fsrs_engine.py")
 
 # 退役済みで、二度と戻ってはいけない URL。直したら理由付きでここに足す。
 DENYLIST = {
@@ -162,6 +167,18 @@ def main():
             name = m.group(1)
             if not re.search(JS_DEF.format(re.escape(name)), text):
                 errors.append(f"{relpath(path)}:{lineno(text, m.start())}: onclick の {name}() が定義されていない")
+
+    # 5. vendor/ の写しが正本と一致するか
+    for name in VENDORED:
+        copy = ROOT / "vendor" / name
+        if not copy.exists():
+            errors.append(f"vendor/{name} が無い（update_dashboard.py が import する）")
+            continue
+        src = ROOT.parent / "scripts" / name
+        if not src.exists():
+            warns.append(f"vendor/{name}: 正本（secretary-portal の scripts/{name}）に届かないので照合しない")
+        elif src.read_bytes() != copy.read_bytes():
+            errors.append(f"vendor/{name} が正本 scripts/{name} と違う。正本を写し直す（vendor/README.md）")
 
     for w in warns:
         print(f"[WARN] {w}")
