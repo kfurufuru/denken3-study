@@ -34,6 +34,12 @@
 - 対策: `sr-record.py` に「本実行では読む前に pull する」を足した（secretary-portal #2218）。改修版では古い clone からの記録も両方 origin に届いた。
 - 確認条件: 次に PC とクラウドの両方で記録した日に、後から書いた側が `[WARN] git pull 失敗` を出さずに `[OK] origin へ push 完了` になったか。
 
+### R-005 構文エラーのまま commit した（#47 の 1382179 → d3954af）
+- 起きたこと: `check_site.py` の改行の置換を、heredoc の中の Python で文字列置換して書いた。`\r\n` が本物の改行になり、構文エラーになった。検査の出力を見る前に、同じコマンドの中で commit まで流した。
+- 原因: 置換の結果を確かめる段（`py_compile`）と commit を1つのコマンドにまとめた。エスケープの多い置換を、文字列置換で書いた。
+- 対策: エスケープ（`\r` `\n` `\\`）を含む変更は Edit で書く。`python -m py_compile` と検査を通してから、別のコマンドで commit する。
+- 確認条件: 次に `scripts/` か `update_dashboard.py` を変える作業で、構文エラーを直すだけの commit が出なかったか。
+
 ## 確認済み
 
 （まだなし）
