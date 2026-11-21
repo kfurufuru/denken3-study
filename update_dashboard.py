@@ -12,6 +12,7 @@
 
 import os, json, re, datetime, requests
 import sys
+import html as html_lib
 
 # SR 復習の候補・期日・並べ方の正本は secretary-portal の scripts/sr_order.py。
 # この repo の CI からは import できないので、vendor/ にバイト一致の写しを置く（vendor/README.md）。
@@ -429,6 +430,8 @@ def compute_today_sessions(notion_records, records_list):
                     "priority":      rec.get("priority", "B"),
                     "type":          "review",
                     "last_result":   last_res if last_res in ("ok", "risky", "ng") else "ng",
+                    # カードの「前回のメモ」欄（index.html が innerHTML に差し込むのでエスケープする）
+                    "memo":          html_lib.escape(rec.get("memo", "") or ""),
                 }
 
         # Notion弱点から探す
