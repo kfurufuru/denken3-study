@@ -756,5 +756,27 @@
     "confidence_pre": null,
     "error_tag": "概念不理解",
     "self_summary": "質量欠損の割合を確かめる"
+  },
+  {
+    "theme_id": "furyoku-shutsuryoku",
+    "theme": "風力発電（出力・パワー係数）",
+    "subject": "電力",
+    "date": "2026-11-21",
+    "result": "ng",
+    "attempt": 1,
+    "next_review": "SR1",
+    "memo": "H30電力問5。選んだ肢なし。ロータ=受風面積πr²が作れず、流れのパワー=質量流量ρAv×½v²の組み立てが出なかった（公式忘れも重なる）",
+    "patch": "P=Cp×½ρAv³[W]。ρAv=1秒に通る質量、½v²=1kgの運動E。単位はρr²v³まで決まるが½とCpは決まらない",
+    "L1": "",
+    "L2": "",
+    "phase": "",
+    "ease_factor": 2.3,
+    "interval_days": 1,
+    "fsrs_stability": 0.212,
+    "fsrs_difficulty": 6.4133,
+    "recall_test_due": null,
+    "confidence_pre": null,
+    "error_tag": "概念不理解",
+    "self_summary": "風速から出力を求める問題は、風速は出力の3乗になることを足しかめる。また、単位合わせをして、最終Wになるように検算する。"
   }
 ]
