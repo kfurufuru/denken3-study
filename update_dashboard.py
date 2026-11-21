@@ -404,21 +404,25 @@ def compute_today_sessions(notion_records, records_list):
         }[slot_name]
 
         # SR復習から探す
+        # records.json の行は subject（理論/電力/機械/法規）と theme を持ち、
+        # question_id・category・last_result は持たない（sr-record.py が書く形）。
         for i, rec in enumerate(sr_candidates):
-            cat = rec.get("category", "") or rec.get("subject", "") or ""
+            subject = rec.get("subject", "") or ""
+            cat = rec.get("category", "") or subject
             cat_is_theory = any(
                 c in cat for c in ("理論", "電気回路", "電磁気", "電子", "計測")
             )
             if (is_theory and cat_is_theory) or (not is_theory and not cat_is_theory):
                 sr_candidates.pop(i)
-                last_res = rec.get("last_result", "ng")
+                last_res = rec.get("last_result", "") or rec.get("result", "ng")
                 return {
                     "slot":          slot_name,
                     "label":         slot_meta["label"],
                     "emoji":         slot_meta["emoji"],
-                    "subject_label": slot_meta["subject_label"],
-                    "question_id":   rec.get("question_id", ""),
-                    "category":      rec.get("category", ""),
+                    # 枠の既定の科目ではなく、その復習の実際の科目を出す（電力を「法規」と出さない）
+                    "subject_label": subject or slot_meta["subject_label"],
+                    "question_id":   rec.get("question_id", "") or rec.get("theme", "") or rec.get("theme_id", ""),
+                    "category":      rec.get("category", "") or subject,
                     "priority":      rec.get("priority", "B"),
                     "type":          "review",
                     "last_result":   last_res if last_res in ("ok", "risky", "ng") else "ng",
