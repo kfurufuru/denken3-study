@@ -39,6 +39,11 @@ ROOT = Path(__file__).resolve().parent.parent
 # secretary-portal の scripts/ から写したファイル（vendor/README.md）
 VENDORED = ("sr_order.py", "fsrs_engine.py")
 
+
+def _lf(data: bytes) -> bytes:
+    """CRLF を LF にそろえる（git の autocrlf で写しの改行コードが変わっても、ずれに数えない）。"""
+    return data.replace(b"\r\n", b"\n")
+
 # 退役済みで、二度と戻ってはいけない URL。直したら理由付きでここに足す。
 DENYLIST = {
     "kfurufuru.github.io/secretary-portal/": "404。secretary-portal-public/ を使う（#22, #27）",
@@ -178,11 +183,7 @@ def main():
         if not src.exists():
             warns.append(f"vendor/{name}: 正本（secretary-portal の scripts/{name}）に届かないので照合しない")
         # 改行コードだけの違い（git の autocrlf）はずれに数えない
-        elif src.read_bytes().replace(b"
-", b"
-") != copy.read_bytes().replace(b"
-", b"
-"):
+        elif _lf(src.read_bytes()) != _lf(copy.read_bytes()):
             errors.append(f"vendor/{name} が正本 scripts/{name} と違う。正本を写し直す（vendor/README.md）")
 
     for w in warns:
