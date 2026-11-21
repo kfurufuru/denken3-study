@@ -177,7 +177,12 @@ def main():
         src = ROOT.parent / "scripts" / name
         if not src.exists():
             warns.append(f"vendor/{name}: 正本（secretary-portal の scripts/{name}）に届かないので照合しない")
-        elif src.read_bytes() != copy.read_bytes():
+        # 改行コードだけの違い（git の autocrlf）はずれに数えない
+        elif src.read_bytes().replace(b"
+", b"
+") != copy.read_bytes().replace(b"
+", b"
+"):
             errors.append(f"vendor/{name} が正本 scripts/{name} と違う。正本を写し直す（vendor/README.md）")
 
     for w in warns:
