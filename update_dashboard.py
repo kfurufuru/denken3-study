@@ -114,6 +114,15 @@ def get_prop(page, name):
     return ""
 
 
+def is_theory_row(page):
+    """Notion の行が理論の行か。科目が空の行は理論として扱う。
+
+    DB は理論の行だけで始まり、既存の理論の行は「科目」が空のまま。
+    電力・機械・法規の行を足しても、理論の集計に混ざらないようにする。
+    """
+    return get_prop(page, "科目") in ("", "理論")
+
+
 # ===== 統計計算（既存） =====
 
 def compute_stats(records):
@@ -637,6 +646,8 @@ def compute_portal_summary(notion_records, records_list):
     # 科目別: 理論のみ Notion DB から集計
     by_cat = {}
     for r in notion_records:
+        if not is_theory_row(r):
+            continue
         cat = get_prop(r, "分野")
         if not cat:
             continue
@@ -847,13 +858,16 @@ if __name__ == "__main__":
     print("📡 Notion からデータ取得中...")
     notion_records = query_all(DB_ID)
     print(f"   {len(notion_records)}件 取得完了")
-    stats = compute_stats(notion_records)
+    # 達成率・弱点リスト・今日の学習の弱点は理論の行だけで出す（他科目の行を混ぜない）
+    theory_records = [r for r in notion_records if is_theory_row(r)]
+    print(f"   うち理論 {len(theory_records)}件")
+    stats = compute_stats(theory_records)
 
     print("📂 data/records.json 読み込み中...")
     records = load_records()
     print(f"   {len(records)}件 ローカルレコード読み込み完了")
 
-    today_data  = compute_today_sessions(notion_records, records)
+    today_data  = compute_today_sessions(theory_records, records)
     pdca_data   = compute_pdca_data(records)
     past_errors = compute_past_errors(records)
 
