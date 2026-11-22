@@ -778,5 +778,27 @@
     "confidence_pre": null,
     "error_tag": "概念不理解",
     "self_summary": "風速から出力を求める問題は、風速は出力の3乗になることを足しかめる。また、単位合わせをして、最終Wになるように検算する。"
+  },
+  {
+    "theme_id": "hyakubunritsu-impedance",
+    "theme": "百分率インピーダンス（%Z の定義・短絡電流）",
+    "subject": "電力",
+    "date": "2026-11-21",
+    "result": "ng",
+    "attempt": 1,
+    "next_review": "SR1",
+    "memo": "H3問11 66kV Z=11Ω I=300A。ZI=3300Vを何で割るか不明。%Zが1相の降下÷1相の電圧の比と未理解。選んだ肢は未回答",
+    "patch": "%Z=ZI/E×100（E=相電圧）=√3ZI/V×100。答えはZI/V(=5%)の√3倍。3倍なら√3を二重に入れている",
+    "L1": "",
+    "L2": "",
+    "phase": "",
+    "ease_factor": 2.3,
+    "interval_days": 1,
+    "fsrs_stability": 0.212,
+    "fsrs_difficulty": 6.4133,
+    "recall_test_due": null,
+    "confidence_pre": null,
+    "error_tag": "概念不理解",
+    "self_summary": ""
   }
 ]
