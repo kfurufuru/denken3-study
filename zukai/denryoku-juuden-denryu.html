@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>ケーブルの充電電流ドリル | 電験3種 学習システム</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Noto+Sans+JP:wght@400;500;700;800&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #0f172a; --bg2: #1e293b; --bg3: #263347;
+      --accent: #38bdf8; --text: #e2e8f0; --muted: #64748b; --muted2: #94a3b8;
+      --border: rgba(255,255,255,0.08);
+      --green: #10b981; --yellow: #f59e0b; --red: #ef4444;
+      --font: 'Inter','Noto Sans JP',sans-serif;
+      --r-sm: 6px; --r-md: 12px;
+      line-break: strict; overflow-wrap: break-word; word-break: normal;
+    }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body { background: var(--bg); color: var(--text); font-family: var(--font); font-size: 0.95rem; line-height: 1.75; min-height: 100vh; }
+    .header { background: var(--bg2); border-bottom: 1px solid var(--border); padding: 14px 16px; display: flex; flex-wrap: wrap; align-items: center; gap: 4px 12px; position: sticky; top: 0; z-index: 10; }
+    .header h1 { font-size: 1.05rem; font-weight: 700; color: var(--accent); }
+    .header-sub { font-size: 0.78rem; color: var(--muted2); }
+    .header-back { margin-left: auto; font-size: 0.82rem; color: var(--muted2); text-decoration: none; padding: 4px 12px; border: 1px solid var(--border); border-radius: var(--r-sm); white-space: nowrap; }
+    .header-back:hover { color: var(--accent); border-color: var(--accent); }
+    .main { max-width: 820px; margin: 0 auto; padding: 24px 16px 64px; }
+    section { margin-bottom: 36px; }
+    .sec-title { font-size: 0.8rem; font-weight: 700; color: var(--muted2); letter-spacing: 0.08em; margin-bottom: 12px; padding-bottom: 6px; border-bottom: 1px solid var(--border); }
+    .card { background: var(--bg2); border: 1px solid var(--border); border-radius: var(--r-md); padding: 16px; }
+    .goal { border-left: 4px solid var(--accent); }
+    .task { border-left: 4px solid var(--yellow); }
+    ul, ol { padding-left: 1.3em; }
+    li { margin: 4px 0; }
+    strong { color: #fff; }
+    .red { color: var(--red); } .green { color: var(--green); } .yellow { color: var(--yellow); } .dim { color: var(--muted2); }
+    .fig { background: var(--bg); border: 1px solid var(--border); border-radius: var(--r-md); padding: 8px; margin-bottom: 10px; }
+    svg { display: block; width: 100%; height: auto; }
+    svg text { font-family: var(--font); }
+    svg .t { fill: var(--text); font-size: 16px; }
+    svg .t.dim { fill: var(--muted2); }
+    svg .leg { font-size: 15px; }
+    svg .head { fill: var(--accent); font-size: 16px; font-weight: 700; }
+    svg .lab { fill: var(--text); font-size: 17px; font-weight: 700; }
+    svg .ans { fill: var(--green); font-size: 16px; font-weight: 700; }
+    svg .ans.leg { font-size: 15px; }
+    svg .blank { fill: var(--yellow); font-size: 22px; font-weight: 800; }
+    svg .fault { fill: var(--yellow); font-size: 20px; }
+    details { background: var(--bg2); border: 1px solid var(--border); border-radius: var(--r-sm); margin: 8px 0; }
+    details > summary { cursor: pointer; padding: 10px 14px; font-weight: 600; color: var(--accent); list-style: none; }
+    details > summary::-webkit-details-marker { display: none; }
+    details > summary::before { content: "▶ "; font-size: 0.75em; }
+    details[open] > summary::before { content: "▼ "; }
+    details > .body { padding: 0 14px 14px; }
+    .answers { display: grid; gap: 6px; }
+    .calc { font-family: 'Inter', monospace; background: var(--bg3); border-radius: var(--r-sm); padding: 12px 14px; overflow-x: auto; }
+    .calc div { white-space: nowrap; }
+    .calc .c { color: var(--muted2); font-family: var(--font); }
+    .check li { list-style: none; margin-left: -1.3em; }
+    .check li::before { content: "☐ "; color: var(--accent); }
+    table { border-collapse: collapse; width: 100%; font-size: 0.9rem; }
+    th, td { border: 1px solid var(--border); padding: 6px 8px; text-align: left; }
+    th { color: var(--muted2); font-weight: 600; }
+    a { color: var(--accent); }
+    code { background: var(--bg3); padding: 1px 6px; border-radius: 4px; font-size: 0.88em; }
+  </style>
+</head>
+<body>
+<header class="header">
+  <div>
+    <h1>ケーブルの充電電流：C の両端と、地絡で動く大地</h1>
+    <div class="header-sub">元の弱点：mistakes/weak_points.md「[電力] 充電電流で、静電容量にかかる電圧を確かめずに線間電圧を使う（DE-01）」（H24 電力 問11）／ 作成日 2026-11-22</div>
+  </div>
+  <a class="header-back" href="../index.html">← ダッシュボード</a>
+</header>
+
+<main class="main">
+
+  <section>
+    <div class="sec-title">この図で答えられるようになること</div>
+    <div class="card goal">
+      <p>線間電圧の<strong>正三角形</strong>の上で、どの静電容量についても「両端はどの2点か」を指し、その<strong>2点の距離＝かかる電圧</strong>として言える。</p>
+      <p style="margin-top:8px">そのうえで、非接地系の1線地絡で<strong>大地の点が N から地絡相の頂点へ移る</strong>こと、だから健全相の対地電圧と相電圧が別の値になることを、図で説明できる。</p>
+      <p class="dim" style="margin-top:8px;font-size:.88rem">前提：ケーブルは心線と大地（遮へい層）を極板にしたコンデンサ。交流で充放電を繰り返すので、無負荷でも電流が流れる。これが充電電流で、<strong>I ＝ ωC ×（その C の両端の電圧）</strong>。</p>
+    </div>
+  </section>
+
+  <section>
+    <div class="sec-title">描き直し課題（先に紙に描く）</div>
+    <div class="card task">
+      <p><strong>紙に、辺 6.6 kV の正三角形 a・b・c を2つ描いてから下に進む。</strong>1つ目は平常時、2つ目は a 相が完全地絡した非接地系。</p>
+      <p style="margin-top:8px">描くときに入れる要素：</p>
+      <ul>
+        <li>中性点 N の位置と、N から各頂点までの電圧</li>
+        <li>平常時の大地の位置（記号 ⏚ で）</li>
+        <li>作用静電容量 C・対地静電容量 Cs・線間静電容量 Cm が、それぞれ<strong>どの2点の間</strong>か（線分で）</li>
+        <li>地絡時の大地の位置（<strong>1点だけ</strong>）</li>
+        <li>地絡時の b 相の対地電圧と相電圧を、<strong>別々の線分</strong>で、kV 付きで</li>
+      </ul>
+    </div>
+  </section>
+
+  <section>
+    <div class="sec-title">空欄版の図</div>
+    <div class="fig"><svg viewBox="0 0 380 440" role="img" aria-label="平常時の電位の三角形（空欄版）" xmlns="http://www.w3.org/2000/svg"><text x="10.0" y="24.0" class="head" text-anchor="start">【1】平常時</text>
+<line x1="190.0" y1="62.0" x2="50.0" y2="304.5" stroke="var(--muted)" stroke-width="2"/>
+<line x1="50.0" y1="304.5" x2="330.0" y2="304.5" stroke="var(--muted)" stroke-width="2"/>
+<line x1="330.0" y1="304.5" x2="190.0" y2="62.0" stroke="var(--muted)" stroke-width="2"/>
+<line x1="50.0" y1="304.5" x2="330.0" y2="304.5" stroke="#a78bfa" stroke-width="4"/>
+<line x1="190.0" y1="62.0" x2="190.0" y2="223.7" stroke="var(--accent)" stroke-width="4"/>
+<g opacity="1.0"><line x1="190.0" y1="229.7" x2="190.0" y2="241.7" stroke="var(--green)" stroke-width="2"/><line x1="178.0" y1="241.7" x2="202.0" y2="241.7" stroke="var(--green)" stroke-width="2.5"/><line x1="182.0" y1="246.7" x2="198.0" y2="246.7" stroke="var(--green)" stroke-width="2.5"/><line x1="186.0" y1="251.7" x2="194.0" y2="251.7" stroke="var(--green)" stroke-width="2.5"/></g>
+<circle cx="190.0" cy="62.0" r="5" fill="var(--text)"/>
+<circle cx="50.0" cy="304.5" r="5" fill="var(--text)"/>
+<circle cx="330.0" cy="304.5" r="5" fill="var(--text)"/>
+<circle cx="190.0" cy="223.7" r="5" fill="var(--accent)"/>
+<text x="178.0" y="56.0" class="lab" text-anchor="end">a</text>
+<text x="46.0" y="328.5" class="lab" text-anchor="middle">b</text>
+<text x="334.0" y="328.5" class="lab" text-anchor="middle">c</text>
+<text x="200.0" y="215.7" class="lab" text-anchor="start">N</text>
+<text x="212.0" y="249.7" class="t dim" text-anchor="start">大地</text>
+<text x="180.0" y="150.8" class="blank" text-anchor="end">①</text>
+<text x="190.0" y="294.5" class="blank" text-anchor="middle">②</text>
+<text x="10.0" y="356.5" class="t leg" text-anchor="start"><tspan fill="var(--accent)">━</tspan> a–N（作用 C の両端）＝ ① kV</text>
+<text x="10.0" y="384.5" class="t leg" text-anchor="start"><tspan fill="#a78bfa">━</tspan> b–c（Cm の両端）＝ ② kV</text>
+<text x="10.0" y="412.5" class="t dim leg" text-anchor="start">辺の長さ＝線間電圧 6.6 kV</text></svg></div>
+    <div class="fig"><svg viewBox="0 0 380 440" role="img" aria-label="a相地絡時の電位の三角形（空欄版）" xmlns="http://www.w3.org/2000/svg"><text x="10.0" y="24.0" class="head" text-anchor="start">【2】a 相が完全地絡（非接地系）</text>
+<line x1="190.0" y1="62.0" x2="50.0" y2="304.5" stroke="var(--muted)" stroke-width="2"/>
+<line x1="50.0" y1="304.5" x2="330.0" y2="304.5" stroke="var(--muted)" stroke-width="2"/>
+<line x1="330.0" y1="304.5" x2="190.0" y2="62.0" stroke="var(--muted)" stroke-width="2"/>
+<text x="158.0" y="58.0" class="fault" text-anchor="end">⚡</text>
+<line x1="190.0" y1="223.7" x2="50.0" y2="304.5" stroke="var(--accent)" stroke-width="4"/>
+<circle cx="190.0" cy="62.0" r="5" fill="var(--text)"/>
+<circle cx="50.0" cy="304.5" r="5" fill="var(--text)"/>
+<circle cx="330.0" cy="304.5" r="5" fill="var(--text)"/>
+<circle cx="190.0" cy="223.7" r="5" fill="var(--accent)"/>
+<text x="178.0" y="56.0" class="lab" text-anchor="end">a</text>
+<text x="46.0" y="328.5" class="lab" text-anchor="middle">b</text>
+<text x="334.0" y="328.5" class="lab" text-anchor="middle">c</text>
+<text x="200.0" y="215.7" class="lab" text-anchor="start">N</text>
+<text x="126.0" y="294.1" class="blank" text-anchor="start">⑤</text>
+<text x="220.0" y="82.0" class="t" text-anchor="start">大地＝③</text>
+<text x="10.0" y="356.5" class="t leg" text-anchor="start">大地の点はどこへ移る？ ＝ ③</text>
+<text x="10.0" y="384.5" class="t leg" text-anchor="start">b の対地電圧 ＝ ④ kV</text>
+<text x="10.0" y="412.5" class="t leg" text-anchor="start"><tspan fill="var(--accent)">━</tspan> b の相電圧 N–b ＝ ⑤ kV</text></svg></div>
+    <p class="dim" style="margin:8px 0 4px;font-size:.85rem">紙の図で埋めてから、1つずつ開いて答え合わせする。</p>
+    <div class="answers">
+      <details><summary>① の答え</summary><div class="body"><strong>3.81 kV（相電圧 E ＝ V/√3）</strong>。作用静電容量（問題文の「心線1線当たり」）の両端は<strong>線〜中性点 N</strong>。三角形の重心から頂点までの距離。</div></details>
+      <details><summary>② の答え</summary><div class="body"><strong>6.6 kV（線間電圧 V）</strong>。Cm の両端は<strong>線〜線</strong>なので三角形の辺そのもの。Cm に相電圧をかけるのは誤り。</div></details>
+      <details><summary>③ の答え</summary><div class="body"><strong>頂点 a だけ</strong>。a 相の電線が大地に直接つながるので、大地の電位＝a 相の電位。大地は1つの電位なので、図の上でも1点。N と a の両方に置くと N–a 間が 0 V になり、巻線が出す 3.81 kV と矛盾する。N は大地と電線でつながっていない（非接地）ので、大地から離れる。</div></details>
+      <details><summary>④ の答え</summary><div class="body"><strong>6.6 kV（平常時 3.81 kV の √3 倍＝線間電圧）</strong>。b の対地電圧＝新しい大地の点 a から b までの距離＝三角形の辺。</div></details>
+      <details><summary>⑤ の答え</summary><div class="body"><strong>3.81 kV のまま（変わらない）</strong>。三角形と N の位置は変圧器の巻線が決めているので動かない。動いたのは大地の点だけ。だから地絡時は「相電圧 ≠ 対地電圧」になる。</div></details>
+    </div>
+  </section>
+
+  <section>
+    <div class="sec-title">完成図</div>
+    <details>
+      <summary>完成図を開く（紙の図を描き終えてから）</summary>
+      <div class="body">
+        <div class="fig"><svg viewBox="0 0 380 440" role="img" aria-label="平常時の電位の三角形（完成図）" xmlns="http://www.w3.org/2000/svg"><text x="10.0" y="24.0" class="head" text-anchor="start">【1】平常時</text>
+<line x1="190.0" y1="62.0" x2="50.0" y2="304.5" stroke="var(--muted)" stroke-width="2"/>
+<line x1="50.0" y1="304.5" x2="330.0" y2="304.5" stroke="var(--muted)" stroke-width="2"/>
+<line x1="330.0" y1="304.5" x2="190.0" y2="62.0" stroke="var(--muted)" stroke-width="2"/>
+<line x1="50.0" y1="304.5" x2="330.0" y2="304.5" stroke="#a78bfa" stroke-width="4"/>
+<line x1="190.0" y1="62.0" x2="190.0" y2="223.7" stroke="var(--accent)" stroke-width="4"/>
+<g opacity="1.0"><line x1="190.0" y1="229.7" x2="190.0" y2="241.7" stroke="var(--green)" stroke-width="2"/><line x1="178.0" y1="241.7" x2="202.0" y2="241.7" stroke="var(--green)" stroke-width="2.5"/><line x1="182.0" y1="246.7" x2="198.0" y2="246.7" stroke="var(--green)" stroke-width="2.5"/><line x1="186.0" y1="251.7" x2="194.0" y2="251.7" stroke="var(--green)" stroke-width="2.5"/></g>
+<circle cx="190.0" cy="62.0" r="5" fill="var(--text)"/>
+<circle cx="50.0" cy="304.5" r="5" fill="var(--text)"/>
+<circle cx="330.0" cy="304.5" r="5" fill="var(--text)"/>
+<circle cx="190.0" cy="223.7" r="5" fill="var(--accent)"/>
+<text x="178.0" y="56.0" class="lab" text-anchor="end">a</text>
+<text x="46.0" y="328.5" class="lab" text-anchor="middle">b</text>
+<text x="334.0" y="328.5" class="lab" text-anchor="middle">c</text>
+<text x="200.0" y="215.7" class="lab" text-anchor="start">N</text>
+<text x="212.0" y="249.7" class="t dim" text-anchor="start">大地</text>
+<text x="10.0" y="356.5" class="ans leg" text-anchor="start"><tspan fill="var(--accent)">━</tspan> ① a–N（作用 C）＝ 3.81 kV 相電圧</text>
+<text x="10.0" y="384.5" class="ans leg" text-anchor="start"><tspan fill="#a78bfa">━</tspan> ② b–c（Cm）＝ 6.6 kV 線間電圧</text>
+<text x="10.0" y="412.5" class="t leg" text-anchor="start">Cs：b–大地。平常時は大地＝N → 3.81 kV</text></svg></div>
+        <div class="fig"><svg viewBox="0 0 380 496" role="img" aria-label="a相地絡時の電位の三角形（完成図）" xmlns="http://www.w3.org/2000/svg"><text x="10.0" y="24.0" class="head" text-anchor="start">【2】a 相が完全地絡（非接地系）</text>
+<line x1="190.0" y1="62.0" x2="50.0" y2="304.5" stroke="var(--muted)" stroke-width="2"/>
+<line x1="50.0" y1="304.5" x2="330.0" y2="304.5" stroke="var(--muted)" stroke-width="2"/>
+<line x1="330.0" y1="304.5" x2="190.0" y2="62.0" stroke="var(--muted)" stroke-width="2"/>
+<text x="158.0" y="58.0" class="fault" text-anchor="end">⚡</text>
+<line x1="190.0" y1="223.7" x2="50.0" y2="304.5" stroke="var(--accent)" stroke-width="4"/>
+<line x1="190.0" y1="62.0" x2="50.0" y2="304.5" stroke="var(--red)" stroke-width="5"/>
+<line x1="190.0" y1="62.0" x2="330.0" y2="304.5" stroke="var(--red)" stroke-width="5"/>
+<line x1="190.0" y1="223.7" x2="190.0" y2="62.0" stroke="var(--green)" stroke-width="3" stroke-dasharray="6 5"/>
+<g opacity="0.3"><line x1="190.0" y1="229.7" x2="190.0" y2="241.7" stroke="var(--green)" stroke-width="2"/><line x1="178.0" y1="241.7" x2="202.0" y2="241.7" stroke="var(--green)" stroke-width="2.5"/><line x1="182.0" y1="246.7" x2="198.0" y2="246.7" stroke="var(--green)" stroke-width="2.5"/><line x1="186.0" y1="251.7" x2="194.0" y2="251.7" stroke="var(--green)" stroke-width="2.5"/></g>
+<line x1="190.0" y1="62.0" x2="230.0" y2="62.0" stroke="var(--green)" stroke-width="2"/>
+<g opacity="1.0"><line x1="230.0" y1="62.0" x2="230.0" y2="74.0" stroke="var(--green)" stroke-width="2"/><line x1="218.0" y1="74.0" x2="242.0" y2="74.0" stroke="var(--green)" stroke-width="2.5"/><line x1="222.0" y1="79.0" x2="238.0" y2="79.0" stroke="var(--green)" stroke-width="2.5"/><line x1="226.0" y1="84.0" x2="234.0" y2="84.0" stroke="var(--green)" stroke-width="2.5"/></g>
+<text x="248.0" y="82.0" class="ans" text-anchor="start">大地＝a</text>
+<text x="212.0" y="249.7" class="t dim" text-anchor="start">元の位置</text>
+<circle cx="190.0" cy="62.0" r="5" fill="var(--text)"/>
+<circle cx="50.0" cy="304.5" r="5" fill="var(--text)"/>
+<circle cx="330.0" cy="304.5" r="5" fill="var(--text)"/>
+<circle cx="190.0" cy="223.7" r="5" fill="var(--accent)"/>
+<text x="178.0" y="56.0" class="lab" text-anchor="end">a</text>
+<text x="46.0" y="328.5" class="lab" text-anchor="middle">b</text>
+<text x="334.0" y="328.5" class="lab" text-anchor="middle">c</text>
+<text x="200.0" y="215.7" class="lab" text-anchor="start">N</text>
+<text x="10.0" y="356.5" class="ans leg" text-anchor="start">③ 大地の点 ＝ 頂点 a（N ではない）</text>
+<text x="10.0" y="384.5" class="ans leg" text-anchor="start"><tspan fill="var(--red)">━</tspan> ④ b の対地電圧 a–b ＝ 6.6 kV</text>
+<text x="10.0" y="412.5" class="ans leg" text-anchor="start">　　平常時の √3 倍（＝線間電圧）</text>
+<text x="10.0" y="440.5" class="ans leg" text-anchor="start"><tspan fill="var(--accent)">━</tspan> ⑤ b の相電圧 N–b ＝ 3.81 kV 不変</text>
+<text x="10.0" y="468.5" class="ans leg" text-anchor="start"><tspan fill="var(--green)">┅</tspan> N の対地電圧 N–a ＝ 3.81 kV</text></svg></div>
+        <table>
+          <tr><th>静電容量</th><th>両端（三角形の2点）</th><th>平常時</th><th>a 相地絡時（b 相について）</th></tr>
+          <tr><td>作用 C（1線当たり）</td><td>b〜N</td><td>3.81 kV</td><td>3.81 kV（不変）</td></tr>
+          <tr><td>対地 Cs</td><td>b〜大地</td><td>3.81 kV（大地＝N）</td><td class="red">6.6 kV（大地＝a）</td></tr>
+          <tr><td>線間 Cm</td><td>b〜c など辺</td><td>6.6 kV</td><td>6.6 kV（不変）</td></tr>
+        </table>
+        <p class="dim" style="margin-top:8px;font-size:.85rem">地絡で値が変わるのは「大地」を端に持つ Cs だけ。相電圧と対地電圧が等しいのは、大地が N にある平常時だけ。</p>
+      </div>
+    </details>
+  </section>
+
+  <section>
+    <div class="sec-title">検算</div>
+    <p style="margin:0 0 6px"><strong>H24 電力 問11</strong>（6.6 kV・50 Hz・こう長 1.5 km・心線1線当たり 0.35 μF/km）</p>
+    <div class="calc">
+      <div><span class="c">C ＝</span> 0.35 × 1.5 ＝ <strong>0.525 μF</strong></div>
+      <div><span class="c">ωC ＝</span> 2π × 50 × 0.525×10⁻⁶ ＝ <strong>1.649×10⁻⁴ S</strong></div>
+      <div><span class="c">C の両端（線〜N）の電圧 E ＝</span> 6,600/√3 ＝ <strong>3,811 V</strong></div>
+      <div><span class="c">Ic ＝ ωC × E ＝</span> <strong>0.628 A</strong></div>
+      <div><span class="c">Q ＝ 1相分 × 3 ＝ 3 × E × Ic ＝</span> 7,185 V·A ≒ <strong class="green">7.2 kV·A</strong>（正解 (3)）</div>
+      <div class="red"><span class="c">前回の誤答：</span> Ic ＝ ωC × 6,600 ＝ 1.089 A → √3 × 6,600 × Ic ＝ 12,444 V·A ≒ 12.4 kV·A → (4) 12</div>
+    </div>
+    <p class="dim" style="margin-top:8px;font-size:.88rem">誤答はちょうど √3 倍（1.732 倍）。Q ＝ ωCV² の形では √3 が打ち消し合って見えないが、Ic を問われると 0.628 A と 1.089 A ではっきり差が出る。</p>
+    <p style="margin:14px 0 6px"><strong>条件を変えた検算例：同じ 6.6 kV 系で a 相が完全地絡したとき</strong></p>
+    <div class="calc">
+      <div><span class="c">b の相電圧（N–b）＝</span> <strong>3,811 V</strong>（平常時と同じ）</div>
+      <div><span class="c">b の対地電圧（a–b）＝</span> <strong class="red">6,600 V</strong> ＝ √3 × 3,811 V</div>
+      <div><span class="c">N の対地電圧（N–a）＝</span> <strong>3,811 V</strong>（平常時は 0 V）</div>
+    </div>
+    <p class="dim" style="margin-top:8px;font-size:.88rem">「相電圧＝対地電圧」と覚えていると、ここで b の対地電圧を 3,811 V と答えてしまう（2026-11-22 のクイズで実際にこう答えた）。</p>
+  </section>
+
+  <section>
+    <div class="sec-title">自己採点チェックリスト</div>
+    <div class="card">
+      <ul class="check">
+        <li>三角形の辺に 6.6 kV、N から頂点に 3.81 kV と書いた</li>
+        <li>作用 C・Cs・Cm を、それぞれ三角形の<strong>どの2点の間</strong>か線分で描いた</li>
+        <li>地絡時の大地の記号を<strong>頂点 a だけ</strong>に描いた（N に残していない）</li>
+        <li>地絡時の b の対地電圧（6.6 kV、√3 倍）と相電圧（3.81 kV、不変）を別の線分で描いた</li>
+        <li>充電容量を「1相分 × 3」で出して 7.2 kV·A になった</li>
+      </ul>
+    </div>
+  </section>
+
+  <section>
+    <div class="sec-title">根拠と要確認事項</div>
+    <div class="card">
+      <p><strong>根拠</strong></p>
+      <ul>
+        <li>作用静電容量が線〜中性点の容量であること、充電電流 Ic ＝ ωCV/√3、充電容量 Q ＝ √3VIc ＝ ωCV²：H24 電力 問11 の解説（問題集）。<code>mistakes/weak_points.md</code> DE-01</li>
+        <li>非接地系の1線完全地絡で健全相の対地電圧が線間電圧になること：地絡相の電位＝大地の電位から導いた（上の図）。<code>mistakes/weak_points.md</code> DE-01「適用条件・例外」</li>
+      </ul>
+      <p style="margin-top:10px"><strong>前提（図が成り立つ条件）</strong></p>
+      <ul>
+        <li>平常時に大地が N にあるのは、三相の対地静電容量がそろっている（平衡）とき</li>
+        <li>地絡時に大地が頂点 a に来るのは<strong>完全地絡</strong>（地絡抵抗 0）のとき。地絡抵抗があると、大地の点は N と a の間のどこかになる</li>
+        <li>中性点を直接接地した系統では、1線地絡はほぼ短絡になり、この図の話ではない</li>
+      </ul>
+      <p style="margin-top:10px"><strong>⚠ 要確認</strong>：なし</p>
+    </div>
+  </section>
+
+  <section>
+    <div class="card">
+      <a href="../index.html">← ダッシュボードへ戻る</a>
+      <p class="dim" style="margin-top:6px;font-size:.88rem">元の弱点の記述：<a href="https://github.com/kfurufuru/denken3-study/blob/main/mistakes/weak_points.md">mistakes/weak_points.md</a>（電力 DE-01）</p>
+    </div>
+  </section>
+
+</main>
+</body>
+</html>
