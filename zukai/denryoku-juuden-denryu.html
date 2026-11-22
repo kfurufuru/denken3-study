@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>ケーブルの充電電流ドリル | 電験3種 学習システム</title>
+  <title>ケーブルの充電電流と1線地絡（理解編＋ドリル） | 電験3種 学習システム</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Noto+Sans+JP:wght@400;500;700;800&display=swap" rel="stylesheet">
@@ -63,29 +63,227 @@
     th { color: var(--muted2); font-weight: 600; }
     a { color: var(--accent); }
     code { background: var(--bg3); padding: 1px 6px; border-radius: 4px; font-size: 0.88em; }
+  
+    .part { margin: 8px 0 18px; padding: 10px 14px; border-radius: var(--r-md); background: var(--bg3); font-weight: 700; color: #fff; }
+    .part small { display: block; font-weight: 400; color: var(--muted2); font-size: .85rem; }
+    .hero { margin-bottom: 20px; }
+    .eyebrow { font-size: .75rem; letter-spacing: .12em; color: var(--accent); font-weight: 700; }
+    .hero-title { font-size: 1.45rem; line-height: 1.4; margin: 6px 0 8px; color: #fff; }
+    .small { font-size: .88rem; }
+    .cards { display: grid; grid-template-columns: 1fr; gap: 10px; }
+    .cc { background: var(--bg2); border: 1px solid var(--border); border-radius: var(--r-md); padding: 14px 16px; }
+    .cc small { color: var(--muted2); font-size: .78rem; }
+    .cc h3 { font-size: 1.05rem; margin: 2px 0; color: #fff; }
+    .cc .big { font-size: 1.2rem; font-weight: 800; color: var(--accent); }
+    .cc p { color: var(--muted2); font-size: .9rem; margin-top: 4px; }
+    .info { background: #14243a; border-left: 4px solid var(--accent); border-radius: 8px; padding: 12px 14px; margin: 12px 0; font-size: .92rem; }
+    .warn-box { border-left-color: var(--yellow); }
+    .switches { display: flex; flex-wrap: wrap; gap: 8px; margin: 4px 0 12px; }
+    .sw { display: flex; gap: 4px; padding: 4px; border: 1px solid #334155; border-radius: 10px; flex: 1 1 100%; }
+    .sw button { flex: 1; appearance: none; border: 0; background: transparent; color: var(--muted2); padding: 9px 8px; font: 700 .92rem var(--font); border-radius: 7px; cursor: pointer; }
+    .sw button.on { background: #1d4f7a; color: #fff; }
+    .sw button:focus-visible { outline: 3px solid var(--yellow); outline-offset: 2px; }
+    .legend { display: flex; flex-wrap: wrap; gap: 6px 12px; font-size: .8rem; color: var(--muted2); margin: 6px 0 10px; }
+    .legend i { display: inline-block; width: 10px; height: 10px; border-radius: 10px; margin-right: 4px; }
+    .tiles { display: grid; grid-template-columns: repeat(2, 1fr); gap: 8px; }
+    .tile { background: var(--bg2); border: 1px solid #314967; border-radius: 10px; padding: 10px 12px; }
+    .tile .lbl { font-size: .8rem; color: var(--muted2); font-weight: 700; }
+    .tile .val { font-size: 1.4rem; font-weight: 800; font-variant-numeric: tabular-nums; }
+    .tile .sub { font-size: .75rem; color: var(--muted2); min-height: 1.2em; }
+    .two { display: grid; grid-template-columns: 1fr; gap: 10px; }
+    .card.ok { border-left: 4px solid var(--green); }
+    .card.bad { border-left: 4px solid var(--red); }
+    .card h3 { font-size: 1rem; margin-bottom: 6px; }
+    .f { font-family: 'Inter', monospace; background: var(--bg3); border-radius: 6px; padding: 7px 10px; margin: 6px 0; font-size: .9rem; overflow-wrap: anywhere; }
+    .result { font-size: 1.5rem; font-weight: 800; color: var(--green); margin-top: 6px; }
+    .card.bad p { font-size: .9rem; margin-top: 6px; }
+    @media (min-width: 720px) { .cards { grid-template-columns: repeat(3, 1fr); } .two { grid-template-columns: 1fr 1fr; } .tiles { grid-template-columns: repeat(3, 1fr); } .sw { flex: 1 1 auto; } }
   </style>
 </head>
 <body>
 <header class="header">
   <div>
-    <h1>ケーブルの充電電流：C の両端と、1線地絡時の大地</h1>
+    <h1>ケーブルの充電電流と1線地絡</h1>
     <div class="header-sub">弱点 DE-01（H24 電力 問11）／ 2026-11-22</div>
   </div>
   <a class="header-back" href="../index.html">← ダッシュボード</a>
 </header>
 
 <main class="main">
+  <div class="part">第1部　理解編<small>図と数値をすべて見せる。切り替えて、2点の距離がどう変わるかを確かめる。</small></div>
+
+  <section class="hero">
+    <div class="eyebrow">電験三種・電力 ／ 理解編</div>
+    <h2 class="hero-title">電圧は「どの2点の差か」で決まる</h2>
+    <p class="dim">H24 電力 問11 の充電容量と、非接地系の1線地絡を、同じ 6.6 kV の三相回路で見比べる。√3 を掛けるか割るかは、覚えるのではなく<strong>2点を指して</strong>決める。</p>
+  </section>
 
   <section>
-    <div class="sec-title">この図で答えられるようになること</div>
-    <div class="card goal">
-      <p>線間電圧の<strong>正三角形</strong>の上で、どの静電容量についても「両端はどの2点か」を指し、その<strong>2点の距離＝かかる電圧</strong>として言える。</p>
-      <p style="margin-top:8px">そのうえで、非接地系の1線地絡のとき<strong>大地の点が三角形のどこにあるか</strong>を図で示し、健全相の対地電圧と相電圧をそれぞれ言える。</p>
-      <p class="dim" style="margin-top:8px;font-size:.88rem">前提：ケーブルには、心線と遮へい層（大地）の間に<strong>対地静電容量 Cs</strong>、心線どうしの間に<strong>線間静電容量 Cm</strong> がある。交流で充放電を繰り返すので、無負荷でも電流が流れる（充電電流）。問題文の「心線1線当たりの静電容量」は、平衡時にこれらをまとめた等価な容量（<strong>作用静電容量 C</strong>）。その両端がどこかは ① で考える。どの C でも <strong>I ＝ ωC ×（その C の両端の電圧）</strong>。</p>
-      <p class="dim" style="margin-top:6px;font-size:.88rem">図の三角形は電位の関係を長さで表したもので、ケーブルの物理的な配置ではない。</p>
+    <div class="sec-title">01　3種類の電圧は、測る2点が違う</div>
+    <div class="cards">
+      <div class="cc"><small>線 ↔ 線</small><h3>線間電圧</h3><div class="big">6.6 kV</div><p>大地がどこにあっても変わらない。</p></div>
+      <div class="cc"><small>線 ↔ 中性点 N</small><h3>相電圧</h3><div class="big">6.6/√3 ＝ 3.81 kV</div><p>変圧器の巻線が決める。地絡しても変わらない。</p></div>
+      <div class="cc"><small>線 ↔ 大地 G</small><h3>対地電圧</h3><div class="big">状態で変わる</div><p>大地の点が N にあるときだけ、相電圧と等しい。</p></div>
+    </div>
+    <div class="info"><strong>決め手の式：</strong> V<sub>aG</sub> ＝ V<sub>aN</sub> ＋ V<sub>NG</sub>（対地電圧 ＝ 相電圧 ＋ 中性点の対地電圧）。V<sub>NG</sub> ＝ 0 のときだけ「対地電圧＝相電圧」。</div>
+  </section>
+
+  <section>
+    <div class="sec-title">02　3種類の静電容量も、両端の2点が違う</div>
+    <div class="cards">
+      <div class="cc"><small>線 ↔ 大地</small><h3>対地静電容量 Cs</h3><p>心線と遮へい層（大地）の間。かかるのは<strong>対地電圧</strong>。</p></div>
+      <div class="cc"><small>線 ↔ 線</small><h3>線間静電容量 Cm</h3><p>心線どうしの間。かかるのは<strong>線間電圧</strong>。</p></div>
+      <div class="cc"><small>線 ↔ N（等価）</small><h3>作用静電容量 C</h3><p>問題文の「心線1線当たり」。平衡時に Cs と Cm をまとめて線〜N に置いた等価な容量。かかるのは<strong>相電圧</strong>。地絡時には使わない。</p></div>
+    </div>
+    <div class="info"><strong>どの C でも：</strong> I ＝ ωC ×（その C の両端の電圧）。先に両端の2点を決め、その2点の電圧をかける。</div>
+  </section>
+
+  <section>
+    <div class="sec-title">03　切り替えて比較：平常時 ／ a 相の完全地絡（非接地系）</div>
+    <div class="switches">
+      <div class="sw" role="group" aria-label="運転状態"><button type="button" data-state="normal" class="on" aria-pressed="true">平常時</button><button type="button" data-state="fault" aria-pressed="false">a 相 完全地絡</button></div>
+      <div class="sw" role="group" aria-label="見方"><button type="button" data-view="N" class="on" aria-pressed="true">N を固定</button><button type="button" data-view="G" aria-pressed="false">大地を固定</button></div>
+    </div>
+    <div class="fig"><div class="pv" data-key="N_normal"><svg viewBox="0 0 380 340" role="img" aria-label="電位図（N 固定・平常時）" xmlns="http://www.w3.org/2000/svg" font-family="Inter, Noto Sans JP, sans-serif"><defs><marker id="ar_f87171" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#f87171"/></marker><marker id="ar_34d399" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#34d399"/></marker><marker id="ar_60a5fa" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#60a5fa"/></marker><marker id="ar_fbbf24" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#fbbf24"/></marker><marker id="ar_e2e8f0" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#e2e8f0"/></marker></defs>
+<line x1="190.0" y1="49.5" x2="90.0" y2="222.7" stroke="#64748b" stroke-width="1.6" stroke-linecap="round" stroke-dasharray="5 5" opacity="1.0"/>
+<line x1="90.0" y1="222.7" x2="290.0" y2="222.7" stroke="#64748b" stroke-width="1.6" stroke-linecap="round" stroke-dasharray="5 5" opacity="1.0"/>
+<line x1="290.0" y1="222.7" x2="190.0" y2="49.5" stroke="#64748b" stroke-width="1.6" stroke-linecap="round" stroke-dasharray="5 5" opacity="1.0"/>
+<line x1="190.0" y1="165.0" x2="190.0" y2="49.5" stroke="#f87171" stroke-width="1.6" stroke-linecap="round" opacity="0.45"/>
+<line x1="190.0" y1="165.0" x2="90.0" y2="222.7" stroke="#34d399" stroke-width="1.6" stroke-linecap="round" opacity="0.45"/>
+<line x1="190.0" y1="165.0" x2="290.0" y2="222.7" stroke="#60a5fa" stroke-width="1.6" stroke-linecap="round" opacity="0.45"/>
+<line x1="190.0" y1="165.0" x2="190.0" y2="49.5" stroke="#f87171" stroke-width="3.5" stroke-linecap="round" marker-end="url(#ar_f87171)" opacity="1.0"/>
+<line x1="190.0" y1="165.0" x2="90.0" y2="222.7" stroke="#34d399" stroke-width="3.5" stroke-linecap="round" marker-end="url(#ar_34d399)" opacity="1.0"/>
+<line x1="190.0" y1="165.0" x2="290.0" y2="222.7" stroke="#60a5fa" stroke-width="3.5" stroke-linecap="round" marker-end="url(#ar_60a5fa)" opacity="1.0"/>
+<circle cx="190.0" cy="165.0" r="6" fill="#fbbf24"/>
+<text x="206.0" y="171.0" fill="#fbbf24" font-size="16" font-weight="700" text-anchor="start">N</text>
+<circle cx="190.0" cy="49.5" r="5" fill="#f87171"/>
+<text x="202.0" y="43.5" fill="#f87171" font-size="17" font-weight="700" text-anchor="start">a</text>
+<circle cx="90.0" cy="222.7" r="5" fill="#34d399"/>
+<text x="80.0" y="240.7" fill="#34d399" font-size="17" font-weight="700" text-anchor="start">b</text>
+<circle cx="290.0" cy="222.7" r="5" fill="#60a5fa"/>
+<text x="300.0" y="240.7" fill="#60a5fa" font-size="17" font-weight="700" text-anchor="start">c</text>
+<circle cx="190.0" cy="165.0" r="4.5" fill="#e2e8f0"/>
+<path d="M179.0 173.0 h22 M183.0 178.0 h14 M187.0 183.0 h6" stroke="#e2e8f0" stroke-width="2" fill="none"/>
+<text x="176.0" y="157.0" fill="#e2e8f0" font-size="14" font-weight="700" text-anchor="end">大地 G</text>
+<text x="200.0" y="107.3" fill="#f87171" font-size="15" font-weight="700" text-anchor="start">3.81 kV</text>
+<text x="190.0" y="246.7" fill="#94a3b8" font-size="14" font-weight="600" text-anchor="middle">線間 6.6 kV</text></svg></div>
+<div class="pv" data-key="N_fault" hidden><svg viewBox="0 0 380 340" role="img" aria-label="電位図（N 固定・a 相地絡）" xmlns="http://www.w3.org/2000/svg" font-family="Inter, Noto Sans JP, sans-serif"><defs><marker id="ar_f87171" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#f87171"/></marker><marker id="ar_34d399" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#34d399"/></marker><marker id="ar_60a5fa" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#60a5fa"/></marker><marker id="ar_fbbf24" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#fbbf24"/></marker><marker id="ar_e2e8f0" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#e2e8f0"/></marker></defs>
+<line x1="190.0" y1="49.5" x2="90.0" y2="222.7" stroke="#64748b" stroke-width="1.6" stroke-linecap="round" stroke-dasharray="5 5" opacity="1.0"/>
+<line x1="90.0" y1="222.7" x2="290.0" y2="222.7" stroke="#64748b" stroke-width="1.6" stroke-linecap="round" stroke-dasharray="5 5" opacity="1.0"/>
+<line x1="290.0" y1="222.7" x2="190.0" y2="49.5" stroke="#64748b" stroke-width="1.6" stroke-linecap="round" stroke-dasharray="5 5" opacity="1.0"/>
+<line x1="190.0" y1="165.0" x2="190.0" y2="49.5" stroke="#f87171" stroke-width="1.6" stroke-linecap="round" opacity="0.45"/>
+<line x1="190.0" y1="165.0" x2="90.0" y2="222.7" stroke="#34d399" stroke-width="1.6" stroke-linecap="round" opacity="0.45"/>
+<line x1="190.0" y1="165.0" x2="290.0" y2="222.7" stroke="#60a5fa" stroke-width="1.6" stroke-linecap="round" opacity="0.45"/>
+<line x1="190.0" y1="49.5" x2="90.0" y2="222.7" stroke="#34d399" stroke-width="3.5" stroke-linecap="round" marker-end="url(#ar_34d399)" opacity="1.0"/>
+<line x1="190.0" y1="49.5" x2="290.0" y2="222.7" stroke="#60a5fa" stroke-width="3.5" stroke-linecap="round" marker-end="url(#ar_60a5fa)" opacity="1.0"/>
+<line x1="190.0" y1="49.5" x2="190.0" y2="165.0" stroke="#fbbf24" stroke-width="2.5" stroke-linecap="round" stroke-dasharray="6 4" opacity="1.0"/>
+<circle cx="190.0" cy="165.0" r="6" fill="#fbbf24"/>
+<text x="206.0" y="171.0" fill="#fbbf24" font-size="16" font-weight="700" text-anchor="start">N</text>
+<circle cx="190.0" cy="49.5" r="5" fill="#f87171"/>
+<text x="202.0" y="43.5" fill="#f87171" font-size="17" font-weight="700" text-anchor="start">a</text>
+<circle cx="90.0" cy="222.7" r="5" fill="#34d399"/>
+<text x="80.0" y="240.7" fill="#34d399" font-size="17" font-weight="700" text-anchor="start">b</text>
+<circle cx="290.0" cy="222.7" r="5" fill="#60a5fa"/>
+<text x="300.0" y="240.7" fill="#60a5fa" font-size="17" font-weight="700" text-anchor="start">c</text>
+<circle cx="190.0" cy="49.5" r="4.5" fill="#e2e8f0"/>
+<path d="M179.0 57.5 h22 M183.0 62.5 h14 M187.0 67.5 h6" stroke="#e2e8f0" stroke-width="2" fill="none"/>
+<text x="176.0" y="41.5" fill="#e2e8f0" font-size="14" font-weight="700" text-anchor="end">大地 G＝a</text>
+<text x="128.0" y="136.1" fill="#34d399" font-size="15" font-weight="700" text-anchor="end">6.6 kV</text>
+<text x="252.0" y="136.1" fill="#60a5fa" font-size="15" font-weight="700" text-anchor="start">6.6 kV</text>
+<text x="200.0" y="111.3" fill="#fbbf24" font-size="14" font-weight="700" text-anchor="start">3.81 kV</text></svg></div>
+<div class="pv" data-key="G_normal" hidden><svg viewBox="0 0 380 340" role="img" aria-label="電位図（大地固定・平常時）" xmlns="http://www.w3.org/2000/svg" font-family="Inter, Noto Sans JP, sans-serif"><defs><marker id="ar_f87171" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#f87171"/></marker><marker id="ar_34d399" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#34d399"/></marker><marker id="ar_60a5fa" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#60a5fa"/></marker><marker id="ar_fbbf24" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#fbbf24"/></marker><marker id="ar_e2e8f0" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#e2e8f0"/></marker></defs>
+<line x1="190.0" y1="22.5" x2="90.0" y2="195.7" stroke="#64748b" stroke-width="1.6" stroke-linecap="round" stroke-dasharray="5 5" opacity="1.0"/>
+<line x1="90.0" y1="195.7" x2="290.0" y2="195.7" stroke="#64748b" stroke-width="1.6" stroke-linecap="round" stroke-dasharray="5 5" opacity="1.0"/>
+<line x1="290.0" y1="195.7" x2="190.0" y2="22.5" stroke="#64748b" stroke-width="1.6" stroke-linecap="round" stroke-dasharray="5 5" opacity="1.0"/>
+<line x1="190.0" y1="138.0" x2="190.0" y2="22.5" stroke="#f87171" stroke-width="1.6" stroke-linecap="round" opacity="0.45"/>
+<line x1="190.0" y1="138.0" x2="90.0" y2="195.7" stroke="#34d399" stroke-width="1.6" stroke-linecap="round" opacity="0.45"/>
+<line x1="190.0" y1="138.0" x2="290.0" y2="195.7" stroke="#60a5fa" stroke-width="1.6" stroke-linecap="round" opacity="0.45"/>
+<line x1="190.0" y1="138.0" x2="190.0" y2="22.5" stroke="#f87171" stroke-width="3.5" stroke-linecap="round" marker-end="url(#ar_f87171)" opacity="1.0"/>
+<line x1="190.0" y1="138.0" x2="90.0" y2="195.7" stroke="#34d399" stroke-width="3.5" stroke-linecap="round" marker-end="url(#ar_34d399)" opacity="1.0"/>
+<line x1="190.0" y1="138.0" x2="290.0" y2="195.7" stroke="#60a5fa" stroke-width="3.5" stroke-linecap="round" marker-end="url(#ar_60a5fa)" opacity="1.0"/>
+<circle cx="190.0" cy="138.0" r="6" fill="#fbbf24"/>
+<text x="206.0" y="144.0" fill="#fbbf24" font-size="16" font-weight="700" text-anchor="start">N</text>
+<circle cx="190.0" cy="22.5" r="5" fill="#f87171"/>
+<text x="202.0" y="16.5" fill="#f87171" font-size="17" font-weight="700" text-anchor="start">a</text>
+<circle cx="90.0" cy="195.7" r="5" fill="#34d399"/>
+<text x="80.0" y="213.7" fill="#34d399" font-size="17" font-weight="700" text-anchor="start">b</text>
+<circle cx="290.0" cy="195.7" r="5" fill="#60a5fa"/>
+<text x="300.0" y="213.7" fill="#60a5fa" font-size="17" font-weight="700" text-anchor="start">c</text>
+<circle cx="190.0" cy="138.0" r="4.5" fill="#e2e8f0"/>
+<path d="M179.0 146.0 h22 M183.0 151.0 h14 M187.0 156.0 h6" stroke="#e2e8f0" stroke-width="2" fill="none"/>
+<text x="176.0" y="130.0" fill="#e2e8f0" font-size="14" font-weight="700" text-anchor="end">大地 G</text>
+<text x="200.0" y="80.3" fill="#f87171" font-size="15" font-weight="700" text-anchor="start">3.81 kV</text>
+<text x="190.0" y="219.7" fill="#94a3b8" font-size="14" font-weight="600" text-anchor="middle">線間 6.6 kV</text></svg></div>
+<div class="pv" data-key="G_fault" hidden><svg viewBox="0 0 380 340" role="img" aria-label="電位図（大地固定・a 相地絡）" xmlns="http://www.w3.org/2000/svg" font-family="Inter, Noto Sans JP, sans-serif"><defs><marker id="ar_f87171" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#f87171"/></marker><marker id="ar_34d399" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#34d399"/></marker><marker id="ar_60a5fa" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#60a5fa"/></marker><marker id="ar_fbbf24" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#fbbf24"/></marker><marker id="ar_e2e8f0" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#e2e8f0"/></marker></defs>
+<line x1="190.0" y1="138.0" x2="90.0" y2="311.2" stroke="#64748b" stroke-width="1.6" stroke-linecap="round" stroke-dasharray="5 5" opacity="1.0"/>
+<line x1="90.0" y1="311.2" x2="290.0" y2="311.2" stroke="#64748b" stroke-width="1.6" stroke-linecap="round" stroke-dasharray="5 5" opacity="1.0"/>
+<line x1="290.0" y1="311.2" x2="190.0" y2="138.0" stroke="#64748b" stroke-width="1.6" stroke-linecap="round" stroke-dasharray="5 5" opacity="1.0"/>
+<line x1="190.0" y1="253.5" x2="190.0" y2="138.0" stroke="#f87171" stroke-width="1.6" stroke-linecap="round" opacity="0.45"/>
+<line x1="190.0" y1="253.5" x2="90.0" y2="311.2" stroke="#34d399" stroke-width="1.6" stroke-linecap="round" opacity="0.45"/>
+<line x1="190.0" y1="253.5" x2="290.0" y2="311.2" stroke="#60a5fa" stroke-width="1.6" stroke-linecap="round" opacity="0.45"/>
+<line x1="190.0" y1="138.0" x2="90.0" y2="311.2" stroke="#34d399" stroke-width="3.5" stroke-linecap="round" marker-end="url(#ar_34d399)" opacity="1.0"/>
+<line x1="190.0" y1="138.0" x2="290.0" y2="311.2" stroke="#60a5fa" stroke-width="3.5" stroke-linecap="round" marker-end="url(#ar_60a5fa)" opacity="1.0"/>
+<line x1="190.0" y1="138.0" x2="190.0" y2="253.5" stroke="#fbbf24" stroke-width="2.5" stroke-linecap="round" stroke-dasharray="6 4" opacity="1.0"/>
+<circle cx="190.0" cy="253.5" r="6" fill="#fbbf24"/>
+<text x="206.0" y="259.5" fill="#fbbf24" font-size="16" font-weight="700" text-anchor="start">N</text>
+<circle cx="190.0" cy="138.0" r="5" fill="#f87171"/>
+<text x="202.0" y="132.0" fill="#f87171" font-size="17" font-weight="700" text-anchor="start">a</text>
+<circle cx="90.0" cy="311.2" r="5" fill="#34d399"/>
+<text x="80.0" y="329.2" fill="#34d399" font-size="17" font-weight="700" text-anchor="start">b</text>
+<circle cx="290.0" cy="311.2" r="5" fill="#60a5fa"/>
+<text x="300.0" y="329.2" fill="#60a5fa" font-size="17" font-weight="700" text-anchor="start">c</text>
+<circle cx="190.0" cy="138.0" r="4.5" fill="#e2e8f0"/>
+<path d="M179.0 146.0 h22 M183.0 151.0 h14 M187.0 156.0 h6" stroke="#e2e8f0" stroke-width="2" fill="none"/>
+<text x="176.0" y="130.0" fill="#e2e8f0" font-size="14" font-weight="700" text-anchor="end">大地 G＝a</text>
+<text x="128.0" y="224.6" fill="#34d399" font-size="15" font-weight="700" text-anchor="end">6.6 kV</text>
+<text x="252.0" y="224.6" fill="#60a5fa" font-size="15" font-weight="700" text-anchor="start">6.6 kV</text>
+<text x="200.0" y="199.7" fill="#fbbf24" font-size="14" font-weight="700" text-anchor="start">3.81 kV</text></svg></div></div>
+    <p class="dim small" id="viewMsg">N を固定した見方：三角形は動かず、大地の点 G が N から頂点 a へ移る。</p>
+    <div class="legend"><span><i style="background:#f87171"></i>a</span><span><i style="background:#34d399"></i>b</span><span><i style="background:#60a5fa"></i>c</span><span><i style="background:#fbbf24"></i>N</span><span>太い矢印＝対地電圧／細線＝相電圧／点線＝線間電圧</span></div>
+    <div class="tiles">
+      <div class="tile"><div class="lbl">線間電圧</div><div class="val" id="m_ll"></div><div class="sub" id="s_ll"></div></div>
+      <div class="tile"><div class="lbl" style="color:#f87171">a の対地電圧</div><div class="val" id="m_a"></div><div class="sub" id="s_a"></div></div>
+      <div class="tile"><div class="lbl" style="color:#34d399">b の対地電圧</div><div class="val" id="m_b"></div><div class="sub" id="s_b"></div></div>
+      <div class="tile"><div class="lbl" style="color:#60a5fa">c の対地電圧</div><div class="val" id="m_c"></div><div class="sub" id="s_c"></div></div>
+      <div class="tile"><div class="lbl" style="color:#fbbf24">N の対地電圧</div><div class="val" id="m_n"></div><div class="sub" id="s_n"></div></div>
+      <div class="tile"><div class="lbl">b の相電圧</div><div class="val" id="m_ph"></div><div class="sub" id="s_ph"></div></div>
+    </div>
+    <div class="info" id="stateMsg"></div>
+    <div class="info warn-box"><strong>前提：</strong>非接地系・三相の対地静電容量が平衡・完全地絡（地絡抵抗 0）。地絡抵抗があると大地の点は a からずれる。中性点を直接接地した系統では、1線地絡はほぼ短絡になり、この図の話ではない。</div>
+  </section>
+
+  <section>
+    <div class="sec-title">04　H24 電力 問11 につなぐ（平常時の充電容量）</div>
+    <p class="dim small">6.6 kV・50 Hz・こう長 1.5 km・心線1線当たり 0.35 μF/km。問題文の C は<strong>作用静電容量</strong>なので、両端は線〜N。</p>
+    <div class="two">
+      <div class="card ok">
+        <h3 class="green">正しい計算</h3>
+        <div class="f">C ＝ 0.35 × 1.5 ＝ 0.525 μF</div>
+        <div class="f">C の両端（線〜N）の電圧 E ＝ 6,600/√3 ≒ 3,811 V</div>
+        <div class="f">Ic ＝ ωC × E ＝ 2π×50×0.525×10⁻⁶ × 3,811 ≒ 0.628 A</div>
+        <div class="f">Q ＝ 3 × E × Ic ＝ ωCV² ≒ 7,185 V·A</div>
+        <div class="result">7.2 kV·A（正解 (3)）</div>
+      </div>
+      <div class="card bad">
+        <h3 class="red">前回の誤答 12.4 kV·A</h3>
+        <div class="f">Ic' ＝ ωC × 6,600 ≒ 1.089 A</div>
+        <div class="f">Q' ＝ √3 × 6,600 × Ic' ≒ 12,444 V·A → (4) 12</div>
+        <p><strong>原因：</strong>C の両端（線〜N）を確かめず、線間電圧をかけた。最後の √3 × V × I の式は正しい。間違えたのは、Ic を出すときに選んだ電圧。答えはちょうど √3 倍（1.732 倍）ずれる。</p>
+      </div>
+    </div>
+    <div class="info"><strong>Q ＝ ωCV² の落とし穴：</strong>2つの √3 が打ち消し合うので、式の形では誤りが見えない。Ic を問われると 0.628 A と 1.089 A ではっきり差が出る。</div>
+  </section>
+
+  <section>
+    <div class="sec-title">05　地絡電流は Cs だけで決まる</div>
+    <div class="card">
+      <p>a 相が完全地絡すると、健全相 b・c の<strong>対地静電容量 Cs</strong> に線間電圧 6.6 kV がかかり、その充電電流が大地を通って地絡点へ戻る。非接地でも地絡電流は 0 にならない。</p>
+      <div class="f">Ig ＝ 3ωCs·E ＝ √3ωCs·V</div>
+      <p class="dim small">Cm の両端は線間電圧のままで変わらないので、地絡電流には効かない。ここで使うのは作用静電容量 C ではなく Cs。問題文が「1線当たり」だけを与えている場合、Cs と Cm の内訳は分からない。</p>
     </div>
   </section>
 
+  <div class="part">第2部　確認ドリル<small>翌日以降に、第1部を見ずに解く。紙に描いてから答えを開く。</small></div>
   <section>
     <div class="sec-title">描き直し課題（先に紙に描く）</div>
     <div class="card task">
@@ -272,5 +470,25 @@
   </section>
 
 </main>
+<script>
+'use strict';
+(function () {
+  const D = {"metrics": {"normal": {"ll": ["6.6 kV", "電線どうし"], "a": ["3.81 kV", "平常時"], "b": ["3.81 kV", "平常時"], "c": ["3.81 kV", "平常時"], "n": ["0 kV", "大地＝N"], "ph": ["3.81 kV", "b–N"]}, "fault": {"ll": ["6.6 kV", "変わらない"], "a": ["0 kV", "地絡相（大地と同電位）"], "b": ["6.6 kV", "√3 倍＝線間電圧"], "c": ["6.6 kV", "√3 倍＝線間電圧"], "n": ["3.81 kV", "N が大地から離れた"], "ph": ["3.81 kV", "変わらない"]}}, "msgs": {"normal": "三相の対地静電容量がそろっていれば、非接地でも大地は N と同じ電位。だから平常時だけは「相電圧＝対地電圧」になる。", "fault": "a 相の電線が大地と直接つながり、大地の電位＝a 相の電位になる。N は大地と電線でつながっていないので、大地から離れる。b・c の対地電圧は a との電位差＝線間電圧になる。"}, "views": {"N": "N を固定した見方：三角形は動かず、大地の点 G が N から頂点 a へ移る。", "G": "大地を固定した見方：大地 G は動かず、三角形全体が a を G に重ねる位置まで動く。どちらも同じ現象。"}};
+  let state = 'normal', view = 'N';
+  const $ = id => document.getElementById(id);
+  function render() {
+    document.querySelectorAll('.pv').forEach(el => { el.hidden = el.dataset.key !== view + '_' + state; });
+    document.querySelectorAll('[data-state]').forEach(b => { const on = b.dataset.state === state; b.classList.toggle('on', on); b.setAttribute('aria-pressed', String(on)); });
+    document.querySelectorAll('[data-view]').forEach(b => { const on = b.dataset.view === view; b.classList.toggle('on', on); b.setAttribute('aria-pressed', String(on)); });
+    const m = D.metrics[state];
+    for (const k of Object.keys(m)) { $('m_' + k).textContent = m[k][0]; $('s_' + k).textContent = m[k][1]; }
+    $('stateMsg').innerHTML = '<strong>この状態の核心：</strong>' + D.msgs[state];
+    $('viewMsg').textContent = D.views[view];
+  }
+  document.querySelectorAll('[data-state]').forEach(b => b.addEventListener('click', () => { state = b.dataset.state; render(); }));
+  document.querySelectorAll('[data-view]').forEach(b => b.addEventListener('click', () => { view = b.dataset.view; render(); }));
+  render();
+})();
+</script>
 </body>
 </html>

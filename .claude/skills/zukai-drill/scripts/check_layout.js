@@ -14,6 +14,8 @@ const pw = require(path.join(execSync('npm root -g').toString().trim(), 'playwri
   const page = await browser.newPage({ viewport: { width: 390, height: 800 }, deviceScaleFactor: 2 });
   await page.goto('file://' + path.resolve(file));
   await page.evaluate(() => document.querySelectorAll('details').forEach(d => (d.open = true)));
+  // 切り替えボタンで隠している図（hidden 属性）も、すべて表示してから測る
+  await page.evaluate(() => document.querySelectorAll('[hidden]').forEach(e => (e.hidden = false)));
   const r = await page.evaluate(() => {
     const W = document.documentElement.clientWidth;
     const problems = [];
